@@ -1,0 +1,926 @@
+/* ============================================================
+   ArianaCSS — Button Component
+   File:    src/6-components/button.css
+   Layer:   @layer components
+   Version: 1.0.0
+
+   PURPOSE:
+   The primary interactive element of ArianaCSS. Buttons
+   trigger actions. They are the most frequently used
+   component in any UI and the most thoroughly tested.
+
+   DESIGN PHILOSOPHY:
+   ArianaCSS buttons are opinionated in exactly three ways:
+   1. Clear visual hierarchy between variants (primary > secondary
+      > ghost > link) communicates action importance at a glance
+   2. Consistent sizing across all variants (same padding,
+      same height for the same size class)
+   3. Every state (hover, active, focus, disabled, loading)
+      is visually distinct and predictable
+
+   VARIANTS (in order of visual weight / importance):
+   --primary    Filled lapis — the one main action per context
+   --secondary  Bordered + tinted — the supporting action
+   --ghost      Bordered, no fill — tertiary / less prominent
+   --danger     Filled ember — destructive actions only
+   --link       Looks like a link — lowest visual weight
+
+   SIZE VARIANTS:
+   --sm   32px tall — table actions, compact toolbars
+   (base) 40px tall — default for most contexts
+   --lg   48px tall — hero CTAs, prominent forms
+
+   ELEMENT STRUCTURE:
+   Simple button:
+     <button class="ar-btn ar-btn--primary" type="button">
+       Save changes
+     </button>
+
+   With leading icon:
+     <button class="ar-btn ar-btn--primary ar-btn--icon-left" type="button">
+       <svg class="ar-btn__icon" aria-hidden="true">...</svg>
+       Save changes
+     </button>
+
+   With trailing icon:
+     <button class="ar-btn ar-btn--primary ar-btn--icon-right" type="button">
+       Download
+       <svg class="ar-btn__icon" aria-hidden="true">...</svg>
+     </button>
+
+   Icon-only button (must have aria-label):
+     <button class="ar-btn ar-btn--ghost ar-btn--icon-only"
+             type="button" aria-label="Delete item">
+       <svg class="ar-btn__icon" aria-hidden="true">...</svg>
+     </button>
+
+   Full-width button:
+     <button class="ar-btn ar-btn--primary ar-btn--full" type="button">
+       Submit form
+     </button>
+
+   Loading state:
+     <button class="ar-btn ar-btn--primary ar-btn--loading"
+             type="button" aria-busy="true" disabled>
+       <span class="ar-btn__spinner" aria-hidden="true"></span>
+       Saving…
+     </button>
+
+   Disabled:
+     <button class="ar-btn ar-btn--primary" type="button" disabled>
+       Save changes
+     </button>
+
+   As an anchor link (use sparingly — prefer <button>):
+     <a class="ar-btn ar-btn--primary" href="/dashboard" role="button">
+       Go to dashboard
+     </a>
+
+   ACCESSIBILITY:
+   - Always use type="button" to prevent accidental form submission
+   - Disabled buttons: use the disabled attribute (not aria-disabled
+     alone) so they are correctly excluded from the tab order
+   - Icon-only buttons MUST have aria-label
+   - Loading buttons: aria-busy="true" + disabled
+   - Link-styled buttons: if using <a>, add role="button"
+
+   TOKEN DEPENDENCIES:
+   --ar-text-size-xs, -sm, -base
+   --ar-text-weight-medium
+   --ar-text-leading-none
+   --ar-text-tracking-normal
+   --ar-space-1, -2, -3, -4, -6
+   --ar-radius-base, -full
+   --ar-shadow-0, -1, -2, -inset
+   --ar-duration-fast, -base
+   --ar-ease-standard
+   --ar-focus-ring-width, -offset, -style, -color-default, -color-danger
+   --ar-color-primary-surface, -border, -base, -hover, -active, -emphasis
+   --ar-color-danger-base, -hover, -active, -border, -surface, -text
+   --ar-color-text-on-primary, -on-danger, -on-warning
+   --ar-color-text-default, -muted, -link, -link-hover, -disabled
+   --ar-color-layer-base, -sunken
+   --ar-color-border-default
+   --ar-color-state-disabled-fill, -disabled-text, -disabled-border
+   --ar-color-state-hover-bg, -active-bg
+
+   COMPONENT CONTRACT:
+   ✓ All values reference tokens — no hard-coded color values
+   ✓ No utility class dependencies in component CSS
+   ✓ No references to other component files
+   ✓ Uses :focus-visible exclusively
+   ✓ All transitions have reduced-motion overrides
+   ✓ Forced colors block present and complete
+   ✓ Works at all viewport widths from 320px
+   ✓ Logical CSS properties throughout (RTL safe)
+   ============================================================ */
+
+
+@layer components {
+
+  /* ==========================================================
+     1. BUTTON BASE
+     ──────────────────────────────────────────────────────────
+     Common structure shared by ALL button variants.
+     The base class sets geometry, typography, and interaction
+     behavior. Color is set by variant modifiers.
+
+     display: inline-flex:
+     Allows icons and text to align on the same baseline with
+     gap. inline-flex means buttons participate in text flow
+     (they don't force block layout like display:block).
+
+     height via min-height:
+     Using min-height (not height) allows button content to
+     wrap on very narrow viewports without the button becoming
+     shorter than its min-height. At normal widths, min-height
+     acts as a fixed height because single-line button text
+     never exceeds it.
+
+     cursor: pointer:
+     Set explicitly on the base class because <a> elements
+     styled as buttons inherit pointer from their link nature,
+     but <button> elements have pointer by default only when
+     enabled. Explicitly setting it here covers both cases.
+
+     user-select: none:
+     Prevents text selection on button labels when users
+     double-click (a common accidental selection pattern).
+
+     white-space: nowrap:
+     Button labels should not wrap. If a button label would
+     wrap, it is too long and should be shortened. The --full
+     modifier with a container constraint handles the case
+     where text length is genuinely uncertain.
+     ========================================================== */
+
+  .ar-btn {
+    /* Private internal properties for size scale */
+    --_ar-btn-height:     2.5rem;    /* 40px — base height */
+    --_ar-btn-font-size:  var(--ar-text-size-sm);
+    --_ar-btn-padding-x:  var(--ar-space-4);
+    --_ar-btn-padding-y:  var(--ar-space-2);
+    --_ar-btn-icon-size:  1rem;      /* 16px icon */
+
+    /* Layout */
+    display:          inline-flex;
+    align-items:      center;
+    justify-content:  center;
+    gap:              var(--ar-space-2);
+    min-height:       var(----ar-btn-height);
+
+    /* Sizing */
+    padding-block:    var(--_ar-btn-padding-y);
+    padding-inline:   var(--_ar-btn-padding-x);
+    min-height:       var(--_ar-btn-height);
+
+    /* Typography */
+    font-family:      inherit;
+    font-size:        var(--_ar-btn-font-size);
+    font-weight:      var(--ar-text-weight-medium);
+    line-height:      var(--ar-text-leading-none);
+    letter-spacing:   var(--ar-text-tracking-normal);
+    text-decoration:  none;
+    white-space:      nowrap;
+
+    /* Structure */
+    border-radius:    var(--ar-radius-base);
+    border:           1px solid transparent;
+    box-sizing:       border-box;
+    vertical-align:   middle;
+
+    /* Interaction */
+    cursor:           pointer;
+    user-select:      none;
+    -webkit-user-select: none;
+    appearance:       none;
+    -webkit-appearance: none;
+
+    /* Default: no shadow, no background — set by variants */
+    background-color: transparent;
+    color:            var(--ar-color-text-default);
+    box-shadow:       var(--ar-shadow-0);
+
+    /* Transition: color, bg, border, shadow */
+    transition:
+      color             var(--ar-duration-fast) var(--ar-ease-standard),
+      background-color  var(--ar-duration-fast) var(--ar-ease-standard),
+      border-color      var(--ar-duration-fast) var(--ar-ease-standard),
+      box-shadow        var(--ar-duration-base) var(--ar-ease-standard),
+      transform         var(--ar-duration-fast) var(--ar-ease-standard),
+      opacity           var(--ar-duration-fast) var(--ar-ease-standard);
+
+    /* Prevent text cursor on label text */
+    -webkit-user-select: none;
+    user-select:         none;
+  }
+
+  /* Active press effect — subtle downward movement */
+  .ar-btn:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(1px);
+  }
+
+  /* Focus ring — base.css/focus.css handles the universal rule.
+     No override needed here — the universal *:focus-visible rule
+     in focus.css applies the default lapis ring to all buttons.
+     Danger button overrides the ring color below.              */
+
+
+  /* ==========================================================
+     2. BUTTON — SIZE VARIANTS
+     ──────────────────────────────────────────────────────────
+     Uses private custom properties so each size variant
+     changes only one set of values, not every property
+     individually. The base rule consumes the privates;
+     variants simply override the privates.
+     ========================================================== */
+
+  /* Small — 32px tall, xs text, tighter padding */
+  .ar-btn--sm {
+    --_ar-btn-height:    2rem;       /* 32px */
+    --_ar-btn-font-size: var(--ar-text-size-xs);
+    --_ar-btn-padding-x: var(--ar-space-3);
+    --_ar-btn-padding-y: var(--ar-space-1);
+    --_ar-btn-icon-size: 0.875rem;  /* 14px icon */
+  }
+
+  /* Large — 48px tall, base text, generous padding */
+  .ar-btn--lg {
+    --_ar-btn-height:    3rem;       /* 48px */
+    --_ar-btn-font-size: var(--ar-text-size-base);
+    --_ar-btn-padding-x: var(--ar-space-6);
+    --_ar-btn-padding-y: var(--ar-space-3);
+    --_ar-btn-icon-size: 1.25rem;   /* 20px icon */
+  }
+
+
+  /* ==========================================================
+     3. BUTTON — PRIMARY VARIANT
+     ──────────────────────────────────────────────────────────
+     Filled lapis background. The primary action in any context.
+     One primary button per form / modal / section — more than
+     one dilutes the visual hierarchy signal.
+
+     Shadow on primary: shadow-1 at rest, shadow-2 on hover.
+     The slight elevation lift communicates "this is the main
+     CTA" without being decorative. It also provides visual
+     feedback on hover.
+     ========================================================== */
+
+  .ar-btn--primary {
+    background-color: var(--ar-color-primary-base);
+    color:            var(--ar-color-text-on-primary);
+    border-color:     var(--ar-color-primary-base);
+    box-shadow:       var(--ar-shadow-1);
+  }
+
+  .ar-btn--primary:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-primary-hover);
+    border-color:     var(--ar-color-primary-hover);
+    box-shadow:       var(--ar-shadow-2);
+  }
+
+  .ar-btn--primary:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-primary-active);
+    border-color:     var(--ar-color-primary-active);
+    box-shadow:       var(--ar-shadow-inset);
+    transform:        translateY(1px);
+  }
+
+
+  /* ==========================================================
+     4. BUTTON — SECONDARY VARIANT
+     ──────────────────────────────────────────────────────────
+     Bordered with primary surface tint. Supporting action —
+     appears alongside primary ("Save" + "Cancel", "Submit" +
+     "Save Draft"). Less visual weight than primary.
+     ========================================================== */
+
+  .ar-btn--secondary {
+    background-color: var(--ar-color-primary-surface);
+    color:            var(--ar-color-primary-emphasis);
+    border-color:     var(--ar-color-primary-border);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  .ar-btn--secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-primary-base);
+    color:            var(--ar-color-text-on-primary);
+    border-color:     var(--ar-color-primary-base);
+    box-shadow:       var(--ar-shadow-1);
+  }
+
+  .ar-btn--secondary:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-primary-hover);
+    color:            var(--ar-color-text-on-primary);
+    border-color:     var(--ar-color-primary-hover);
+    box-shadow:       var(--ar-shadow-inset);
+    transform:        translateY(1px);
+  }
+
+
+  /* ==========================================================
+     5. BUTTON — GHOST VARIANT
+     ──────────────────────────────────────────────────────────
+     Visible border, no fill at rest. Tertiary action — less
+     prominent than secondary. Used for: cancel/back actions,
+     toolbar buttons, filter toggles, table row actions.
+     ========================================================== */
+
+  .ar-btn--ghost {
+    background-color: transparent;
+    color:            var(--ar-color-text-default);
+    border-color:     var(--ar-color-border-default);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  .ar-btn--ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-state-hover-bg);
+    color:            var(--ar-color-text-heading);
+    border-color:     var(--ar-color-border-default);
+    box-shadow:       var(--ar-shadow-1);
+  }
+
+  .ar-btn--ghost:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-state-active-bg);
+    color:            var(--ar-color-text-heading);
+    border-color:     var(--ar-color-border-default);
+    box-shadow:       var(--ar-shadow-inset);
+    transform:        translateY(1px);
+  }
+
+
+  /* ==========================================================
+     6. BUTTON — DANGER VARIANT
+     ──────────────────────────────────────────────────────────
+     Filled ember background. Destructive actions only:
+     delete, remove, revoke, disable, unsubscribe. Never use
+     for primary actions that happen to be important — "danger"
+     communicates irreversibility, not importance.
+
+     The danger button keeps the DEFAULT (lapis) focus ring,
+     not a red ring. Rationale: a red button with a red ring
+     has very low ring-to-button contrast. The lapis ring is
+     clearly distinct from the ember background.
+     See focus.css section 9 for the component contract note.
+     ========================================================== */
+
+  .ar-btn--danger {
+    background-color: var(--ar-color-danger-base);
+    color:            var(--ar-color-text-on-danger);
+    border-color:     var(--ar-color-danger-base);
+    box-shadow:       var(--ar-shadow-1);
+  }
+
+  .ar-btn--danger:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-danger-hover);
+    border-color:     var(--ar-color-danger-hover);
+    box-shadow:       var(--ar-shadow-2);
+  }
+
+  .ar-btn--danger:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-danger-active);
+    border-color:     var(--ar-color-danger-active);
+    box-shadow:       var(--ar-shadow-inset);
+    transform:        translateY(1px);
+  }
+
+
+  /* ==========================================================
+     7. BUTTON — DANGER GHOST VARIANT
+     ──────────────────────────────────────────────────────────
+     Danger-colored border and text, no fill at rest.
+     For destructive actions that need LESS visual weight than
+     a filled danger button — table row delete, remove item
+     in a list, inline undo action.
+     ========================================================== */
+
+  .ar-btn--danger-ghost {
+    background-color: transparent;
+    color:            var(--ar-color-danger-text);
+    border-color:     var(--ar-color-danger-border);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  .ar-btn--danger-ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-danger-surface);
+    color:            var(--ar-color-danger-text);
+    border-color:     var(--ar-color-danger-base);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  .ar-btn--danger-ghost:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: var(--ar-color-danger-base);
+    color:            var(--ar-color-text-on-danger);
+    border-color:     var(--ar-color-danger-base);
+    box-shadow:       var(--ar-shadow-inset);
+    transform:        translateY(1px);
+  }
+
+
+  /* ==========================================================
+     8. BUTTON — LINK VARIANT
+     ──────────────────────────────────────────────────────────
+     Visually styled as a link. No border, no background.
+     The lowest visual weight button variant. Use for:
+     "Cancel", "Skip this step", "More details", "Learn more".
+
+     The link button has button dimensions (height, padding)
+     so it aligns correctly in flex containers alongside other
+     button variants. This distinguishes it from a plain <a>
+     link which has no height constraints.
+     ========================================================== */
+
+  .ar-btn--link {
+    background-color: transparent;
+    color:            var(--ar-color-text-link);
+    border-color:     transparent;
+    box-shadow:       var(--ar-shadow-0);
+    text-decoration:  underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    padding-inline:   var(--ar-space-1);
+    /* Reduced horizontal padding since there is no background
+       fill to create visual weight. Keeps it compact.        */
+  }
+
+  .ar-btn--link:hover:not(:disabled):not([aria-disabled="true"]) {
+    color:            var(--ar-color-text-link-hover);
+    background-color: transparent;
+    text-decoration-thickness: 2px;
+  }
+
+  .ar-btn--link:active:not(:disabled):not([aria-disabled="true"]) {
+    color:    var(--ar-color-primary-active);
+    transform: none;
+    /* Link buttons do not press down visually — they
+       behave like links, not physical buttons.              */
+  }
+
+
+  /* ==========================================================
+     9. BUTTON — INVERSE VARIANT
+     ──────────────────────────────────────────────────────────
+     White-on-transparent for dark surface contexts — dark nav,
+     dark hero, dark sidebar. The border is semi-transparent
+     white so it adapts to any dark background tone.
+     ========================================================== */
+
+  .ar-btn--inverse {
+    background-color: hsl(0 0% 100% / 0.12);
+    color:            var(--ar-color-text-inverse);
+    border-color:     hsl(0 0% 100% / 0.30);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  .ar-btn--inverse:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: hsl(0 0% 100% / 0.22);
+    border-color:     hsl(0 0% 100% / 0.50);
+  }
+
+  .ar-btn--inverse:active:not(:disabled):not([aria-disabled="true"]) {
+    background-color: hsl(0 0% 100% / 0.08);
+    box-shadow:       var(--ar-shadow-inset);
+    transform:        translateY(1px);
+  }
+
+  /* Focus ring on inverse — white ring visible on dark surface */
+  [data-layer="inverse"] .ar-btn:focus-visible,
+  [data-theme="dark"] .ar-btn:focus-visible,
+  .ar-btn--inverse:focus-visible {
+    outline-color: hsl(0 0% 100%);
+  }
+
+
+  /* ==========================================================
+     10. BUTTON — DISABLED STATE
+     ──────────────────────────────────────────────────────────
+     Applied via the HTML disabled attribute (for <button>)
+     or aria-disabled="true" (for <a> used as button).
+
+     DISABLED VS ARIA-DISABLED:
+     - [disabled]: button is removed from tab order, cannot
+       receive click events. Correct for <button> elements.
+     - [aria-disabled="true"]: element remains in tab order
+       and focusable (useful when you want to show a tooltip
+       explaining why the button is disabled). Use with
+       JavaScript to prevent the click action.
+
+     Both produce identical visual appearance.
+
+     The disabled state intentionally has very low contrast
+     (~1.9:1) because WCAG 1.4.3 exempts disabled controls.
+     The low contrast IS the "disabled" visual signal.
+     Do not increase contrast for disabled buttons.
+     ========================================================== */
+
+  .ar-btn:disabled,
+  .ar-btn[aria-disabled="true"] {
+    background-color: var(--ar-color-state-disabled-fill);
+    color:            var(--ar-color-state-disabled-text);
+    border-color:     var(--ar-color-state-disabled-border);
+    box-shadow:       var(--ar-shadow-0);
+    cursor:           not-allowed;
+    transform:        none;
+    opacity:          1;
+    /* Explicit opacity: 1 prevents some browser UA stylesheets
+       from applying 0.5 opacity on disabled inputs. The token
+       colors already communicate the disabled state.          */
+  }
+
+  /* Ensure the base :active transform does not apply to disabled */
+  .ar-btn:active:disabled,
+  .ar-btn:active[aria-disabled="true"] {
+    transform: none;
+    box-shadow: var(--ar-shadow-0);
+  }
+
+
+  /* ==========================================================
+     11. BUTTON — FULL WIDTH
+     ========================================================== */
+
+  .ar-btn--full {
+    display: flex;
+    width:   100%;
+    /* flex (not inline-flex) + 100% width spans the full
+       available width of the containing block.               */
+  }
+
+
+  /* ==========================================================
+     12. BUTTON — PILL SHAPE
+     ──────────────────────────────────────────────────────────
+     Full border-radius pill for marketing CTAs, hero sections,
+     newsletter signups — contexts where the rounded shape
+     feels more approachable or brand-aligned.
+     ========================================================== */
+
+  .ar-btn--pill {
+    border-radius: var(--ar-radius-full);
+    padding-inline: var(--ar-space-6);
+    /* Extra horizontal padding prevents pill buttons from
+       looking too squat at the base and sm sizes.            */
+  }
+
+  .ar-btn--pill.ar-btn--sm {
+    padding-inline: var(--ar-space-4);
+  }
+
+
+  /* ==========================================================
+     13. BUTTON — ICON LAYOUT HELPERS
+     ──────────────────────────────────────────────────────────
+     The gap between icon and text is set in the base rule.
+     The icon element itself needs explicit sizing to prevent
+     SVG icons from inheriting unexpected dimensions.
+     ========================================================== */
+
+  .ar-btn__icon {
+    display:     block;
+    flex-shrink: 0;
+    width:       var(--_ar-btn-icon-size);
+    height:      var(--_ar-btn-icon-size);
+    color:       inherit;
+    /* SVG icons inherit the button's text color. No need for
+       explicit fill — use currentColor in the SVG source.    */
+  }
+
+  /* Icon-only button — remove text padding, make it square */
+  .ar-btn--icon-only {
+    padding-inline: var(--_ar-btn-padding-y);
+    /* padding-inline equals padding-block (y) to make the
+       button as wide as it is tall — a perfect square.       */
+    aspect-ratio: 1;
+  }
+
+
+  /* ==========================================================
+     14. BUTTON — LOADING STATE
+     ──────────────────────────────────────────────────────────
+     Applied when an async action is in progress. The button
+     shows a spinner alongside the label text.
+
+     The spinner is a CSS-only rotating ring. No JavaScript
+     animation library is required. The spin animation is
+     automatically disabled by motion.css when the user
+     has requested reduced motion.
+
+     Implementation requires:
+     - aria-busy="true" on the button
+     - disabled attribute (prevents double-submission)
+     - aria-live="polite" region elsewhere on the page to
+       announce the loading state to screen readers
+     - <span class="ar-btn__spinner" aria-hidden="true">
+       (the visual spinner is decorative — aria-hidden)
+     ========================================================== */
+
+  .ar-btn--loading {
+    cursor: wait;
+    /* cursor: wait signals "the computer is working"          */
+  }
+
+  .ar-btn__spinner {
+    display:       block;
+    flex-shrink:   0;
+    width:         var(--_ar-btn-icon-size);
+    height:        var(--_ar-btn-icon-size);
+    border:        2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--ar-radius-full);
+    animation:     ar-btn-spin 0.75s linear infinite;
+  }
+
+  @keyframes ar-btn-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ar-btn__spinner {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      /* Spinner becomes a static ring — still visible,
+         but does not rotate. The aria-busy + disabled
+         state communicates loading without motion.          */
+    }
+  }
+
+
+  /* ==========================================================
+     15. BUTTON GROUP
+     ──────────────────────────────────────────────────────────
+     A container for multiple related buttons. The group
+     merges adjacent button borders so they share a single
+     border between them, reducing visual noise.
+
+     Usage:
+       <div class="ar-btn-group" role="group" aria-label="Text alignment">
+         <button class="ar-btn ar-btn--ghost">Left</button>
+         <button class="ar-btn ar-btn--ghost">Center</button>
+         <button class="ar-btn ar-btn--ghost">Right</button>
+       </div>
+
+     The role="group" and aria-label are required for groups
+     of related toggle buttons. For simple action groups
+     (Save / Cancel) without toggle behavior, role and
+     aria-label are optional.
+     ========================================================== */
+
+  .ar-btn-group {
+    display:     inline-flex;
+    align-items: stretch;
+  }
+
+  /* Remove inner-edge border-radius to create joined appearance */
+  .ar-btn-group .ar-btn {
+    border-radius: 0;
+  }
+
+  .ar-btn-group .ar-btn:first-child {
+    border-start-start-radius: var(--ar-radius-base);
+    border-end-start-radius:   var(--ar-radius-base);
+  }
+
+  .ar-btn-group .ar-btn:last-child {
+    border-start-end-radius: var(--ar-radius-base);
+    border-end-end-radius:   var(--ar-radius-base);
+  }
+
+  /* Collapse the shared border between adjacent buttons */
+  .ar-btn-group .ar-btn + .ar-btn {
+    margin-inline-start: -1px;
+    /* Negative margin pulls each button left by 1px, overlapping
+       borders. The result is a shared 1px border.              */
+  }
+
+  /* Ensure the hovered/active button's border appears above
+     its neighbor (without z-index, the overlapping border
+     from the next sibling would cover the hover state).       */
+  .ar-btn-group .ar-btn:hover,
+  .ar-btn-group .ar-btn:focus-visible {
+    position: relative;
+    z-index:  var(--ar-z-raised);
+  }
+
+  /* Pill group: radius on outer edges only */
+  .ar-btn-group--pill .ar-btn:first-child {
+    border-start-start-radius: var(--ar-radius-full);
+    border-end-start-radius:   var(--ar-radius-full);
+  }
+
+  .ar-btn-group--pill .ar-btn:last-child {
+    border-start-end-radius: var(--ar-radius-full);
+    border-end-end-radius:   var(--ar-radius-full);
+  }
+
+  /* Vertical button group */
+  .ar-btn-group--vertical {
+    flex-direction: column;
+    align-items:    stretch;
+  }
+
+  .ar-btn-group--vertical .ar-btn:first-child {
+    border-radius: 0;
+    border-start-start-radius: var(--ar-radius-base);
+    border-start-end-radius:   var(--ar-radius-base);
+  }
+
+  .ar-btn-group--vertical .ar-btn:last-child {
+    border-radius: 0;
+    border-end-start-radius: var(--ar-radius-base);
+    border-end-end-radius:   var(--ar-radius-base);
+  }
+
+  .ar-btn-group--vertical .ar-btn + .ar-btn {
+    margin-inline-start: 0;
+    margin-block-start:  -1px;
+  }
+
+
+  /* ==========================================================
+     16. REDUCED MOTION
+     ========================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    .ar-btn {
+      transition-duration: 0.01ms !important;
+    }
+
+    .ar-btn:active:not(:disabled):not([aria-disabled="true"]) {
+      transform: none;
+    }
+  }
+
+
+  /* ==========================================================
+     17. FORCED COLORS / HIGH CONTRAST MODE
+     ========================================================== */
+
+  @media (forced-colors: active) {
+
+    .ar-btn {
+      border:              1px solid ButtonBorder;
+      background-color:    ButtonFace;
+      color:               ButtonText;
+      forced-color-adjust: none;
+    }
+
+    .ar-btn:hover:not(:disabled):not([aria-disabled="true"]) {
+      border-color:     Highlight;
+      background-color: ButtonFace;
+      color:            ButtonText;
+    }
+
+    .ar-btn:focus-visible {
+      outline-color: Highlight;
+    }
+
+    .ar-btn:disabled,
+    .ar-btn[aria-disabled="true"] {
+      border-color:     GrayText;
+      background-color: ButtonFace;
+      color:            GrayText;
+    }
+
+    .ar-btn--primary,
+    .ar-btn--danger {
+      background-color: Highlight;
+      color:            HighlightText;
+      border-color:     Highlight;
+    }
+
+    .ar-btn--primary:hover,
+    .ar-btn--danger:hover {
+      background-color: Highlight;
+      color:            HighlightText;
+      filter:           brightness(1.15);
+    }
+
+    .ar-btn__spinner {
+      border-color:     ButtonText;
+      border-top-color: transparent;
+    }
+
+  }
+
+
+  /* ==========================================================
+     18. PRINT
+     ========================================================== */
+
+  @media print {
+
+    .ar-btn {
+      background-color: transparent !important;
+      color:            currentColor !important;
+      border:           1px solid currentColor;
+      box-shadow:       none;
+    }
+
+    .ar-btn--link {
+      border: 0;
+      text-decoration: underline;
+    }
+
+    .ar-btn__spinner {
+      display: none;
+    }
+
+  }
+
+} /* end @layer components */
+
+
+/* ============================================================
+   END OF FILE — button.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (35+ references):
+   Typography: --ar-text-size-xs, -sm, -base
+               --ar-text-weight-medium
+               --ar-text-leading-none
+               --ar-text-tracking-normal
+   Spacing:    --ar-space-1, -2, -3, -4, -6
+   Radius:     --ar-radius-base, -full
+   Shadow:     --ar-shadow-0, -1, -2, -inset
+   Motion:     --ar-duration-fast, -base, --ar-ease-standard
+   Focus:      --ar-focus-ring-width, -offset, -style,
+               --ar-focus-ring-color-default
+   Z-index:    --ar-z-raised
+   Color:      --ar-color-primary-surface, -border, -base,
+               --ar-color-primary-hover, -active, -emphasis
+               --ar-color-danger-surface, -border, -base,
+               --ar-color-danger-hover, -active, -text
+               --ar-color-text-on-primary, -on-danger
+               --ar-color-text-default, -heading, -muted,
+               --ar-color-text-link, -link-hover, -inverse
+               --ar-color-text-disabled
+               --ar-color-layer-base
+               --ar-color-border-default, -divider
+               --ar-color-state-hover-bg, -active-bg
+               --ar-color-state-disabled-fill, -text, -border
+
+   Private tokens (internal):
+   --_ar-btn-height, --_ar-btn-font-size,
+   --_ar-btn-padding-x, --_ar-btn-padding-y, --_ar-btn-icon-size
+
+   Hard-coded values (justified structural constants):
+   1px     — border width (structural constant throughout)
+   2px     — spinner border width (structural constant)
+   1px     — translateY press effect (structural constant)
+   3px     — link underline offset (perceptual constant)
+   0.75s   — spinner rotation speed (animation constant)
+   hsl(0 0% 100% / 0.12/0.22/0.08/0.30/0.50) — inverse
+             button overlays (structural — adapts to any dark bg)
+
+   Classes produced (22):
+   Base:      .ar-btn
+   Variants:  .ar-btn--primary, --secondary, --ghost,
+              .ar-btn--danger, --danger-ghost, --link, --inverse
+   Size:      .ar-btn--sm, --lg
+   Layout:    .ar-btn--full, --pill, --icon-only
+   State:     .ar-btn--loading
+   Elements:  .ar-btn__icon, .ar-btn__spinner
+   Group:     .ar-btn-group, .ar-btn-group--pill,
+              .ar-btn-group--vertical
+
+   TESTING CHECKLIST:
+   □ PRIMARY: lapis fill, white text, shadow-1 at rest
+   □ PRIMARY hover: lapis-700 fill, shadow-2
+   □ PRIMARY active: lapis-active fill, inset shadow, translateY 1px
+   □ SECONDARY: lapis-surface fill, lapis border
+   □ SECONDARY hover: fills to lapis, white text
+   □ GHOST: transparent, default border
+   □ GHOST hover: neutral overlay, slight shadow
+   □ DANGER: ember fill, white text, shadow-1
+   □ DANGER hover: ember-700, shadow-2
+   □ DANGER-GHOST: transparent, danger border + text
+   □ LINK: no bg/border, underlined, link color
+   □ LINK hover: link-hover color, thicker underline
+   □ INVERSE: semi-transparent white on dark surface
+   □ All variants: disabled state (bg: stone-50, text: stone-300)
+   □ Disabled: cursor: not-allowed
+   □ Disabled: no hover/active effects
+   □ aria-disabled="true": same visual as disabled
+   □ --sm: 32px height verified
+   □ (base): 40px height verified
+   □ --lg: 48px height verified
+   □ --full: spans full container width
+   □ --pill: full border-radius, wider padding
+   □ --icon-only: square shape, no text
+   □ .ar-btn__icon: correct size per variant
+   □ Loading: spinner visible, cursor: wait
+   □ Loading: spinner is static with prefers-reduced-motion
+   □ Button group: shared border (no double border)
+   □ Button group: hover button border above neighbor
+   □ Button group: first/last corners rounded only
+   □ Button group--vertical: stacks correctly
+   □ Active: translateY 1px (except link, disabled)
+   □ translateY: none with prefers-reduced-motion
+   □ Focus ring: visible on all variants via keyboard Tab
+   □ Focus ring: inverse button gets white ring
+   □ Forced colors: all variants use system color keywords
+   □ Print: transparent bg, border-only, no spinner
+   □ RTL: icon positions correct (logical margin)
+   □ At 320px: button does not overflow viewport
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

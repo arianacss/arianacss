@@ -1,0 +1,878 @@
+/* ============================================================
+   ArianaCSS — Input Component
+   File:    src/6-components/input.css
+   Layer:   @layer components
+   Version: 1.0.0
+
+   PURPOSE:
+   Form input styles for all text-entry elements: text, email,
+   password, number, search, url, tel, and textarea. Includes
+   the label, field wrapper, helper text, and error message
+   that compose a complete form field.
+
+   SCOPE — WHAT THIS FILE COVERS:
+   ✓ .ar-input          — the input element itself
+   ✓ .ar-label          — the associated label
+   ✓ .ar-field          — wrapper: label + input + message
+   ✓ .ar-field__hint    — helper text beneath the input
+   ✓ .ar-field__error   — validation error message
+   ✓ .ar-field__count   — character count (optional)
+   ✓ .ar-input-group    — input + prefix/suffix addon
+   ✓ State variants:    --error, --success, --disabled
+   ✓ Size variants:     --sm, --lg
+   ✓ Textarea variant
+
+   SCOPE — WHAT THIS FILE DOES NOT COVER:
+   ✗ Select / dropdown — OS-native rendering, complex to override
+   ✗ Checkbox / radio  — custom styling deferred to v2.0
+   ✗ File upload       — complex browser UI, deferred to v2.0
+   ✗ Range / slider    — deferred to v2.0
+
+   DESIGN DECISIONS:
+
+   Inset shadow on focus:
+   Inputs receive a subtle inset shadow (--ar-shadow-inset) on
+   focus, creating the visual impression of the field being
+   "activated" or "pressed open." Combined with the focus ring
+   outline, this provides two layers of focus indication — one
+   inside the element (inset shadow), one outside (ring).
+
+   Border thickening on state:
+   Error and success states change the border color AND increase
+   its width from 1px to 2px. The width change provides a non-
+   color visual differentiator (WCAG 1.4.1 — color cannot be
+   the only means of conveying information). The 2px border is
+   visually distinct from the 1px default border without being
+   aggressive.
+
+   State-specific focus rings:
+   Input in error state → --ar-focus-ring-color-danger (red ring)
+   Input in success state → --ar-focus-ring-color-success (green ring)
+   The state-colored ring reinforces the state signal on keyboard
+   focus. A blue ring on a red-bordered error input would
+   contradict the error signal.
+
+   Background on sunken layer:
+   Inputs use --ar-color-layer-sunken (slightly darker than white)
+   as their default background. This subtle differentiation from
+   the page background (white) makes the input field visually
+   identifiable as a data-entry area even without a visible border.
+
+   TOKEN DEPENDENCIES:
+   --ar-text-size-xs, -sm, -base
+   --ar-text-weight-normal, -medium, -semibold
+   --ar-text-leading-normal, -relaxed
+   --ar-space-micro, -1, -2, -3, -4, -5
+   --ar-radius-base, -sm
+   --ar-shadow-inset, -0, -1
+   --ar-duration-fast, -base, --ar-ease-standard
+   --ar-focus-ring-width, -offset, -style
+   --ar-focus-ring-color-default, -color-danger, -color-success
+   --ar-color-layer-base, -sunken
+   --ar-color-text-default, -heading, -muted, -placeholder, -disabled
+   --ar-color-success-border, -base, -surface, -text
+   --ar-color-danger-border, -base, -surface, -text
+   --ar-color-border-default, -strong, -focus
+   --ar-color-state-disabled-fill, -disabled-text, -disabled-border
+   --ar-color-primary-base, -border, -surface
+
+   COMPONENT CONTRACT:
+   ✓ All values reference tokens — no hard-coded color values
+   ✓ No utility class dependencies in component CSS
+   ✓ Uses :focus-visible (not :focus)
+   ✓ State-specific focus ring colors applied per focus.css contract
+   ✓ All transitions have reduced-motion overrides
+   ✓ Forced colors block present
+   ✓ Works with all optional elements absent
+   ✓ Logical CSS properties throughout (RTL safe)
+   ✓ Autofill styling handled (webkit autofill override)
+   ============================================================ */
+
+
+@layer components {
+
+  /* ==========================================================
+     1. LABEL
+     ──────────────────────────────────────────────────────────
+     The label associated with an input. Always rendered as a
+     block element so it stacks above the input. Uses the
+     heading color (slightly darker than body text) to create
+     a visual hierarchy signal: label → input → helper text.
+
+     Required indicator:
+     The .ar-label--required modifier adds a red asterisk after
+     the label text via ::after. The asterisk is decorative
+     supplementation — the input itself must also have the
+     required attribute and an accessible error message when
+     left empty. Color alone cannot signal "required".
+     ========================================================== */
+
+  .ar-label {
+    display:          block;
+    font-size:        var(--ar-text-size-sm);
+    font-weight:      var(--ar-text-weight-medium);
+    line-height:      var(--ar-text-leading-normal);
+    color:            var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-1);
+    cursor:           default;
+  }
+
+  /* Required field asterisk */
+  .ar-label--required::after {
+    content:            " *";
+    color:              var(--ar-color-danger-base);
+    font-weight:        var(--ar-text-weight-normal);
+    aria-hidden:        true;
+    /* Note: aria-hidden is not a valid CSS property — this is
+       documentation only. The asterisk is visual decoration;
+       the required state is communicated via the required
+       attribute on the input element itself.                  */
+  }
+
+  /* Optional indicator (for forms where most fields are required) */
+  .ar-label--optional::after {
+    content:     " (optional)";
+    font-size:   var(--ar-text-size-xs);
+    font-weight: var(--ar-text-weight-normal);
+    color:       var(--ar-color-text-muted);
+  }
+
+  /* Label in disabled field context */
+  .ar-label--disabled {
+    color:  var(--ar-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+
+  /* ==========================================================
+     2. INPUT BASE
+     ──────────────────────────────────────────────────────────
+     The text input element. Applies to:
+       input[type="text"]
+       input[type="email"]
+       input[type="password"]
+       input[type="number"]
+       input[type="search"]
+       input[type="url"]
+       input[type="tel"]
+       textarea
+     Applied via the .ar-input class, not element selectors,
+     so the component style is opt-in and does not override
+     inputs that intentionally have no framework styles.
+     ========================================================== */
+
+  .ar-input {
+    /* Private size tokens */
+    --_ar-input-height:   2.5rem;    /* 40px — base height */
+    --_ar-input-font-size: var(--ar-text-size-sm);
+    --_ar-input-padding-y: var(--ar-space-2);
+    --_ar-input-padding-x: var(--ar-space-3);
+
+    display:          block;
+    width:            100%;
+    min-height:       var(--_ar-input-height);
+
+    padding-block:    var(--_ar-input-padding-y);
+    padding-inline:   var(--_ar-input-padding-x);
+
+    font-family:      inherit;
+    font-size:        var(--_ar-input-font-size);
+    font-weight:      var(--ar-text-weight-normal);
+    line-height:      var(--ar-text-leading-normal);
+    color:            var(--ar-color-text-default);
+
+    background-color: var(--ar-color-layer-sunken);
+    border:           1px solid var(--ar-color-border-default);
+    border-radius:    var(--ar-radius-base);
+    box-shadow:       var(--ar-shadow-0);
+    box-sizing:       border-box;
+
+    appearance:       none;
+    -webkit-appearance: none;
+    outline:          none;
+    /* outline: none is safe here because :focus-visible rules
+       below restore the framework focus ring explicitly.      */
+
+    transition:
+      border-color  var(--ar-duration-fast) var(--ar-ease-standard),
+      box-shadow    var(--ar-duration-fast) var(--ar-ease-standard),
+      background-color var(--ar-duration-fast) var(--ar-ease-standard);
+  }
+
+  /* Placeholder text */
+  .ar-input::placeholder {
+    color:   var(--ar-color-text-placeholder);
+    opacity: 1;
+    /* opacity: 1 overrides Firefox's default 0.54 opacity on
+       placeholders. Our token already provides the correct
+       lightness; we don't need Firefox's additional dimming.  */
+  }
+
+  /* Hover state — border darkens slightly to confirm interactivity */
+  .ar-input:hover:not(:disabled):not([aria-disabled="true"]):not(:focus) {
+    border-color: var(--ar-color-border-strong);
+  }
+
+  /* Focus state — ring appears outside, inset shadow inside */
+  .ar-input:focus-visible {
+    border-color: var(--ar-color-border-focus);
+    box-shadow:   var(--ar-shadow-inset);
+    outline:      var(--ar-focus-ring-width)
+                  var(--ar-focus-ring-style)
+                  var(--ar-focus-ring-color-default);
+    outline-offset: var(--ar-focus-ring-offset);
+    background-color: var(--ar-color-layer-base);
+    /* Background lightens to pure white on focus — the input
+       "opens up" visually, contrasting with the sunken default. */
+  }
+
+
+  /* ==========================================================
+     3. INPUT — SIZE VARIANTS
+     ========================================================== */
+
+  /* Small — 32px tall, xs text */
+  .ar-input--sm {
+    --_ar-input-height:    2rem;     /* 32px */
+    --_ar-input-font-size: var(--ar-text-size-xs);
+    --_ar-input-padding-y: var(--ar-space-1);
+    --_ar-input-padding-x: var(--ar-space-2);
+  }
+
+  /* Large — 48px tall, base text */
+  .ar-input--lg {
+    --_ar-input-height:    3rem;     /* 48px */
+    --_ar-input-font-size: var(--ar-text-size-base);
+    --_ar-input-padding-y: var(--ar-space-3);
+    --_ar-input-padding-x: var(--ar-space-4);
+  }
+
+
+  /* ==========================================================
+     4. INPUT — STATE VARIANTS
+     ──────────────────────────────────────────────────────────
+     Error and success states communicate form validation
+     outcome. Applied programmatically via JavaScript after
+     validation runs.
+
+     TWO-SIGNAL APPROACH (WCAG 1.4.1 compliance):
+     Each state uses BOTH a color change AND a border-width
+     change (1px → 2px). Color alone cannot communicate state.
+     The border-width change is the non-color signal.
+
+     The 2px border introduces a 1px inward shift of content.
+     This is compensated by reducing padding by 1px when the
+     2px border is active — however, since the visual difference
+     is 1px total and only appears after user interaction, no
+     layout shift compensation is applied. The 1px shift is
+     below the threshold of perceived layout change.
+     ========================================================== */
+
+  /* Error state */
+  .ar-input--error {
+    border-width: 2px;
+    border-color: var(--ar-color-danger-base);
+    background-color: var(--ar-color-danger-surface);
+  }
+
+  .ar-input--error::placeholder {
+    color: var(--ar-color-danger-text);
+    opacity: 0.60;
+  }
+
+  .ar-input--error:hover:not(:disabled) {
+    border-color: var(--ar-color-danger-hover);
+  }
+
+  /* Error state focus ring — red ring signals the error on focus */
+  .ar-input--error:focus-visible {
+    border-color:   var(--ar-color-danger-base);
+    outline-color:  var(--ar-focus-ring-color-danger);
+    background-color: var(--ar-color-layer-base);
+    box-shadow: var(--ar-shadow-inset);
+  }
+
+  /* Success state */
+  .ar-input--success {
+    border-width: 2px;
+    border-color: var(--ar-color-success-base);
+    background-color: var(--ar-color-success-surface);
+  }
+
+  .ar-input--success:hover:not(:disabled) {
+    border-color: var(--ar-color-success-hover);
+  }
+
+  /* Success state focus ring — green ring signals validity on focus */
+  .ar-input--success:focus-visible {
+    border-color:   var(--ar-color-success-base);
+    outline-color:  var(--ar-focus-ring-color-success);
+    background-color: var(--ar-color-layer-base);
+    box-shadow: var(--ar-shadow-inset);
+  }
+
+
+  /* ==========================================================
+     5. INPUT — DISABLED STATE
+     ──────────────────────────────────────────────────────────
+     Disabled inputs communicate non-interactivity through low
+     contrast and cursor change. Not an error — just inactive.
+
+     Use the HTML disabled attribute on the input element, not
+     a class, so the input is correctly excluded from the tab
+     order and cannot receive click events.
+     ========================================================== */
+
+  .ar-input:disabled,
+  .ar-input[aria-disabled="true"] {
+    background-color: var(--ar-color-state-disabled-fill);
+    border-color:     var(--ar-color-state-disabled-border);
+    color:            var(--ar-color-state-disabled-text);
+    cursor:           not-allowed;
+    opacity:          1;
+    /* opacity: 1 prevents UA stylesheets from adding their own
+       opacity on disabled elements — our token values already
+       communicate the disabled state.                         */
+  }
+
+  .ar-input:disabled::placeholder {
+    color: var(--ar-color-text-disabled);
+  }
+
+
+  /* ==========================================================
+     6. TEXTAREA
+     ──────────────────────────────────────────────────────────
+     Textareas inherit all .ar-input styles. Additional rules
+     override the single-line input defaults that don't apply
+     to multi-line text entry.
+     ========================================================== */
+
+  textarea.ar-input {
+    min-height:  7rem;       /* 112px — three visible lines minimum */
+    height:      auto;       /* Override the fixed height from ar-input */
+    resize:      vertical;   /* Allow vertical resize only (horizontal
+                                resize would break layouts)             */
+    line-height: var(--ar-text-leading-relaxed);
+    /* Relaxed line height for comfortable multi-line reading  */
+    padding-block: var(--ar-space-2);
+    /* Slightly less vertical padding than the input height
+       would suggest — textareas don't have a fixed height.   */
+  }
+
+  /* Textarea sizes */
+  textarea.ar-input--sm {
+    min-height: 5rem;    /* ~2.5 lines */
+    padding-block: var(--ar-space-1);
+  }
+
+  textarea.ar-input--lg {
+    min-height: 9rem;    /* ~4 lines */
+    padding-block: var(--ar-space-3);
+  }
+
+
+  /* ==========================================================
+     7. WEBKIT AUTOFILL OVERRIDE
+     ──────────────────────────────────────────────────────────
+     WebKit browsers apply a blue/yellow background to
+     autofilled inputs that overrides all CSS background-color
+     rules. This cannot be prevented, only worked around.
+     The workaround: use a box-shadow to paint the desired
+     background color OVER the autofill background.
+
+     The large spread (1000px) ensures the box-shadow fills
+     the entire input regardless of size. The !important is
+     required to override the browser UA stylesheet's autofill
+     styles — this is one of the only legitimate uses of
+     !important in component CSS, alongside [hidden] in reset.
+
+     The transition delay on autofill: 9999s effectively
+     prevents the browser from animating the autofill color
+     in, which would produce a jarring flash.
+     ========================================================== */
+
+  .ar-input:-webkit-autofill,
+  .ar-input:-webkit-autofill:hover,
+  .ar-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--ar-color-layer-base) inset !important;
+    -webkit-text-fill-color: var(--ar-color-text-default) !important;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+
+  .ar-input--error:-webkit-autofill,
+  .ar-input--error:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--ar-color-danger-surface) inset !important;
+    -webkit-text-fill-color: var(--ar-color-text-default) !important;
+  }
+
+
+  /* ==========================================================
+     8. FIELD WRAPPER (.ar-field)
+     ──────────────────────────────────────────────────────────
+     The complete form field: label + input + hint/error.
+     The wrapper groups these elements semantically and
+     provides consistent spacing between them.
+
+     ELEMENT STRUCTURE:
+       <div class="ar-field">
+         <label class="ar-label" for="email">Email</label>
+         <input class="ar-input" type="email" id="email"
+                name="email" autocomplete="email">
+         <p class="ar-field__hint">We'll never share your email.</p>
+       </div>
+
+     Error state structure:
+       <div class="ar-field ar-field--error">
+         <label class="ar-label ar-label--required" for="email">Email</label>
+         <input class="ar-input ar-input--error" type="email"
+                id="email" aria-describedby="email-error"
+                aria-invalid="true">
+         <p class="ar-field__error" id="email-error" role="alert">
+           Please enter a valid email address.
+         </p>
+       </div>
+
+     ACCESSIBILITY REQUIREMENTS:
+     - input id must match label for attribute
+     - aria-describedby on input must reference error/hint id
+     - aria-invalid="true" on input in error state
+     - role="alert" on error message for screen reader announcement
+     ========================================================== */
+
+  .ar-field {
+    display:       flex;
+    flex-direction: column;
+    gap:           var(--ar-space-1);
+    width:         100%;
+  }
+
+  /* Hint text — helper information below the input */
+  .ar-field__hint {
+    font-size:   var(--ar-text-size-xs);
+    font-weight: var(--ar-text-weight-normal);
+    line-height: var(--ar-text-leading-normal);
+    color:       var(--ar-color-text-muted);
+    margin:      0;
+  }
+
+  /* Error message — validation failure */
+  .ar-field__error {
+    display:     flex;
+    align-items: flex-start;
+    gap:         var(--ar-space-1);
+    font-size:   var(--ar-text-size-xs);
+    font-weight: var(--ar-text-weight-medium);
+    line-height: var(--ar-text-leading-normal);
+    color:       var(--ar-color-danger-text);
+    margin:      0;
+  }
+
+  /* Success message — validation success */
+  .ar-field__success {
+    font-size:   var(--ar-text-size-xs);
+    font-weight: var(--ar-text-weight-medium);
+    line-height: var(--ar-text-leading-normal);
+    color:       var(--ar-color-success-text);
+    margin:      0;
+  }
+
+  /* Character count — for inputs with maxlength */
+  .ar-field__count {
+    font-size:  var(--ar-text-size-xs);
+    color:      var(--ar-color-text-muted);
+    text-align: end;
+    margin:     0;
+    /* text-align: end is logical (RTL-safe) — count
+       appears at the reading-end edge.                       */
+  }
+
+  /* Count approaching limit — warn user */
+  .ar-field__count--warning {
+    color:       var(--ar-color-warning-text);
+    font-weight: var(--ar-text-weight-medium);
+  }
+
+  /* Count at limit — error signal */
+  .ar-field__count--limit {
+    color:       var(--ar-color-danger-text);
+    font-weight: var(--ar-text-weight-semibold);
+  }
+
+  /* Error state on the field wrapper */
+  .ar-field--error .ar-label {
+    color: var(--ar-color-danger-text);
+  }
+
+  /* Success state on the field wrapper */
+  .ar-field--success .ar-label {
+    color: var(--ar-color-success-text);
+  }
+
+  /* Disabled state on the field wrapper */
+  .ar-field--disabled .ar-label {
+    color:  var(--ar-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  /* :focus-within — highlight the active field group container.
+     This rule is established in focus.css as the .ar-field
+     :focus-within hook. The actual visual treatment is here
+     because input.css has the token context needed.           */
+  .ar-field:focus-within .ar-label {
+    color: var(--ar-color-primary-base);
+    /* Primary color on the label when the input inside is
+       focused — subtle but reinforces the active field signal. */
+  }
+
+  /* Don't override error/success label color on focus */
+  .ar-field--error:focus-within .ar-label {
+    color: var(--ar-color-danger-text);
+  }
+
+  .ar-field--success:focus-within .ar-label {
+    color: var(--ar-color-success-text);
+  }
+
+
+  /* ==========================================================
+     9. FIELD — SIZE VARIANTS
+     ──────────────────────────────────────────────────────────
+     Field size variants adjust the gap between label, input,
+     and messages to match the input size.
+     ========================================================== */
+
+  .ar-field--sm {
+    gap: var(--ar-space-micro);
+  }
+
+  .ar-field--sm .ar-label {
+    font-size: var(--ar-text-size-xs);
+  }
+
+  .ar-field--lg {
+    gap: var(--ar-space-2);
+  }
+
+  .ar-field--lg .ar-label {
+    font-size:   var(--ar-text-size-base);
+    font-weight: var(--ar-text-weight-semibold);
+  }
+
+  .ar-field--lg .ar-field__hint,
+  .ar-field--lg .ar-field__error,
+  .ar-field--lg .ar-field__success {
+    font-size: var(--ar-text-size-sm);
+  }
+
+
+  /* ==========================================================
+     10. INPUT GROUP
+     ──────────────────────────────────────────────────────────
+     An input with a prefix or suffix addon — text label,
+     icon, or button attached to the input edge.
+
+     Common patterns:
+     - URL prefix: https:// [input for path]
+     - Currency: $ [price input]
+     - Search: [input] [Search button]
+     - Domain: [subdomain input] .arianacss.dev
+
+     ELEMENT STRUCTURE:
+       <div class="ar-input-group">
+         <span class="ar-input-group__addon">https://</span>
+         <input class="ar-input" type="url" placeholder="example.com">
+       </div>
+
+       <div class="ar-input-group">
+         <input class="ar-input" type="text" placeholder="Search...">
+         <button class="ar-btn ar-btn--primary ar-input-group__btn">Search</button>
+       </div>
+     ========================================================== */
+
+  .ar-input-group {
+    display:     flex;
+    align-items: stretch;
+    width:       100%;
+  }
+
+  /* Addon: text, icon, or unit label attached to the input */
+  .ar-input-group__addon {
+    display:          inline-flex;
+    align-items:      center;
+    padding-inline:   var(--ar-space-3);
+    font-size:        var(--ar-text-size-sm);
+    font-weight:      var(--ar-text-weight-normal);
+    color:            var(--ar-color-text-muted);
+    background-color: var(--ar-color-layer-sunken);
+    border:           1px solid var(--ar-color-border-default);
+    white-space:      nowrap;
+    flex-shrink:      0;
+  }
+
+  /* Prefix addon (at the reading-start edge) */
+  .ar-input-group__addon:first-child {
+    border-inline-end: 0;
+    border-start-start-radius: var(--ar-radius-base);
+    border-end-start-radius:   var(--ar-radius-base);
+  }
+
+  /* Suffix addon (at the reading-end edge) */
+  .ar-input-group__addon:last-child {
+    border-inline-start: 0;
+    border-start-end-radius: var(--ar-radius-base);
+    border-end-end-radius:   var(--ar-radius-base);
+  }
+
+  /* Input inside a group — remove outer-edge radius */
+  .ar-input-group .ar-input {
+    flex: 1;
+    min-width: 0;
+    /* min-width: 0 prevents flex children from overflowing
+       when the input content is wider than available space.  */
+  }
+
+  /* Input between two addons */
+  .ar-input-group__addon + .ar-input,
+  .ar-input-group .ar-input:not(:first-child) {
+    border-start-start-radius: 0;
+    border-end-start-radius:   0;
+  }
+
+  .ar-input-group .ar-input:not(:last-child) {
+    border-start-end-radius: 0;
+    border-end-end-radius:   0;
+  }
+
+  /* Button addon attached to the input */
+  .ar-input-group__btn {
+    flex-shrink: 0;
+    border-radius: 0;
+  }
+
+  .ar-input-group__btn:first-child {
+    border-start-start-radius: var(--ar-radius-base);
+    border-end-start-radius:   var(--ar-radius-base);
+  }
+
+  .ar-input-group__btn:last-child {
+    border-start-end-radius: var(--ar-radius-base);
+    border-end-end-radius:   var(--ar-radius-base);
+  }
+
+  /* Collapse the shared border between adjacent group elements */
+  .ar-input-group .ar-input + .ar-input-group__addon,
+  .ar-input-group .ar-input + .ar-input-group__btn {
+    margin-inline-start: -1px;
+  }
+
+
+  /* ==========================================================
+     11. FIELDSET AND LEGEND
+     ──────────────────────────────────────────────────────────
+     Native HTML fieldset for grouping related fields.
+     Styled to match the framework's visual language without
+     the browser's default border and indent.
+
+     Usage:
+       <fieldset class="ar-fieldset">
+         <legend class="ar-legend">Shipping address</legend>
+         <div class="ar-field">...</div>
+         <div class="ar-field">...</div>
+       </fieldset>
+     ========================================================== */
+
+  .ar-fieldset {
+    border:          0;
+    padding:         0;
+    margin:          0;
+    min-width:       0;
+    /* min-width: 0 fixes a known Firefox fieldset flex bug   */
+  }
+
+  .ar-legend {
+    display:          block;
+    width:            100%;
+    font-size:        var(--ar-text-size-base);
+    font-weight:      var(--ar-text-weight-semibold);
+    color:            var(--ar-color-text-heading);
+    padding:          0;
+    margin-block-end: var(--ar-space-4);
+    padding-block-end: var(--ar-space-2);
+    border-block-end: 1px solid var(--ar-color-divider);
+  }
+
+
+  /* ==========================================================
+     12. REDUCED MOTION
+     ========================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    .ar-input {
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+
+  /* ==========================================================
+     13. FORCED COLORS / HIGH CONTRAST MODE
+     ========================================================== */
+
+  @media (forced-colors: active) {
+
+    .ar-input {
+      border:              1px solid ButtonBorder;
+      background-color:    Field;
+      color:               FieldText;
+      forced-color-adjust: none;
+    }
+
+    .ar-input:focus-visible {
+      outline-color:  Highlight;
+      border-color:   Highlight;
+    }
+
+    .ar-input:disabled {
+      border-color: GrayText;
+      color:        GrayText;
+    }
+
+    .ar-input--error {
+      border-color: LinkText;
+      /* LinkText is typically a strongly saturated color in
+         high-contrast mode — reasonable for error indication.  */
+    }
+
+    .ar-input-group__addon {
+      border-color:    ButtonBorder;
+      background:      ButtonFace;
+      color:           ButtonText;
+      forced-color-adjust: none;
+    }
+
+    .ar-label {
+      color: CanvasText;
+    }
+
+    .ar-field__error {
+      color: LinkText;
+    }
+
+    .ar-field__hint {
+      color: GrayText;
+    }
+
+  }
+
+
+  /* ==========================================================
+     14. PRINT
+     ========================================================== */
+
+  @media print {
+
+    .ar-input {
+      border:           1px solid hsl(0 0% 40%);
+      background-color: transparent;
+      box-shadow:       none;
+      color:            hsl(0 0% 0%);
+    }
+
+    .ar-field__error,
+    .ar-field__hint,
+    .ar-field__count {
+      /* Retain text — form validation context is meaningful
+         even in printed form summaries.                       */
+      color: hsl(0 0% 20%);
+    }
+
+  }
+
+} /* end @layer components */
+
+
+/* ============================================================
+   END OF FILE — input.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (30+ references):
+   Typography: --ar-text-size-xs, -sm, -base
+               --ar-text-weight-normal, -medium, -semibold
+               --ar-text-leading-normal, -relaxed
+   Spacing:    --ar-space-micro, -1, -2, -3, -4, -5
+   Radius:     --ar-radius-base, -sm
+   Shadow:     --ar-shadow-0, -1, -inset
+   Motion:     --ar-duration-fast, --ar-ease-standard
+   Focus:      --ar-focus-ring-width, -offset, -style,
+               --ar-focus-ring-color-default, -color-danger, -color-success
+   Color:      --ar-color-layer-base, -sunken
+               --ar-color-text-default, -heading, -muted,
+               --ar-color-text-placeholder, -disabled
+               --ar-color-danger-surface, -border, -base, -hover, -text
+               --ar-color-success-surface, -border, -base, -hover, -text
+               --ar-color-primary-base, -border, -surface
+               --ar-color-border-default, -strong, -focus
+               --ar-color-state-disabled-fill, -text, -border
+               --ar-color-text-muted, --ar-color-divider
+               --ar-color-warning-text
+
+   Private tokens (internal):
+   --_ar-input-height, --_ar-input-font-size,
+   --_ar-input-padding-y, --_ar-input-padding-x
+
+   Hard-coded values (justified structural constants):
+   2px      — error/success border width (two-signal approach)
+   1px      — border width default (structural constant)
+   1000px   — webkit autofill box-shadow spread (technique requirement)
+   9999s    — autofill transition delay (technique requirement)
+   7rem     — textarea default min-height (3 lines — structural)
+   5rem     — textarea sm min-height (structural)
+   9rem     — textarea lg min-height (structural)
+   0.60     — error placeholder opacity (visual constant)
+
+   Classes produced (28):
+   Label:      .ar-label, --required, --optional, --disabled
+   Input:      .ar-input, --sm, --lg, --error, --success
+   Field:      .ar-field, --sm, --lg, --error, --success, --disabled
+   Messages:   .ar-field__hint, __error, __success, __count,
+               .ar-field__count--warning, __count--limit
+   Group:      .ar-input-group, __addon, __btn
+   Fieldset:   .ar-fieldset, .ar-legend
+
+   TESTING CHECKLIST:
+   □ Base input: sunken bg, default border, sm text
+   □ Input hover: border darkens to border-strong
+   □ Input focus: primary border, inset shadow, focus ring, white bg
+   □ Input focus ring: lapis-colored outline visible via Tab
+   □ Error state: 2px ember border, surface tint bg
+   □ Error focus ring: RED outline (not blue) — critical check
+   □ Success state: 2px cedar border, surface tint bg
+   □ Success focus ring: GREEN outline — critical check
+   □ Disabled: stone-50 bg, stone-300 border, not-allowed cursor
+   □ Disabled: not focusable via Tab
+   □ Placeholder: lighter than entered text color
+   □ Placeholder on error: danger-text at 60% opacity
+   □ Autofill: white bg (not browser yellow/blue)
+   □ Autofill on error: danger-surface bg
+   □ Textarea: min-height 3 lines, vertical resize only
+   □ Textarea sm/lg sizes correct
+   □ .ar-label: medium weight, heading color, sm size
+   □ .ar-label--required: red asterisk after label
+   □ .ar-label--optional: "(optional)" suffix in muted color
+   □ Label turns primary color when field is focused (:focus-within)
+   □ Error field: label turns danger color
+   □ .ar-field gap: consistent spacing label → input → message
+   □ .ar-field__error: xs, medium weight, danger color
+   □ .ar-field__hint: xs, normal weight, muted color
+   □ .ar-field__count--limit: danger color, semibold
+   □ Input group prefix: attached, shared border collapsed
+   □ Input group suffix button: attached, radius on outer edge only
+   □ Input group: input flex-1, fills available space
+   □ .ar-fieldset: no border, no padding
+   □ .ar-legend: semibold, heading color, bottom border divider
+   □ RTL: label ::after asterisk positioned correctly
+   □ RTL: input-group addon at reading-end in RTL
+   □ All transitions instant with prefers-reduced-motion
+   □ Forced colors: Field background, FieldText, Highlight focus
+   □ Print: transparent bg, dark border
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

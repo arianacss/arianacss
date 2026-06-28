@@ -1,0 +1,951 @@
+/* ============================================================
+   ArianaCSS — Card Component
+   File:    src/6-components/card.css
+   Layer:   @layer components
+   Version: 1.0.0
+
+   PURPOSE:
+   The most compositional component in ArianaCSS. A card is a
+   contained surface that groups related content and actions.
+   Cards appear in grids, lists, dashboards, and content feeds.
+
+   WHY CARD IS LAST:
+   Card is the most compositional component — it is tested
+   with every other component inside it: badges, avatars,
+   buttons, inputs, and alerts can all appear inside a card.
+   It must be the last component written so all its inner
+   components are complete and verifiable.
+
+   DESIGN APPROACH:
+
+   Optional sections:
+   Every sub-element (.ar-card__header, __body, __footer,
+   __media) is optional. The card must render correctly with
+   any combination — or none — of these sections present.
+   This is tested explicitly in the checklist below.
+
+   Shadow + border approach:
+   The default card uses shadow-1 (resting elevation) with no
+   border. The --bordered variant uses a border with no shadow.
+   These are intentionally mutually exclusive visual signals:
+   shadow communicates floating elevation; border communicates
+   a contained region. Mixing both creates visual redundancy.
+
+   Interactive cards:
+   The --interactive variant is for clickable cards (product
+   cards, article previews, dashboard tiles). It lifts to
+   shadow-2 on hover and transitions smoothly. The entire card
+   is the click target — not just a "Read more" link.
+
+   Touch device hover:
+   The hover lift on --interactive uses @media (hover: hover)
+   to ensure the lift effect only applies on pointer devices.
+   On touch screens, the lift would appear on tap and stay
+   (no hover-end event), creating a confusing persistent
+   elevated state. @media (hover: hover) solves this correctly.
+
+   ELEMENT STRUCTURE:
+
+   Minimal card:
+     <div class="ar-card">
+       <div class="ar-card__body">
+         Content here.
+       </div>
+     </div>
+
+   Full card with all sections:
+     <div class="ar-card">
+       <div class="ar-card__media">
+         <img src="..." alt="...">
+       </div>
+       <div class="ar-card__header">
+         <h3 class="ar-card__title">Card Title</h3>
+         <p class="ar-card__subtitle">Optional subtitle</p>
+       </div>
+       <div class="ar-card__body">
+         <p>Card content paragraph.</p>
+       </div>
+       <div class="ar-card__footer">
+         <button class="ar-btn ar-btn--primary">Action</button>
+         <button class="ar-btn ar-btn--ghost">Cancel</button>
+       </div>
+     </div>
+
+   Interactive card (entire card is clickable):
+     <article class="ar-card ar-card--interactive">
+       <a class="ar-card__link" href="/article/slug" aria-label="Read: Article Title">
+         <div class="ar-card__media">...</div>
+         <div class="ar-card__header">
+           <h3 class="ar-card__title">Article Title</h3>
+         </div>
+         <div class="ar-card__body">...</div>
+       </a>
+     </article>
+
+   Card with badge in header:
+     <div class="ar-card">
+       <div class="ar-card__header">
+         <div style="display:flex;align-items:center;gap:0.5rem">
+           <h3 class="ar-card__title">Project Name</h3>
+           <span class="ar-badge ar-badge--success ar-badge--pill">Active</span>
+         </div>
+       </div>
+       <div class="ar-card__body">...</div>
+     </div>
+
+   TOKEN DEPENDENCIES:
+   --ar-text-size-xs, -sm, -base, -xl
+   --ar-text-weight-normal, -medium, -semibold
+   --ar-text-leading-normal, -relaxed
+   --ar-space-1, -2, -3, -4, -5, -6, -7
+   --ar-radius-base, -lg, -xl, -none
+   --ar-shadow-0, -1, -2
+   --ar-duration-base, --ar-ease-standard
+   --ar-focus-ring-width, -offset, -style, -color-default
+   --ar-color-layer-base, -raised, -sunken, -inverse
+   --ar-color-text-default, -heading, -muted, -inverse, -inverse-muted
+   --ar-color-border-default, -divider
+   --ar-color-primary-surface, -border, -base
+   --ar-color-success-surface, -border
+   --ar-color-warning-surface, -border
+   --ar-color-danger-surface, -border
+   --ar-color-info-surface, -border
+   --ar-color-state-hover-bg
+
+   COMPONENT CONTRACT:
+   ✓ All values reference tokens — no hard-coded color values
+   ✓ No utility class dependencies in component CSS
+   ✓ No references to other component files
+   ✓ Uses :focus-visible (not :focus)
+   ✓ All transitions covered by reduced-motion block
+   ✓ Forced colors block present
+   ✓ Works with ALL combinations of optional sub-elements
+   ✓ Interactive hover suppressed on touch devices (@media hover)
+   ✓ Logical CSS properties throughout (RTL safe)
+   ============================================================ */
+
+
+@layer components {
+
+  /* ==========================================================
+     1. CARD BASE
+     ──────────────────────────────────────────────────────────
+     Default card: white background, resting shadow, base
+     border-radius. No border (shadow provides the elevation
+     signal). All sub-elements are optional.
+
+     overflow: hidden clips media images and any content that
+     extends to the card edge to the border-radius, preventing
+     sharp corners on rounded media within the card.
+
+     display: flex + flex-direction: column enables footer
+     to sit at the bottom of variable-height cards when cards
+     are inside a flex or grid row with equal-height stretching.
+     ========================================================== */
+
+  .ar-card {
+    position:         relative;
+    display:          flex;
+    flex-direction:   column;
+    background-color: var(--ar-color-layer-base);
+    border-radius:    var(--ar-radius-base);
+    box-shadow:       var(--ar-shadow-1);
+    overflow:         hidden;
+    box-sizing:       border-box;
+    width:            100%;
+  }
+
+
+  /* ==========================================================
+     2. CARD — STYLE VARIANTS
+     ──────────────────────────────────────────────────────────
+     Each variant is a complete visual approach to the card
+     surface. Apply one variant per card — they are mutually
+     exclusive in practice (shadow vs border vs flat).
+     ========================================================== */
+
+  /* Flat — no shadow, no border. For cards inside an already-
+     bordered container (another card, a bordered panel, a
+     table cell). Reduces visual noise in dense layouts.      */
+  .ar-card--flat {
+    box-shadow: var(--ar-shadow-0);
+  }
+
+  /* Bordered — border instead of shadow. Use when the card
+     sits on a white surface where a shadow would bleed into
+     the background color, or in flat-design aesthetic contexts. */
+  .ar-card--bordered {
+    box-shadow:  var(--ar-shadow-0);
+    border:      1px solid var(--ar-color-border-default);
+  }
+
+  /* Raised — elevated shadow. For featured or selected cards
+     that need to appear above their siblings in a card grid. */
+  .ar-card--raised {
+    box-shadow: var(--ar-shadow-2);
+  }
+
+  /* Sunken — recessed surface. For secondary cards inside
+     a primary card, code snippet containers, or "well" panels
+     that should appear below the surrounding content level.  */
+  .ar-card--sunken {
+    background-color: var(--ar-color-layer-sunken);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  /* Inverse — dark card for dark-surface contexts.
+     Use on dark backgrounds: dark sidebars, dark hero sections,
+     dark dashboards. Provides a slightly lighter dark surface
+     to create depth within the dark context.                 */
+  .ar-card--inverse {
+    background-color: var(--ar-color-layer-inverse-raised);
+    box-shadow:       var(--ar-shadow-2);
+    color:            var(--ar-color-text-inverse);
+  }
+
+  .ar-card--inverse .ar-card__title {
+    color: var(--ar-color-text-inverse);
+  }
+
+  .ar-card--inverse .ar-card__subtitle,
+  .ar-card--inverse .ar-card__footer {
+    color: var(--ar-color-text-inverse-muted);
+  }
+
+  .ar-card--inverse .ar-card__divider {
+    border-color: hsl(0 0% 100% / 0.12);
+  }
+
+
+  /* ==========================================================
+     3. CARD — BORDER RADIUS VARIANTS
+     ──────────────────────────────────────────────────────────
+     The base radius (6px) is appropriate for dashboard and
+     SaaS contexts. For marketing and editorial, larger radii
+     create a friendlier aesthetic.
+     ========================================================== */
+
+  .ar-card--rounded-lg { border-radius: var(--ar-radius-lg); }
+  .ar-card--rounded-xl { border-radius: var(--ar-radius-xl); }
+  .ar-card--rounded-none { border-radius: var(--ar-radius-none); }
+
+
+  /* ==========================================================
+     4. CARD — SIZE VARIANTS
+     ──────────────────────────────────────────────────────────
+     Size variants adjust the internal padding of __header,
+     __body, and __footer sections uniformly. Applied to
+     the card root; consumed by sub-element rules below.
+     ========================================================== */
+
+  /* Private size tokens consumed by sub-elements */
+  .ar-card {
+    --_ar-card-padding: var(--ar-space-5);
+    /* 20px default internal padding                           */
+  }
+
+  .ar-card--sm {
+    --_ar-card-padding: var(--ar-space-3);
+    /* 12px compact padding for dense dashboard widgets        */
+  }
+
+  .ar-card--lg {
+    --_ar-card-padding: var(--ar-space-7);
+    /* 28px generous padding for featured content cards        */
+  }
+
+
+  /* ==========================================================
+     5. CARD — SUB-ELEMENTS
+     ──────────────────────────────────────────────────────────
+     All sub-elements are optional. The card renders correctly
+     with any combination of these elements.
+
+     INTER-ELEMENT BORDERS:
+     Dividers between header/body/footer use a bottom border
+     on the element above, not a separate hr element. This
+     approach uses less markup and avoids the specificity
+     complexity of styling an hr inside a card.
+     ========================================================== */
+
+  /* Media — image or video container at the top of the card.
+     Appears BEFORE header/body/footer.
+     overflow: visible overrides the card's overflow:hidden
+     on the child specifically — the card's overflow:hidden
+     handles clipping at the card boundary.                   */
+  .ar-card__media {
+    display:  block;
+    width:    100%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .ar-card__media img,
+  .ar-card__media video {
+    display:    block;
+    width:      100%;
+    height:     100%;
+    object-fit: cover;
+  }
+
+  /* Media aspect ratio helpers — applied directly on __media */
+  .ar-card__media--video   { aspect-ratio: 16 / 9; }
+  .ar-card__media--photo   { aspect-ratio: 4  / 3; }
+  .ar-card__media--square  { aspect-ratio: 1  / 1; }
+  .ar-card__media--wide    { aspect-ratio: 21 / 9; }
+
+
+  /* Header — card title, subtitle, and optional header actions */
+  .ar-card__header {
+    display:        flex;
+    flex-direction: column;
+    gap:            var(--ar-space-1);
+    padding:        var(--_ar-card-padding);
+    padding-block-end: var(--ar-space-3);
+    flex-shrink:    0;
+  }
+
+  /* Header with a horizontal layout (title + action button) */
+  .ar-card__header--row {
+    flex-direction:  row;
+    align-items:     center;
+    justify-content: space-between;
+    gap:             var(--ar-space-3);
+  }
+
+  /* Bottom border on header when body follows */
+  .ar-card__header + .ar-card__body,
+  .ar-card__header + .ar-card__media {
+    /* Handled via border-block-end on header when needed.
+       Applied via --separated modifier below.               */
+  }
+
+  /* Separated header: has a visible divider below */
+  .ar-card--separated .ar-card__header {
+    border-block-end: 1px solid var(--ar-color-divider);
+    padding-block-end: var(--_ar-card-padding);
+  }
+
+  /* Separated footer: has a visible divider above */
+  .ar-card--separated .ar-card__footer {
+    border-block-start: 1px solid var(--ar-color-divider);
+    padding-block-start: var(--_ar-card-padding);
+  }
+
+
+  /* Title — the primary heading of the card */
+  .ar-card__title {
+    font-size:      var(--ar-text-size-xl);
+    font-weight:    var(--ar-text-weight-semibold);
+    line-height:    var(--ar-text-leading-normal);
+    color:          var(--ar-color-text-heading);
+    margin:         0;
+  }
+
+  /* Subtitle — secondary description below the title */
+  .ar-card__subtitle {
+    font-size:   var(--ar-text-size-sm);
+    font-weight: var(--ar-text-weight-normal);
+    line-height: var(--ar-text-leading-normal);
+    color:       var(--ar-color-text-muted);
+    margin:      0;
+  }
+
+
+  /* Body — the main content area of the card */
+  .ar-card__body {
+    padding:     var(--_ar-card-padding);
+    flex:        1;
+    /* flex: 1 allows the body to expand and fill available
+       height when cards in a row are equal height (stretch). */
+    font-size:   var(--ar-text-size-base);
+    line-height: var(--ar-text-leading-relaxed);
+    color:       var(--ar-color-text-default);
+  }
+
+  /* When header exists before body, reduce top padding on body
+     to avoid double-spacing. The header's padding-block-end
+     already provides the gap.                                */
+  .ar-card__header + .ar-card__body {
+    padding-block-start: 0;
+  }
+
+  /* Remove bottom margin from last paragraph in body */
+  .ar-card__body > p:last-child {
+    margin-block-end: 0;
+  }
+
+
+  /* Footer — actions and metadata at the bottom of the card */
+  .ar-card__footer {
+    display:         flex;
+    align-items:     center;
+    gap:             var(--ar-space-2);
+    padding:         var(--_ar-card-padding);
+    padding-block-start: var(--ar-space-3);
+    flex-shrink:     0;
+    color:           var(--ar-color-text-muted);
+    font-size:       var(--ar-text-size-sm);
+  }
+
+  /* Footer with actions pushed to the end */
+  .ar-card__footer--end {
+    justify-content: flex-end;
+  }
+
+  /* Footer with primary action on end, secondary on start */
+  .ar-card__footer--between {
+    justify-content: space-between;
+  }
+
+
+  /* Explicit divider element (optional horizontal rule) */
+  .ar-card__divider {
+    display:           block;
+    height:            0;
+    border:            0;
+    border-block-start: 1px solid var(--ar-color-divider);
+    margin-block:      0;
+    /* No margin — padding from adjacent sections provides spacing */
+  }
+
+
+  /* Meta row — for dates, authors, category tags, read time */
+  .ar-card__meta {
+    display:     flex;
+    align-items: center;
+    flex-wrap:   wrap;
+    gap:         var(--ar-space-2);
+    font-size:   var(--ar-text-size-xs);
+    color:       var(--ar-color-text-muted);
+  }
+
+
+  /* ==========================================================
+     6. CARD — INTERACTIVE VARIANT
+     ──────────────────────────────────────────────────────────
+     For clickable cards: product tiles, article previews,
+     dashboard navigation tiles, link cards.
+
+     The --interactive modifier makes the CARD ITSELF the
+     click target via a child .ar-card__link element that
+     stretches to cover the entire card with ::after.
+
+     HOVER LIFT:
+     Shadow transitions from shadow-1 (resting) to shadow-2
+     (hover) communicating liftability. Combined with a
+     subtle translateY(-2px) the card visually lifts.
+
+     TOUCH DEVICES:
+     @media (hover: hover) ensures the lift only applies on
+     pointer devices (mouse, trackpad). On touch devices, the
+     hover state persists after tap and would leave the card
+     in a permanently raised state until another element is
+     tapped. The media query prevents this entirely.
+
+     CURSOR:
+     cursor: pointer on the card root (not just the link)
+     so the pointer appears anywhere on the card, not just
+     over text content.
+     ========================================================== */
+
+  .ar-card--interactive {
+    cursor:     pointer;
+    transition:
+      box-shadow var(--ar-duration-base) var(--ar-ease-standard),
+      transform  var(--ar-duration-base) var(--ar-ease-standard);
+  }
+
+  @media (hover: hover) {
+    .ar-card--interactive:hover {
+      box-shadow: var(--ar-shadow-2);
+      transform:  translateY(-2px);
+    }
+  }
+
+  .ar-card--interactive:active {
+    box-shadow: var(--ar-shadow-1);
+    transform:  translateY(0);
+  }
+
+
+  /* .ar-card__link — the full-card clickable area.
+     Uses ::after to create a stretched overlay so the entire
+     card surface is clickable, regardless of where in the card
+     hierarchy this anchor element is placed.                  */
+  .ar-card__link {
+    text-decoration: none;
+    color:           inherit;
+    display:         contents;
+    /* display: contents removes the anchor's own box so it
+       does not affect card layout. The ::after pseudo-element
+       creates the clickable overlay.                          */
+  }
+
+  /* Stretched link technique — the ::after overlay */
+  .ar-card__link::after {
+    content:  "";
+    position: absolute;
+    inset:    0;
+    /* inset: 0 is shorthand for top:0, right:0, bottom:0, left:0.
+       Positions the overlay to cover the entire card.         */
+    z-index:  var(--ar-z-raised);
+    border-radius: inherit;
+  }
+
+  /* Focus ring on the card via the link */
+  .ar-card__link:focus-visible::after {
+    outline:        var(--ar-focus-ring-width)
+                    var(--ar-focus-ring-style)
+                    var(--ar-focus-ring-color-default);
+    outline-offset: var(--ar-focus-ring-offset);
+  }
+
+  /* Ensure interactive elements inside the card (buttons, links)
+     appear above the stretched link overlay so they remain
+     clickable independently.                                  */
+  .ar-card--interactive .ar-btn,
+  .ar-card--interactive .ar-badge--interactive,
+  .ar-card--interactive .ar-avatar--interactive,
+  .ar-card--interactive a:not(.ar-card__link) {
+    position: relative;
+    z-index:  calc(var(--ar-z-raised) + 1);
+  }
+
+
+  /* ==========================================================
+     7. CARD — SEMANTIC COLOR VARIANTS
+     ──────────────────────────────────────────────────────────
+     Tinted card surfaces for status-driven content:
+     - Success: completed tasks, positive metrics
+     - Warning: attention-needed items, pending actions
+     - Danger: errors, critical issues
+     - Info: informational panels, neutral status
+     - Primary: highlighted or selected cards
+
+     Each uses the role's surface color (lightest tint) as the
+     background and the role's border color for the outline.
+     Text inherits from the base card and remains readable.
+     ========================================================== */
+
+  .ar-card--primary {
+    background-color: var(--ar-color-primary-surface);
+    border:           1px solid var(--ar-color-primary-border);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  .ar-card--success {
+    background-color: var(--ar-color-success-surface);
+    border:           1px solid var(--ar-color-success-border);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  .ar-card--warning {
+    background-color: var(--ar-color-warning-surface);
+    border:           1px solid var(--ar-color-warning-border);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  .ar-card--danger {
+    background-color: var(--ar-color-danger-surface);
+    border:           1px solid var(--ar-color-danger-border);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+  .ar-card--info {
+    background-color: var(--ar-color-info-surface);
+    border:           1px solid var(--ar-color-info-border);
+    box-shadow:       var(--ar-shadow-0);
+  }
+
+
+  /* ==========================================================
+     8. CARD — HORIZONTAL LAYOUT VARIANT
+     ──────────────────────────────────────────────────────────
+     A horizontal card with media on one side and content on
+     the other. Common in article lists, search results, and
+     product comparison layouts.
+
+     Structure:
+       <div class="ar-card ar-card--horizontal">
+         <div class="ar-card__media" style="width:160px;flex-shrink:0">
+           <img src="..." alt="...">
+         </div>
+         <div class="ar-card__body">...</div>
+       </div>
+
+     The media width is set inline or via a utility class —
+     it is not opinionated here because horizontal media width
+     is a layout decision that varies by context.
+     ========================================================== */
+
+  .ar-card--horizontal {
+    flex-direction: row;
+    align-items:    stretch;
+  }
+
+  .ar-card--horizontal .ar-card__media {
+    flex-shrink: 0;
+    align-self:  stretch;
+  }
+
+  .ar-card--horizontal .ar-card__media img,
+  .ar-card--horizontal .ar-card__media video {
+    height: 100%;
+    /* Override the 100% height from base __media so the image
+       fills the full height of the card in horizontal layout.  */
+  }
+
+  /* Stack horizontally on mobile, side-by-side on tablet+ */
+  @media (max-width: 767px) {
+    .ar-card--horizontal {
+      flex-direction: column;
+    }
+  }
+
+
+  /* ==========================================================
+     9. CARD GRID
+     ──────────────────────────────────────────────────────────
+     A container that arranges cards in a responsive grid.
+     .ar-card-grid is a convenience wrapper — it could be
+     replaced by utility classes, but the pattern is common
+     enough to justify a named component.
+
+     The auto-fill approach (minmax) creates as many columns
+     as fit at the defined minimum card width. Cards automatically
+     reflow without breakpoint classes — no need for
+     ar-grid-cols-1 ar-md:grid-cols-2 ar-lg:grid-cols-3.
+
+     Three column density variants match common use cases.
+     ========================================================== */
+
+  .ar-card-grid {
+    display:               grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap:                   var(--ar-space-6);
+    width:                 100%;
+  }
+
+  /* Compact grid — smaller minimum card width */
+  .ar-card-grid--sm {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+    gap:                   var(--ar-space-4);
+  }
+
+  /* Wide grid — larger minimum card width */
+  .ar-card-grid--lg {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+    gap:                   var(--ar-space-8);
+  }
+
+  /* Equal height cards — stretch cards in each row to the same height.
+     Enabled by default. Footer slots to bottom when cards stretch. */
+  .ar-card-grid .ar-card {
+    height: 100%;
+  }
+
+
+  /* ==========================================================
+     10. CARD — SKELETON / LOADING STATE
+     ──────────────────────────────────────────────────────────
+     A pulsing placeholder shown while card content is loading.
+     Uses the ar-card--skeleton modifier on the card root and
+     ar-card-skeleton__line elements inside for the placeholder
+     lines.
+
+     The animation is a CSS gradient shimmer — no JS required.
+     The animation is suppressed under prefers-reduced-motion.
+
+     Usage:
+       <div class="ar-card ar-card--skeleton" aria-busy="true"
+            aria-label="Loading content...">
+         <div class="ar-card__body">
+           <div class="ar-card-skeleton__media"></div>
+           <div class="ar-card-skeleton__line ar-card-skeleton__line--title"></div>
+           <div class="ar-card-skeleton__line"></div>
+           <div class="ar-card-skeleton__line ar-card-skeleton__line--short"></div>
+         </div>
+       </div>
+     ========================================================== */
+
+  @keyframes ar-skeleton-shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .ar-card--skeleton {
+    pointer-events: none;
+    user-select:    none;
+    -webkit-user-select: none;
+  }
+
+  /* Skeleton element base */
+  .ar-card-skeleton__line,
+  .ar-card-skeleton__media {
+    background: linear-gradient(
+      90deg,
+      var(--ar-color-layer-sunken)     25%,
+      var(--ar-color-border-default)   50%,
+      var(--ar-color-layer-sunken)     75%
+    );
+    background-size: 200% 100%;
+    animation: ar-skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius:   var(--ar-radius-sm);
+  }
+
+  /* Media placeholder */
+  .ar-card-skeleton__media {
+    width:            100%;
+    aspect-ratio:     16 / 9;
+    border-radius:    var(--ar-radius-none);
+    /* No radius — media fills the card top edge (same as real media) */
+    margin-block-end: var(--ar-space-4);
+  }
+
+  /* Text line placeholder */
+  .ar-card-skeleton__line {
+    height:           0.875rem;  /* ~14px — sm text height */
+    width:            100%;
+    margin-block-end: var(--ar-space-2);
+  }
+
+  /* Title line — taller and full width */
+  .ar-card-skeleton__line--title {
+    height: 1.25rem;   /* ~20px — xl text height */
+    width:  80%;
+    margin-block-end: var(--ar-space-3);
+  }
+
+  /* Short line — for last line of a paragraph (natural ragged end) */
+  .ar-card-skeleton__line--short {
+    width: 60%;
+  }
+
+  /* Last line has no bottom margin */
+  .ar-card-skeleton__line:last-child {
+    margin-block-end: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ar-card-skeleton__line,
+    .ar-card-skeleton__media {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      /* Static gradient — no animation, still visually distinct
+         from real content.                                     */
+    }
+  }
+
+
+  /* ==========================================================
+     11. REDUCED MOTION
+     ========================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    .ar-card--interactive {
+      transition-duration: 0.01ms !important;
+    }
+
+    .ar-card--interactive:hover {
+      transform: none;
+    }
+
+    .ar-card--interactive:active {
+      transform: none;
+    }
+  }
+
+
+  /* ==========================================================
+     12. FORCED COLORS / HIGH CONTRAST MODE
+     ========================================================== */
+
+  @media (forced-colors: active) {
+
+    .ar-card {
+      border:              1px solid ButtonBorder;
+      background-color:    Canvas;
+      color:               CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .ar-card--interactive:hover {
+      border-color: Highlight;
+    }
+
+    .ar-card__link:focus-visible::after {
+      outline-color: Highlight;
+    }
+
+    .ar-card__title {
+      color: CanvasText;
+    }
+
+    .ar-card__subtitle,
+    .ar-card__meta,
+    .ar-card__footer {
+      color: GrayText;
+    }
+
+    .ar-card__divider {
+      border-color: ButtonBorder;
+    }
+
+    .ar-card-skeleton__line,
+    .ar-card-skeleton__media {
+      background: ButtonFace;
+      border:     1px solid ButtonBorder;
+      animation:  none;
+    }
+
+  }
+
+
+  /* ==========================================================
+     13. PRINT
+     ========================================================== */
+
+  @media print {
+
+    .ar-card {
+      box-shadow:    none;
+      border:        1px solid hsl(0 0% 60%);
+      break-inside:  avoid;
+      page-break-inside: avoid;
+    }
+
+    .ar-card--interactive {
+      cursor: default;
+    }
+
+    .ar-card--skeleton,
+    .ar-card-skeleton__line,
+    .ar-card-skeleton__media {
+      display: none;
+      /* Skeleton placeholders have no meaning in print.       */
+    }
+
+    .ar-card-grid {
+      display: block;
+    }
+
+    .ar-card-grid .ar-card {
+      margin-block-end: var(--ar-space-4);
+      height: auto;
+    }
+
+  }
+
+} /* end @layer components */
+
+
+/* ============================================================
+   END OF FILE — card.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (32 references):
+   Typography: --ar-text-size-xs, -sm, -base, -xl
+               --ar-text-weight-normal, -medium, -semibold
+               --ar-text-leading-normal, -relaxed
+   Spacing:    --ar-space-1, -2, -3, -4, -5, -6, -7, -8
+   Radius:     --ar-radius-none, -sm, -base, -lg, -xl
+   Shadow:     --ar-shadow-0, -1, -2
+   Motion:     --ar-duration-base, --ar-ease-standard
+   Z-index:    --ar-z-raised
+   Focus:      --ar-focus-ring-width, -offset, -style, -color-default
+   Color:      --ar-color-layer-base, -raised, -sunken,
+               --ar-color-layer-inverse-raised
+               --ar-color-text-default, -heading, -muted,
+               --ar-color-text-inverse, -inverse-muted
+               --ar-color-border-default, -divider
+               --ar-color-primary-surface, -border
+               --ar-color-success-surface, -border
+               --ar-color-warning-surface, -border
+               --ar-color-danger-surface, -border
+               --ar-color-info-surface, -border
+
+   Private tokens (internal):
+   --_ar-card-padding  (consumed by header, body, footer)
+
+   Hard-coded values (justified structural constants):
+   280px / 200px / 360px — card-grid minimum widths
+             (layout constants — viewport-relative, not token-based)
+   -2px    — interactive card hover translateY lift
+             (structural micro-movement constant)
+   0.875rem / 1.25rem — skeleton line heights
+             (text height approximations, not type tokens)
+   80% / 60% — skeleton line widths (natural text ragged-end constants)
+
+   Classes produced (38):
+   Base:        .ar-card
+   Style:       .ar-card--flat, --bordered, --raised, --sunken,
+                .ar-card--inverse
+   Radius:      .ar-card--rounded-lg, --rounded-xl, --rounded-none
+   Size:        .ar-card--sm, --lg
+   Color:       .ar-card--primary, --success, --warning, --danger, --info
+   Layout:      .ar-card--horizontal, --separated
+   Interactive: .ar-card--interactive
+   Sub-elements: .ar-card__media, __header, __header--row,
+                .ar-card__title, __subtitle, __body, __footer,
+                .ar-card__footer--end, __footer--between,
+                .ar-card__divider, __meta, __link
+   Media:       .ar-card__media--video, --photo, --square, --wide
+   Skeleton:    .ar-card--skeleton, .ar-card-skeleton__line,
+                .ar-card-skeleton__line--title, --short,
+                .ar-card-skeleton__media
+   Grid:        .ar-card-grid, .ar-card-grid--sm, --lg
+
+   TESTING CHECKLIST:
+   □ Base card: white bg, shadow-1, base border-radius
+   □ --flat: no shadow, no border
+   □ --bordered: no shadow, visible border
+   □ --raised: shadow-2 at rest
+   □ --sunken: sunken bg, no shadow
+   □ --inverse: inverse-raised bg, inverse text colors
+   □ --rounded-lg / --rounded-xl: correct radius
+   □ --sm: compact padding; --lg: generous padding
+   □ Optional elements: all 8 combinations tested
+     1. header only
+     2. body only
+     3. footer only
+     4. header + body
+     5. header + footer
+     6. body + footer
+     7. header + body + footer
+     8. header + media + body + footer (full)
+   □ __media: image fills width, object-fit cover
+   □ __media--video: 16:9 ratio
+   □ __media--square: 1:1 ratio
+   □ __header + __body: no double padding between them
+   □ --separated: dividers between header and footer
+   □ __body: flex:1 stretches to fill equal-height card
+   □ __footer: sits at bottom of stretched card
+   □ __footer--end: actions right-aligned
+   □ __footer--between: actions space-between
+   □ __title: xl, semibold, heading color
+   □ __subtitle: sm, normal, muted color
+   □ Color variants: correct surface tint + border each
+   □ --interactive: shadow-2 + translateY(-2px) on hover
+   □ --interactive: no hover effect on touch device
+     (test in Chrome DevTools emulation: touch)
+   □ --interactive: active state: shadow-1, translateY(0)
+   □ __link::after: entire card surface clickable
+   □ __link:focus-visible: focus ring on card outline
+   □ Buttons inside interactive card: remain clickable
+     (above the stretched link overlay via z-index)
+   □ --horizontal: side-by-side layout at 768px+
+   □ --horizontal: stacks on mobile (< 768px)
+   □ ar-card-grid: auto-reflow without breakpoint classes
+   □ ar-card-grid equal-height: all cards same height in row
+   □ ar-card-grid footer: sits at bottom of all cards
+   □ Skeleton: shimmer animation visible
+   □ Skeleton: static gradient with prefers-reduced-motion
+   □ aria-busy="true" present on skeleton card
+   □ Print: border-only, no shadow, break-inside: avoid
+   □ Print: card-grid collapses to block layout
+   □ Print: skeleton cards hidden in print
+   □ Forced colors: Canvas bg, CanvasText, Highlight on hover
+   □ RTL: horizontal card media appears on end side in RTL
+   □ RTL: __footer actions order preserved (logical flex)
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

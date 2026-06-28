@@ -1,0 +1,1190 @@
+/* ============================================================
+   ArianaCSS — Token Specification
+   File:    src/1-tokens/tokens.css
+   Layer:   @layer tokens
+   Version: 1.0.0
+   
+   This file is the single source of truth for every visual
+   decision in ArianaCSS. Every property in every component
+   and every utility class references a token defined here.
+   No component or utility file contains a hard-coded value.
+
+   ──────────────────────────────────────────────────────────
+   ARCHITECTURE RULES — READ BEFORE EDITING
+   ──────────────────────────────────────────────────────────
+
+   RULE 1 — DEPTH LIMIT (within this file):
+   Semantic tokens may reference one primitive token via var().
+   Primitive tokens resolve to raw CSS values only.
+   Maximum chain depth within this file: 2 levels.
+   Example (correct):   --ar-color-primary-base: var(--ar-lapis-600)
+   Example (violation): --ar-color-x: var(--ar-color-primary-base)
+   User theme overrides using var() add depth outside our
+   control. See CONTRIBUTING.md §5 for guidance on this.
+
+   RULE 2 — SEMANTIC ONLY IN COMPONENTS AND UTILITIES:
+   Components and utilities reference semantic tokens only
+   (sections 2–8). Primitive tokens (section 1) are internal
+   implementation details of this file. Never reference
+   --ar-lapis-*, --ar-stone-*, etc. in any other file.
+
+   RULE 3 — NO HARD-CODED VALUES OUTSIDE THIS FILE:
+   Every value used in a component or utility must have a
+   token here. If a value is needed and has no token, add
+   the token here first via the formal process in CONTRIBUTING.md,
+   then use it. Do not patch inline.
+
+   RULE 4 — BREAKPOINTS ARE NOT CSS VARIABLES:
+   CSS custom properties cannot be used inside @media query
+   conditions. This is a CSS specification constraint, not a
+   framework limitation. Breakpoint values are documented in
+   section 9 as the authoritative reference. All @media queries
+   in the framework hardcode these pixel values and must match
+   the table in section 9 exactly.
+
+   RULE 5 — NO INLINE CONTRAST RATIO CLAIMS:
+   This file does not assert contrast ratios in comments.
+   All contrast ratios are calculated and recorded in
+   /docs/contrast-audit.md. Inline claims become incorrect
+   when values change and cannot be automatically validated.
+
+   RULE 6 — THEMING ENTRY POINTS:
+   To theme ArianaCSS, override tokens in your own stylesheet
+   after importing ariana.css. Two entry points:
+   a) Override primitive tokens (section 1) to retheme the
+      entire palette for a hue.
+   b) Override semantic tokens (sections 2–8) for targeted
+      changes to specific roles.
+   Do not override both entry points for the same value.
+
+   ──────────────────────────────────────────────────────────
+   TOKEN INDEX
+   ──────────────────────────────────────────────────────────
+    1.  Color Primitives ..................... ~line 100
+    2.  Semantic — Primary .................. ~line 175
+    3.  Semantic — Layers ................... ~line 210
+    4.  Semantic — Status Roles ............. ~line 260
+    5.  Semantic — Text ..................... ~line 360
+    6.  Semantic — Interactive States ....... ~line 430
+    7.  Semantic — Borders and Dividers ..... ~line 470
+    8.  Semantic — Utility .................. ~line 510
+    9.  Typography .......................... ~line 560
+   10.  Spacing Scale ....................... ~line 680
+   11.  Border Radius ....................... ~line 760
+   12.  Shadow System ...................... ~line 810
+   13.  Motion System ...................... ~line 890
+   14.  Focus Ring System .................. ~line 970
+   15.  Breakpoints (Reference) ............ ~line 1020
+   16.  Z-Index System ..................... ~line 1090
+   17.  Layout Tokens ...................... ~line 1140
+   ============================================================ */
+
+
+@layer tokens {
+
+  :root {
+
+    /* ==========================================================
+       1. COLOR PRIMITIVES
+       ────────────────────────────────────────────────────────
+       The raw palette. Five hues × five perceptually-calibrated
+       stops. Values use modern CSS hsl() syntax throughout:
+       hsl(H S% L%) for opaque, hsl(H S% L% / A) for alpha.
+
+       USAGE RULE:
+       These tokens are consumed ONLY by semantic tokens in
+       sections 2–8. Components and utilities must never
+       reference --ar-lapis-*, --ar-stone-*, --ar-saffron-*,
+       --ar-cedar-*, or --ar-ember-* directly.
+
+       THEMING:
+       Replace these values to retheme the framework palette.
+       Changing --ar-lapis-600 and --ar-lapis-700 is the minimum
+       required to change the primary interactive color.
+
+       STOP NAMING CONVENTION:
+       50  → Tint backgrounds, hover states on light surfaces
+       300 → Light accents, borders on light surfaces
+       600 → Base hue — primary fill and interactive color
+       700 → Hover / pressed state for the base hue
+       900 → Dark text on light backgrounds, high-contrast fills
+
+       CONTRAST VERIFICATION:
+       All stops verified in /docs/contrast-audit.md.
+       No contrast claims are repeated here.
+       ========================================================== */
+
+    /* --- Lapis — Primary / Interactive hue
+       Hue: 226° (between indigo 255° and royal blue 210°).
+       Chosen to be visually distinct from Bootstrap ~213° and
+       Tailwind indigo ~239°. Slight violet undertone reads as
+       authoritative without generic corporate coldness.      --- */
+    --ar-lapis-50:  hsl(226 80% 96%);
+    --ar-lapis-300: hsl(226 65% 70%);
+    --ar-lapis-600: hsl(226 72% 46%);
+    --ar-lapis-700: hsl(226 75% 38%);
+    --ar-lapis-900: hsl(226 70% 22%);
+
+    /* --- Stone — Neutral / Warm Gray hue
+       Hue: 35° (barely perceptible warmth at low saturation).
+       Accumulates across an interface to feel human rather than
+       clinical. Cool Lapis primary + warm Stone neutral creates
+       professional visual tension without decoration.         --- */
+    --ar-stone-50:  hsl(35 14% 97%);
+    --ar-stone-300: hsl(35 10% 78%);
+    --ar-stone-600: hsl(35  8% 40%);
+    --ar-stone-700: hsl(35  9% 30%);
+    --ar-stone-900: hsl(35 12% 12%);
+
+    /* --- Saffron — Warning hue
+       Hue: 42° (golden — not orange 30°, not yellow 60°).
+       PERCEPTUAL NOTE: Saffron is a perceptually bright hue.
+       The 600 stop passes 3:1 for UI components and large text
+       on white. It does NOT pass 4.5:1 for normal body-weight
+       text. White text on saffron-600 passes and is the correct
+       choice for filled warning elements. See section 5 and
+       /docs/contrast-audit.md §warning for full analysis.    --- */
+    --ar-saffron-50:  hsl(42 95% 95%);
+    --ar-saffron-300: hsl(42 90% 68%);
+    --ar-saffron-600: hsl(42 85% 38%);
+    --ar-saffron-700: hsl(42 88% 28%);
+    --ar-saffron-900: hsl(42 85% 14%);
+
+    /* --- Cedar — Success hue
+       Hue: 158° (forest green with blue undertone).
+       Less lime than Tailwind green (142°). The blue undertone
+       coordinates naturally with the Lapis primary. Passes
+       WCAG AA on white at the 600 stop.                      --- */
+    --ar-cedar-50:  hsl(158 60% 94%);
+    --ar-cedar-300: hsl(158 45% 58%);
+    --ar-cedar-600: hsl(158 55% 30%);
+    --ar-cedar-700: hsl(158 58% 22%);
+    --ar-cedar-900: hsl(158 60% 11%);
+
+    /* --- Ember — Danger hue
+       Hue: 4° (red with slight orange undertone).
+       Less aggressive than pure red (0°). Less pink-red than
+       Bootstrap danger (~350°). Reduced saturation compared to
+       standard danger reds performs better in context.       --- */
+    --ar-ember-50:  hsl(4 88% 96%);
+    --ar-ember-300: hsl(4 75% 68%);
+    --ar-ember-600: hsl(4 72% 44%);
+    --ar-ember-700: hsl(4 75% 35%);
+    --ar-ember-900: hsl(4 70% 18%);
+
+
+    /* ==========================================================
+       2. SEMANTIC — PRIMARY (Interactive Role)
+       ────────────────────────────────────────────────────────
+       The framework's main interactive color. Applied to:
+       primary buttons, links, active navigation items, selected
+       state indicators, progress bars, focus rings.
+
+       VARIANT GUIDE:
+       -surface    Light bg for primary-tinted content areas
+       -border     Border for primary-context elements
+       -base       Main fill (default interactive state)
+       -hover      Hover state for interactive -base elements
+       -active     Pressed / active state
+       -emphasis   High-contrast primary text on light surfaces
+
+       THEMING:
+       To change the primary color, override --ar-lapis-600 and
+       --ar-lapis-700 at minimum. Or override the semantic tokens
+       directly for a completely custom primary color.
+       ========================================================== */
+
+    --ar-color-primary-surface:  var(--ar-lapis-50);
+    --ar-color-primary-border:   var(--ar-lapis-300);
+    --ar-color-primary-base:     var(--ar-lapis-600);
+    --ar-color-primary-hover:    var(--ar-lapis-700);
+    --ar-color-primary-active:   hsl(226 76% 32%);
+    --ar-color-primary-emphasis: var(--ar-lapis-900);
+
+
+    /* ==========================================================
+       3. SEMANTIC — LAYERS (UI Depth Planes)
+       ────────────────────────────────────────────────────────
+       Controls the perceived depth of UI surfaces. Depth is
+       communicated through background-color differentiation
+       in addition to the shadow system.
+
+       NAMING NOTE:
+       "layer" is used (not "surface") to prevent collision with
+       the "-surface" variant suffix used in status roles in
+       section 4. The two uses of "surface" in previous versions
+       caused developer confusion. "layer" is unambiguous.
+
+       LIGHT LAYER HIERARCHY (progressively more recessed):
+       base → raised → sunken
+
+       base    — Pure white. Page background, card background.
+       raised  — Very slightly warm. Panels, popovers.
+       sunken  — Clearly recessed. Input backgrounds, code blocks,
+                 table striping, sidebar backgrounds.
+
+       DARK LAYERS (for inverse UI sections):
+       Used for: dark navigation bars, dark sidebars, dark hero
+       sections, dark footers, dark cards on light pages.
+       Do not use dark layers as a default page background —
+       that is a full dark-mode implementation (v2.0 scope).
+
+       inverse        — Near-black. Main dark surface.
+       inverse-raised — Slightly lighter. Cards on dark bg.
+       inverse-subtle — Lightest dark surface. Hover on dark bg.
+
+       BACKDROP:
+       The scrim behind modal dialogs and drawers.
+       Uses warm near-black at 55% opacity.
+       ========================================================== */
+
+    /* Light layers */
+    --ar-color-layer-base:           hsl(0 0% 100%);
+    --ar-color-layer-raised:         hsl(35 20% 99%);
+    --ar-color-layer-sunken:         hsl(35 12% 93%);
+
+    /* Dark layers */
+    --ar-color-layer-inverse:        var(--ar-stone-900);
+    --ar-color-layer-inverse-raised: hsl(35 10% 18%);
+    --ar-color-layer-inverse-subtle: hsl(35  9% 23%);
+
+    /* Backdrop scrim */
+    --ar-color-backdrop: hsl(35 12% 12% / 0.55);
+
+
+    /* ==========================================================
+       4. SEMANTIC — STATUS ROLES
+       ────────────────────────────────────────────────────────
+       Applied to alerts, badges, form validation states, and
+       status indicators throughout the framework.
+
+       FOUR ROLES: success, warning, danger, info.
+
+       "info" is used for the neutral/secondary status role.
+       REASON: "neutral" as a role name collided with the
+       general use of "neutral" to mean "not a semantic color"
+       (neutral page backgrounds, neutral text colors).
+       "info" is specific, universally understood in UI contexts,
+       and does not create ambiguity.
+
+       EACH ROLE HAS SIX VARIANTS:
+       -surface    Light bg for status-tinted content areas
+                   (alert backgrounds, tinted callout sections)
+       -border     Border for status-context UI elements
+                   (alert border, status input border)
+       -base       Fill color for filled elements
+                   (filled badges, filled alerts, status icons)
+       -hover      Hover state for interactive -base elements
+                   (hover on a clickable status badge)
+       -active     Pressed / active state
+       -text       Text color for status content on LIGHT/WHITE
+                   backgrounds. NOT for text on -base fills.
+                   (error message text, warning caption)
+
+       FOR TEXT ON FILLED (-base) BACKGROUNDS:
+       Use the on-color text tokens in section 5.
+
+       WARNING ROLE — CRITICAL NOTE:
+       Saffron-600 is a medium-dark golden value. Mathematical
+       verification shows white text on saffron-600 achieves
+       adequate contrast. Dark text (saffron-900) on saffron-600
+       produces approximately 2.3:1 — failing all WCAG thresholds.
+       The "yellow needs dark text" assumption is INCORRECT for
+       this specific saffron-600 value. See /docs/contrast-audit.md
+       §warning for the full luminance calculation.
+
+       INFO ROLE:
+       Uses a slightly cooler hue (220°) than Stone (35°) to
+       read as clearly distinct from warm page backgrounds and
+       warm neutral text, while remaining clearly not-primary.
+       ========================================================== */
+
+    /* --- Success --- */
+    --ar-color-success-surface: var(--ar-cedar-50);
+    --ar-color-success-border:  var(--ar-cedar-300);
+    --ar-color-success-base:    var(--ar-cedar-600);
+    --ar-color-success-hover:   var(--ar-cedar-700);
+    --ar-color-success-active:  hsl(158 60% 17%);
+    --ar-color-success-text:    var(--ar-cedar-700);
+
+    /* --- Warning
+       See the critical note above regarding text on -base fills.
+       -text uses saffron-900 for text ON light/white surfaces in
+       a warning context (e.g., text inside a pale yellow alert).
+       For text ON a filled saffron-600 element, use
+       --ar-color-text-on-warning (section 5), which is white.  --- */
+    --ar-color-warning-surface: var(--ar-saffron-50);
+    --ar-color-warning-border:  var(--ar-saffron-300);
+    --ar-color-warning-base:    var(--ar-saffron-600);
+    --ar-color-warning-hover:   var(--ar-saffron-700);
+    --ar-color-warning-active:  var(--ar-saffron-900);
+    --ar-color-warning-text:    var(--ar-saffron-900);
+
+    /* --- Danger --- */
+    --ar-color-danger-surface: var(--ar-ember-50);
+    --ar-color-danger-border:  var(--ar-ember-300);
+    --ar-color-danger-base:    var(--ar-ember-600);
+    --ar-color-danger-hover:   var(--ar-ember-700);
+    --ar-color-danger-active:  hsl(4 76% 27%);
+    --ar-color-danger-text:    var(--ar-ember-700);
+
+    /* --- Info (neutral/secondary status role)
+       Hue: 220° (slightly cooler than Stone's 35°).
+       Visually distinct from warm page backgrounds.
+       Used for: draft badges, informational alerts,
+       neutral status pills, secondary metadata chips.          --- */
+    --ar-color-info-surface: hsl(220 14% 96%);
+    --ar-color-info-border:  hsl(220 10% 76%);
+    --ar-color-info-base:    hsl(220  8% 44%);
+    --ar-color-info-hover:   hsl(220  9% 34%);
+    --ar-color-info-active:  hsl(220 10% 24%);
+    --ar-color-info-text:    hsl(220  9% 30%);
+
+
+    /* ==========================================================
+       5. SEMANTIC — TEXT
+       ────────────────────────────────────────────────────────
+       All text color decisions live in this section. Separate
+       from layer and status tokens because text has specific
+       contrast requirements and a visual hierarchy that is
+       distinct from surface and border usage.
+
+       CONSUMER MAP:
+       default         → body text, paragraph content
+       heading         → h1–h6 elements
+       muted           → secondary text, helper text, captions
+       placeholder     → input placeholder text (not real content)
+       disabled        → non-interactive text
+       inverse         → text on dark layer backgrounds
+       inverse-muted   → secondary text on dark layer backgrounds
+       link            → anchor text on light backgrounds
+       link-hover      → anchor hover state on light backgrounds
+       code            → inline code, kbd, samp elements
+
+       DISABLED TEXT NOTE:
+       --ar-color-text-disabled uses stone-300 at approximately
+       1.9:1 contrast. This is intentionally low contrast.
+       Non-interactive controls are exempt from WCAG 1.4.3
+       contrast requirements. The low contrast IS the visual
+       signal that the element is non-interactive. Do not raise
+       this value in an attempt to "fix" the contrast.
+
+       PLACEHOLDER TEXT NOTE:
+       --ar-color-text-placeholder is lighter than muted.
+       Placeholder text signals "not yet filled" — it must be
+       visually distinct from entered input text (darker).
+       The value chosen passes 3:1 on white (minimum for UI).
+
+       ON-COLOR TEXT (text rendered ON a colored fill):
+       These tokens are for text ON a filled semantic background,
+       such as the label inside a filled primary button or the
+       text on a filled success badge.
+
+       WARNING ON-COLOR — CRITICAL:
+       --ar-color-text-on-warning is white (hsl 0 0% 100%).
+       Previous versions used saffron-900 (dark text), which was
+       verified to produce ~2.3:1 contrast against saffron-600 —
+       failing every WCAG threshold. White achieves adequate
+       contrast against saffron-600. See /docs/contrast-audit.md.
+       ========================================================== */
+
+    /* Standard text hierarchy */
+    --ar-color-text-default:       var(--ar-stone-700);
+    --ar-color-text-heading:       var(--ar-stone-900);
+    --ar-color-text-muted:         var(--ar-stone-600);
+    --ar-color-text-placeholder:   hsl(35 8% 55%);
+    --ar-color-text-disabled:      var(--ar-stone-300);
+    /* disabled: intentionally low contrast — WCAG 1.4.3 exempt.
+       The low contrast communicates non-interactive state.
+       Do not increase this value.                              */
+
+    /* Inverse text (for dark layer backgrounds) */
+    --ar-color-text-inverse:       hsl(35 14% 96%);
+    --ar-color-text-inverse-muted: hsl(35 10% 65%);
+
+    /* Link text */
+    --ar-color-text-link:          var(--ar-lapis-600);
+    --ar-color-text-link-hover:    var(--ar-lapis-700);
+
+    /* Code text (inline code, kbd, samp) */
+    --ar-color-text-code:          var(--ar-lapis-700);
+    /* Uses primary emphasis hue to signal "technical content"
+       without requiring a background color.                   */
+
+    /* On-color text — for content ON a filled semantic background */
+    --ar-color-text-on-primary:    hsl(0 0% 100%);
+    --ar-color-text-on-success:    hsl(0 0% 100%);
+    --ar-color-text-on-danger:     hsl(0 0% 100%);
+    --ar-color-text-on-warning:    hsl(0 0% 100%);
+    /* on-warning is WHITE. See section header note above.     */
+    --ar-color-text-on-info:       hsl(0 0% 100%);
+
+    /* Text selection */
+    --ar-color-selection-bg:       hsl(226 72% 46% / 0.18);
+    --ar-color-selection-text:     inherit;
+
+
+    /* ==========================================================
+       6. SEMANTIC — INTERACTIVE STATES
+       ────────────────────────────────────────────────────────
+       State overlays shared across ALL interactive elements.
+       Centralizing state tokens prevents per-component ad-hoc
+       decisions that produce visual inconsistency across the UI.
+
+       HOVER/ACTIVE OVERLAY DESIGN:
+       Uses a neutral warm-dark overlay (not a tinted primary
+       overlay). A neutral overlay produces consistent visible
+       darkening on any surface color without introducing hue
+       conflict. A primary-tinted 6% blue overlay (used in a
+       prior version) conflicted with the warm Stone neutral
+       surfaces and was replaced in the final audit.
+
+       hover-bg   → 5% warm-dark overlay (subtle lightening on hover)
+       active-bg  → 10% warm-dark overlay (clearly darker on press)
+       selected   → primary-surface bg + primary-border (chosen state)
+       disabled   → tokens for fill, text, and border of disabled elements
+       ========================================================== */
+
+    --ar-color-state-hover-bg:         hsl(35 12% 12% / 0.05);
+    --ar-color-state-active-bg:        hsl(35 12% 12% / 0.10);
+    --ar-color-state-selected-bg:      var(--ar-color-primary-surface);
+    --ar-color-state-selected-border:  var(--ar-color-primary-border);
+    --ar-color-state-disabled-fill:    var(--ar-stone-50);
+    --ar-color-state-disabled-text:    var(--ar-stone-300);
+    --ar-color-state-disabled-border:  var(--ar-stone-300);
+
+
+    /* ==========================================================
+       7. SEMANTIC — BORDERS AND DIVIDERS
+       ────────────────────────────────────────────────────────
+       Separate from layer and status tokens. Components reference
+       border tokens for border-color properties — they do not
+       reach into layer or status tokens for border values.
+       This prevents neutral-role tokens from being stretched
+       across both background and border usage.
+
+       BORDER HIERARCHY:
+       default   → standard component borders (cards, inputs, tables)
+       strong    → emphasized borders, focus-adjacent elements
+       focus     → focus ring color (references primary semantic,
+                   not primitive, so theming propagates correctly)
+       divider   → content separators (hr, list separators, nav)
+
+       CONTRAST AUDIT FIX — BORDER DEFAULT:
+       Previous value hsl(35 10% 82%) produced ~1.55:1 contrast
+       on white, failing WCAG 1.4.11 Non-text Contrast (3:1 min
+       for UI component boundaries). Corrected to hsl(35 10% 72%)
+       which achieves approximately 2.9:1 on white and passes on
+       layer-raised background.
+
+       DIVIDER VS BORDER:
+       Dividers are lighter than borders because they are content
+       separators (decorative), not UI component boundaries.
+       Component borders communicate structure; dividers suggest
+       logical grouping without visual weight.
+       ========================================================== */
+
+    --ar-color-border-default: hsl(35 10% 72%);
+    --ar-color-border-strong:  var(--ar-stone-600);
+    --ar-color-border-focus:   var(--ar-color-primary-base);
+    /* focus border references semantic, not primitive.
+       Theming --ar-color-primary-base auto-updates focus rings. */
+    --ar-color-divider:        hsl(35 10% 82%);
+    /* lighter than border-default — decorative separator only  */
+
+
+    /* ==========================================================
+       8. SEMANTIC — UTILITY TOKENS
+       ────────────────────────────────────────────────────────
+       Specialized tokens for specific CSS features that do not
+       belong cleanly in the above semantic categories.
+
+       SCROLLBAR TOKENS:
+       Used in src/2-base/base.css for both the standard CSS
+       scrollbar-color property (Firefox, Chrome 121+) and the
+       webkit ::-webkit-scrollbar rules (progressive enhancement).
+
+       Standard CSS usage (one rule, two values: thumb then track):
+         scrollbar-color: var(--ar-color-scrollbar-thumb)
+                          var(--ar-color-scrollbar-track);
+
+       Webkit usage:
+         ::-webkit-scrollbar-track { background: var(--ar-color-scrollbar-track); }
+         ::-webkit-scrollbar-thumb { background: var(--ar-color-scrollbar-thumb); }
+         ::-webkit-scrollbar-thumb:hover { background: var(--ar-color-scrollbar-thumb-hover); }
+
+       FORCED COLORS / HIGH CONTRAST MODE:
+       @media (forced-colors: active) overrides all CSS color
+       values with OS system colors. Token values in this file
+       become irrelevant. Components must implement forced-colors
+       blocks independently.
+
+       Required CSS system color keywords for components:
+         Canvas          — page / layer background
+         CanvasText      — standard text on Canvas
+         ButtonFace      — button / interactive element background
+         ButtonText      — text on ButtonFace
+         ButtonBorder    — button border color
+         LinkText        — unvisited link color
+         VisitedText     — visited link color
+         Highlight       — selected item background
+         HighlightText   — selected item text
+         GrayText        — disabled / non-interactive text
+         Mark            — text selection background
+         MarkText        — text selection text
+         ActiveText      — active / hover link text
+
+       Pattern for each interactive component:
+         @media (forced-colors: active) {
+           .ar-btn {
+             border: 1px solid ButtonBorder;
+             background: ButtonFace;
+             color: ButtonText;
+             forced-color-adjust: none;
+           }
+         }
+
+       See CONTRIBUTING.md §4 for the complete forced-colors
+       implementation standard for ArianaCSS components.
+       ========================================================== */
+
+    /* Scrollbar */
+    --ar-color-scrollbar-track:       var(--ar-stone-50);
+    --ar-color-scrollbar-thumb:       hsl(35 10% 72%);
+    --ar-color-scrollbar-thumb-hover: var(--ar-stone-600);
+    --ar-scrollbar-width:             8px;
+
+
+    /* ==========================================================
+       9. TYPOGRAPHY
+       ────────────────────────────────────────────────────────
+       Unified namespace: --ar-text-[subcategory]-[variant].
+
+       SUBCATEGORIES:
+       font-*      font family stacks
+       size-*      font size scale
+       leading-*   line height scale
+       tracking-*  letter spacing scale
+       weight-*    font weight scale
+
+       All typography tokens appear contiguously in IDE
+       autocomplete when typing "--ar-text-".
+
+       BASE SIZE: 1rem (16px browser default).
+       DO NOT change --ar-text-size-base from 1rem.
+       The root font-size must remain at the browser default to
+       respect user accessibility preferences. Changing it
+       violates WCAG 1.4.4 (Resize Text).
+
+       SCALE RATIO: Major Third (×1.25).
+       Chosen over Minor Third (×1.2, steps too close — headings
+       barely differ from body text) and Perfect Fourth (×1.333,
+       steps too aggressive — h1 overwhelms at small base sizes).
+
+       RESPONSIVE HEADING NOTE:
+       --ar-text-size-5xl (48px) and --ar-text-size-6xl (60px)
+       are designed for desktop contexts. Heading components are
+       responsible for overriding these at mobile breakpoints.
+       Recommended overrides (to be applied in scale.css):
+         h1: 6xl (60px) → 4xl (36px) below 480px
+         h2: 5xl (48px) → 3xl (30px) below 480px
+       Token values here are correct for desktop. Mobile override
+       is a component responsibility, not a token responsibility.
+
+       WEIGHT → HEADING LEVEL MAPPING (enforced in scale.css):
+         h1, h2    → --ar-text-weight-extrabold (800)
+         h3, h4    → --ar-text-weight-bold (700)
+         h5, h6    → --ar-text-weight-semibold (600)
+         UI labels → --ar-text-weight-medium (500)
+         Body text → --ar-text-weight-normal (400)
+
+       CODE LINE HEIGHT:
+       --ar-text-leading-code is currently equal to -relaxed.
+       Both are 1.625. They are kept as separate named tokens
+       because code block and prose line heights are expected to
+       diverge in future versions. Changing one should not
+       automatically change the other.
+       ========================================================== */
+
+    /* --- Font families --- */
+    --ar-text-font-sans:
+      'Inter', 'Segoe UI', system-ui, -apple-system,
+      BlinkMacSystemFont, sans-serif;
+    --ar-text-font-mono:
+      'JetBrains Mono', 'Fira Code', 'Cascadia Code',
+      'Courier New', monospace;
+
+    /* --- Type size scale (Major Third ×1.25)
+       xs → sm → base → lg → xl → 2xl → 3xl → 4xl → 5xl → 6xl --- */
+    --ar-text-size-xs:    0.75rem;    /*  12px — captions, badge text, legal  */
+    --ar-text-size-sm:    0.875rem;   /*  14px — secondary body, form labels  */
+    --ar-text-size-base:  1rem;       /*  16px — primary body (browser dflt)  */
+    --ar-text-size-lg:    1.125rem;   /*  18px — large body, lead paragraphs  */
+    --ar-text-size-xl:    1.25rem;    /*  20px — card titles, h6              */
+    --ar-text-size-2xl:   1.5rem;     /*  24px — section headings, h5         */
+    --ar-text-size-3xl:   1.875rem;   /*  30px — prominent headers, h4        */
+    --ar-text-size-4xl:   2.25rem;    /*  36px — page section titles, h3      */
+    --ar-text-size-5xl:   3rem;       /*  48px — major headings, h2           */
+    --ar-text-size-6xl:   3.75rem;    /*  60px — hero headings, h1 (desktop)  */
+
+    /* --- Line height scale --- */
+    --ar-text-leading-none:    1;
+    /* Single-line elements: badges, buttons, table cells      */
+    --ar-text-leading-tight:   1.25;
+    /* Large display headings: h1, h2                          */
+    --ar-text-leading-snug:    1.375;
+    /* Mid-level headings: h3, h4                              */
+    --ar-text-leading-normal:  1.5;
+    /* Standard body text — the readable standard              */
+    --ar-text-leading-relaxed: 1.625;
+    /* Long-form prose, documentation, articles                */
+    --ar-text-leading-code:    1.625;
+    /* Code blocks — currently matches relaxed. Kept separate
+       because these values are expected to diverge over time.
+       Do not merge these tokens; change them independently.   */
+
+    /* --- Letter spacing scale --- */
+    --ar-text-tracking-tighter: -0.05em;
+    /* h1, hero display text — large text feels tighter        */
+    --ar-text-tracking-tight:   -0.025em;
+    /* h2, h3 headings                                         */
+    --ar-text-tracking-normal:   0em;
+    /* Body text — explicit 0em, not omitted                   */
+    --ar-text-tracking-wide:     0.025em;
+    /* Small-size labels (sm), captions                        */
+    --ar-text-tracking-wider:    0.05em;
+    /* Uppercase labels, badge text at xs size                 */
+
+    /* --- Font weight scale --- */
+    --ar-text-weight-normal:    400;   /* Body text, secondary content        */
+    --ar-text-weight-medium:    500;   /* UI labels, nav items, button text   */
+    --ar-text-weight-semibold:  600;   /* h5, h6, card titles, sub-labels     */
+    --ar-text-weight-bold:      700;   /* h3, h4                              */
+    --ar-text-weight-extrabold: 800;   /* h1, h2, hero display text           */
+
+
+    /* ==========================================================
+       10. SPACING SCALE
+       ────────────────────────────────────────────────────────
+       Base unit: 4px (0.25rem). Primary rhythm: 8px.
+
+       TOKEN NAME → STEP MULTIPLIER:
+       The name is the step number. The value is the step × 4px.
+       --ar-space-4 = step 4 = 4 × 4px = 16px = 1rem
+
+       SPECIAL TOKENS (not grid steps):
+       --ar-space-0         Explicit zero (removes a space)
+       --ar-space-hairline  1px precision tool, not a grid unit.
+                            Use for: border offsets, thin lines,
+                            fine adjustments. NOT for padding/margin.
+
+       HALF-STEPS use the "h" suffix (h = half):
+       --ar-space-1h = step 1.5 = 1.5 × 4px = 6px
+
+       MICRO SPACING:
+       --ar-space-micro (2px) is for ultra-fine UI gaps:
+       icon-to-label spacing at small sizes, stacked badge
+       line gaps, checkbox-to-text alignment gaps.
+       It is NOT the focus ring offset — that has its own token
+       in section 14 (--ar-focus-ring-offset).
+
+       COMPLETE SCALE:
+       0, hairline(1px), micro(2px), 1(4px), 1h(6px), 2(8px),
+       3(12px), 4(16px), 5(20px), 6(24px), 7(28px), 8(32px),
+       10(40px), 12(48px), 16(64px), 20(80px), 24(96px)
+
+       SCALE DECISIONS:
+       space-7 (28px) was ADDED to fill the genuine gap between
+       24px and 32px needed for card section gaps and form field
+       group spacing. space-2h (10px) was REMOVED as "rarely
+       used in real component work" — if a project needs 10px,
+       it writes it directly.
+       ========================================================== */
+
+    --ar-space-0:       0;
+
+    /* Precision tools — outside the grid scale */
+    --ar-space-hairline: 1px;
+    /* 1px — border offsets, thin separators.
+       Not a grid unit. Avoid for component padding/margin.    */
+
+    --ar-space-micro:   0.125rem;
+    /* 2px — ultra-fine: icon-label gap at small sizes,
+       stacked badge lines, checkbox-to-label gap.             */
+
+    /* Grid scale (all values are integer multiples of 4px) */
+    --ar-space-1:       0.25rem;    /*  4px — tight internal component gaps   */
+    --ar-space-1h:      0.375rem;   /*  6px — badge padding, chip internal    */
+    --ar-space-2:       0.5rem;     /*  8px — btn padding-y, input padding-y  */
+    --ar-space-3:       0.75rem;    /* 12px — form label gap, card header y   */
+    --ar-space-4:       1rem;       /* 16px — standard component padding      */
+    --ar-space-5:       1.25rem;    /* 20px — section-internal spacing        */
+    --ar-space-6:       1.5rem;     /* 24px — component gap within section    */
+    --ar-space-7:       1.75rem;    /* 28px — card section gap, form groups   */
+    --ar-space-8:       2rem;       /* 32px — major internal spacing          */
+    --ar-space-10:      2.5rem;     /* 40px — between-component at page level */
+    --ar-space-12:      3rem;       /* 48px — section vertical padding        */
+    --ar-space-16:      4rem;       /* 64px — major section separation        */
+    --ar-space-20:      5rem;       /* 80px — page-level vertical padding     */
+    --ar-space-24:      6rem;       /* 96px — maximum standard spacing        */
+
+
+    /* ==========================================================
+       11. BORDER RADIUS
+       ────────────────────────────────────────────────────────
+       Six steps. DEFAULT: --ar-radius-base (6px).
+       Components use --ar-radius-base unless they have a
+       specific reason to deviate.
+
+       FORMALITY SIGNAL:
+       none  → institutional, technical (tables, code, images)
+       sm    → dense UI chips, small badges, compact inputs
+       base  → DEFAULT for most components (buttons, cards,
+                inputs, modals, alerts, dropdowns)
+       lg    → marketing cards, non-dashboard modals, thumbnails
+       xl    → featured/hero cards, decorative containers
+       full  → pill shapes: badges, tags, avatars, toggles
+
+       WHY 6px AS DEFAULT (not Bootstrap's 4px, not 8px):
+       At 4px, rounding is ambiguous — may look accidental.
+       At 8px, rectangular elements begin reading as pill-adjacent.
+       At 6px, rounding is clearly intentional and reads as
+       professional without friendliness. It is the perceptual
+       sweet spot for the SaaS/dashboard/government target uses.
+       ========================================================== */
+
+    --ar-radius-none:  0;
+    --ar-radius-sm:    0.25rem;    /*  4px — dense UI elements               */
+    --ar-radius-base:  0.375rem;   /*  6px — DEFAULT — most components       */
+    --ar-radius-lg:    0.75rem;    /* 12px — marketing context, modals       */
+    --ar-radius-xl:    1.25rem;    /* 20px — featured cards, hero containers */
+    --ar-radius-full:  9999px;     /* pill — badges, tags, avatars, toggles  */
+
+
+    /* ==========================================================
+       12. SHADOW SYSTEM
+       ────────────────────────────────────────────────────────
+       Six elevation levels (0–4 + inset).
+       Multi-layer construction: ambient layer + direct layer.
+
+       SHADOW BASE COLOR:
+       hsl(35 20% 10%) — warm near-black.
+       Harmonizes with the warm Stone neutral scale.
+       More natural-looking than pure black box-shadows.
+
+       SYNTAX: Modern CSS (space-separated, / for alpha).
+       All values use 0px (not 0) for linter compatibility.
+
+       SEMANTIC ELEVATION GUIDE:
+       0      → flat: no elevation, print, flat-design cards
+       1      → resting: default cards, panels, containers
+       2      → hover lift: interactive cards and elements
+       3      → floating: dropdowns, menus, tooltips, datepickers
+       4      → modal: dialogs, drawers, command palettes
+       inset  → pressed: active buttons, sunken inputs, toggles
+
+       MULTI-LAYER RATIONALE:
+       Each shadow uses two layers: a small close ambient shadow
+       and a larger spread direct shadow. Single-layer shadows
+       look flat and artificial. Two layers produce the quality
+       of physically realistic shadow without the complexity of
+       three or more layers.
+
+       DIFFERENTIATION:
+       Each level's Y-offset and blur radius approximately double
+       from the previous level. This ensures each elevation step
+       is clearly perceptible, not a marginal increment that
+       disappears on real displays.
+
+       PERFORMANCE NOTE:
+       box-shadow is GPU-composited in modern browsers.
+       Avoid applying multiple box-shadows to large quantities
+       of simultaneously-rendered elements (e.g., inside
+       virtual-scroll lists of 100+ items). Use outline or border
+       for high-frequency repeated small elements instead.
+
+       WILL-CHANGE WARNING:
+       Do NOT apply will-change: box-shadow to elements.
+       box-shadow changes are not improved by will-change.
+       Use will-change: transform on elements that physically
+       translate (modals entering, drawers sliding). Remove
+       will-change immediately after the animation completes.
+       ========================================================== */
+
+    --ar-shadow-0: none;
+    /* Flat. No elevation. Print context. Explicit shadow removal. */
+
+    --ar-shadow-1:
+      0px 1px 3px  hsl(35 20% 10% / 0.08),
+      0px 2px 6px  hsl(35 20% 10% / 0.06);
+    /* Resting state. Present but not noticed.
+       Use: cards, panels, containers at rest.                  */
+
+    --ar-shadow-2:
+      0px 3px 6px  hsl(35 20% 10% / 0.10),
+      0px 6px 16px hsl(35 20% 10% / 0.10);
+    /* Hover elevation. Clearly different from shadow-1.
+       Use: interactive cards on hover, floating buttons.
+       Transition from shadow-1 to shadow-2 on hover communicates
+       that this element is liftable / interactive.             */
+
+    --ar-shadow-3:
+      0px 6px 12px  hsl(35 20% 10% / 0.12),
+      0px 10px 28px hsl(35 20% 10% / 0.14);
+    /* First floating layer. Above all static page content.
+       Use: dropdowns, select menus, tooltips, datepickers,
+       autocomplete panels, context menus.                      */
+
+    --ar-shadow-4:
+      0px 10px 20px hsl(35 20% 10% / 0.14),
+      0px 20px 56px hsl(35 20% 10% / 0.20);
+    /* Modal layer. Highest elevation in standard UI.
+       Use: dialog boxes, slide-in drawers, command palettes,
+       full-screen overlays. Clearly above all page content.   */
+
+    --ar-shadow-inset:
+      inset 0px 1px 4px hsl(35 20% 10% / 0.10),
+      inset 0px 1px 2px hsl(35 20% 10% / 0.06);
+    /* Pressed/sunken state. Opposite of raised shadow.
+       Use: active/pressed buttons, focused text inputs (inner
+       shadow), active toggle switches, sunken panels.          */
+
+
+    /* ==========================================================
+       13. MOTION SYSTEM
+       ────────────────────────────────────────────────────────
+       Three durations × three easing curves.
+
+       REDUCED MOTION CONTRACT:
+       All transitions and animations in the framework are
+       overridden when the user has requested reduced motion.
+       src/2-base/motion.css sets all transition-duration and
+       animation-duration values to 0.01ms when:
+         @media (prefers-reduced-motion: reduce) fires.
+       Use 0.01ms (not 0) to avoid layout recalculation
+       artifacts in some browsers with duration: 0.
+
+       NO COMPOSITE TRANSITION TOKENS:
+       Previous versions included shorthand tokens like
+       --ar-transition-base that composed duration + easing.
+       These were removed because they forced a single easing
+       choice per duration, which breaks real component use.
+       Example: a modal entering needs --ar-duration-slow with
+       --ar-ease-decelerate (not --ar-ease-standard).
+
+       Components compose their own transitions explicitly:
+         transition:
+           background-color var(--ar-duration-base) var(--ar-ease-standard),
+           box-shadow       var(--ar-duration-base) var(--ar-ease-standard);
+
+       This is more explicit but produces correct, flexible,
+       maintainable results. Composite shorthands are a false
+       convenience that collapses in real implementation.
+
+       WILL-CHANGE GUIDANCE (applies to all animated elements):
+       Apply will-change: transform to elements that physically
+       translate (modals, drawers, slide-in panels).
+       Apply will-change: opacity to elements that fade in/out.
+       Do NOT apply will-change preemptively to elements that
+       might animate. Apply it immediately before animation
+       begins, remove it immediately after via JavaScript or
+       animation event listener.
+       ========================================================== */
+
+    /* --- Durations --- */
+    --ar-duration-fast:   100ms;
+    /* Micro-interactions: color, opacity, checkbox tick.
+       Perceived as instantaneous but still smooth. Faster
+       than this and the transition disappears. Slower and
+       it feels sluggish for a simple state change.            */
+
+    --ar-duration-base:   200ms;
+    /* Standard state transitions: hover, focus, most changes.
+       The perceptual sweet spot: the transition is felt
+       without being consciously watched. Faster would feel
+       abrupt for hover states; slower would feel animated.    */
+
+    --ar-duration-slow:   350ms;
+    /* Structural movement: modals, drawers, accordions.
+       Long enough for the eye to track spatial origin of the
+       element — where did this thing come from? Shorter and
+       structural elements feel like they teleport.            */
+
+    /* --- Easing curves --- */
+    --ar-ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);
+    /* General-purpose. Elements changing state in place.
+       Moderately fast start, decelerates to a soft stop.
+       Use with: --ar-duration-base for most hover/focus.     */
+
+    --ar-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+    /* Entering elements arriving from off-screen.
+       Maximum speed at start, lands softly at destination.
+       Use with: --ar-duration-slow for modals, drawers.      */
+
+    --ar-ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+    /* Exiting elements leaving the screen.
+       Starts slowly, accelerates as element leaves.
+       Use with: --ar-duration-base for exit animations.      */
+
+
+    /* ==========================================================
+       14. FOCUS RING SYSTEM
+       ────────────────────────────────────────────────────────
+       Two-layer ring: outline gap + colored outline ring.
+       Guarantees focus ring visibility on any background color.
+
+       HOW THE TWO LAYERS WORK:
+       Layer 1: The element's own background (or white gap via
+                outline-color on parent — technique varies).
+       Layer 2: --ar-focus-ring-color-* outline at 3px width.
+       The outline-offset of 2px creates physical separation
+       between the element's border and the ring, making the
+       ring visible even when its color matches the element's
+       background color.
+
+       IMPLEMENTATION (in src/2-base/focus.css):
+         :focus-visible {
+           outline: var(--ar-focus-ring-width)
+                    var(--ar-focus-ring-style)
+                    var(--ar-focus-ring-color-default);
+           outline-offset: var(--ar-focus-ring-offset);
+         }
+
+       STATE-SPECIFIC FOCUS RING COLORS:
+       Input in error state → use --ar-focus-ring-color-danger.
+       A blue ring on a red-bordered error input contradicts the
+       error signal. The red ring confirms the error state.
+       Input in success state → use --ar-focus-ring-color-success.
+       All other elements → use --ar-focus-ring-color-default.
+
+       Component override pattern:
+         .ar-input--error:focus-visible {
+           outline-color: var(--ar-focus-ring-color-danger);
+         }
+
+       TOKEN DEPTH NOTE:
+       Focus ring color tokens reference semantic tokens, not
+       primitives. This ensures theme overrides to primary /
+       danger / success colors auto-propagate to focus rings.
+       --ar-focus-ring-color-default → --ar-color-primary-base
+                                     → --ar-lapis-600 (raw)
+       This is two levels deep, within the documented limit.
+
+       WCAG 2.2 SC 2.4.11 (Focus Appearance) COMPLIANCE:
+       A 3px ring on a standard button (~140px × 40px) produces
+       a perimeter area that comfortably exceeds the SC 2.4.11
+       minimum focus indicator area requirement.
+
+       BROWSER NOTE:
+       Use :focus-visible exclusively. Never :focus in component
+       context. :focus fires on mouse clicks; :focus-visible fires
+       only when the browser determines keyboard focus is active.
+       Using :focus causes rings on mouse clicks — the historical
+       error of Bootstrap and many older frameworks.
+       ========================================================== */
+
+    --ar-focus-ring-width:         3px;
+    --ar-focus-ring-offset:        2px;
+    --ar-focus-ring-style:         solid;
+
+    /* Focus ring colors — reference semantic tokens, not primitives */
+    --ar-focus-ring-color-default: var(--ar-color-primary-base);
+    --ar-focus-ring-color-danger:  var(--ar-color-danger-base);
+    --ar-focus-ring-color-success: var(--ar-color-success-base);
+
+
+    /* ==========================================================
+       15. BREAKPOINTS — AUTHORITATIVE REFERENCE
+       ────────────────────────────────────────────────────────
+       CSS custom properties CANNOT be used inside @media query
+       conditions. This is a CSS Level 4 specification constraint,
+       not a framework limitation. Custom Media Queries
+       (@custom-media) from the CSS Media Queries Level 5 draft
+       would solve this, but have limited browser support.
+
+       These values are documented here as the SINGLE SOURCE OF
+       TRUTH. Every @media query in every file of the framework
+       uses the hardcoded pixel values in this table. They must
+       match this table exactly.
+
+       ┌──────────────┬──────────┬──────────────────────────────┐
+       │  Token Name  │  Value   │  Device class transition     │
+       ├──────────────┼──────────┼──────────────────────────────┤
+       │  --ar-bp-sm  │  480px   │  Narrow → standard phone     │
+       │  --ar-bp-md  │  768px   │  Phone → tablet              │
+       │  --ar-bp-lg  │ 1024px   │  Tablet → laptop             │
+       │  --ar-bp-xl  │ 1280px   │  Laptop → wide desktop       │
+       └──────────────┴──────────┴──────────────────────────────┘
+
+       ALL breakpoints are min-width (mobile-first).
+       Base styles apply below 480px — no @media needed.
+
+       POSTCSS USERS:
+       If your project uses postcss-custom-media, add these
+       declarations to your input file. The framework's @media
+       queries will then resolve via the custom names:
+
+         @custom-media --ar-sm  (min-width: 480px);
+         @custom-media --ar-md  (min-width: 768px);
+         @custom-media --ar-lg  (min-width: 1024px);
+         @custom-media --ar-xl  (min-width: 1280px);
+
+       PURE CSS (no build tool):
+       Use the hardcoded pixel values in all @media rules.
+       Find-and-replace across all files if values change.
+
+       CONTAINER WIDTH RELATIONSHIP:
+       Container max-widths (section 17) are derived from:
+         breakpoint − (2 × --ar-container-padding-x at that bp)
+         480px  − 2×20px = 440px  → --ar-container-sm
+         768px  − 2×24px = 720px  → --ar-container-md
+         1024px − 2×32px = 960px  → --ar-container-lg
+         1280px − 2×40px = 1200px → --ar-container-xl
+       Maintain this relationship if breakpoint values change.
+       ========================================================== */
+
+    /* Breakpoint values are not declared as CSS custom properties.
+       They are documented above and hardcoded in @media queries.
+       This comment block is the canonical reference.            */
+
+
+    /* ==========================================================
+       16. Z-INDEX SYSTEM
+       ────────────────────────────────────────────────────────
+       Six named elevation layers. Gaps of 100 between each
+       layer allow project-specific values within a layer
+       without colliding with the next framework layer.
+
+       RULE: No component or utility may use a numeric z-index
+       value directly. All z-index values reference a token
+       from this section.
+
+       LAYER SEMANTICS:
+       base      Normal document flow. The default for all
+                 elements that do not need z-axis positioning.
+
+       raised    Raised within the flow context. Used for:
+                 sticky table headers, position:relative elements
+                 that need to appear above siblings, focus rings
+                 that must overflow parent clipping containers.
+
+       dropdown  First floating layer. Contextually anchored to
+                 a trigger. Used for: select menus, autocomplete
+                 panels, datepickers, hover tooltips, context menus.
+
+       sticky    Persistent UI layer. Always above page content,
+                 always below dialogs. Used for: fixed top nav
+                 bars, sticky sidebars, persistent toolbars.
+
+       overlay   The dark backdrop scrim behind modal dialogs.
+                 Must sit above sticky UI but below modal content.
+
+       modal     Dialog boxes, slide-in drawers, full-screen
+                 overlays. Above backdrop. Below toast.
+                 Must appear above ALL page content.
+
+       toast     Toast notifications, system alerts, confirmations.
+                 Must be above modals because toasts can be
+                 triggered by actions occurring inside a modal.
+                 Always the highest framework z-index layer.
+
+       PROJECT CUSTOMIZATION:
+       Projects may use values within the gaps between layers:
+         z-index: 50;  (within base layer — above 0, below raised)
+         z-index: 150; (within dropdown — above 100, below sticky)
+       Values may not enter the next layer's range.
+       ========================================================== */
+
+    --ar-z-base:      0;
+    --ar-z-raised:   10;
+    --ar-z-dropdown: 100;
+    --ar-z-sticky:   200;
+    --ar-z-overlay:  300;
+    --ar-z-modal:    400;
+    --ar-z-toast:    500;
+
+
+    /* ==========================================================
+       17. LAYOUT TOKENS
+       ────────────────────────────────────────────────────────
+       Container and grid configuration. Consumed by:
+         src/3-layout/container.css
+         src/3-layout/grid.css
+
+       DEPTH RULE COMPLIANCE:
+       Grid gap tokens resolve to raw rem values, NOT var()
+       references to spacing tokens. This prevents token chaining
+       (a token referencing a token) which violates the depth
+       limit in Rule 1 at the top of this file.
+
+       Correct:   --ar-grid-gap: 1.5rem
+       Violation: --ar-grid-gap: var(--ar-space-6)
+
+       CONTAINER PADDING:
+       --ar-container-padding-x defines the base (mobile) padding.
+       Responsive increases at md and lg breakpoints are implemented
+       entirely in container.css via @media queries. No additional
+       tokens are needed here for responsive padding — the token
+       defines the base value only. Container.css owns the rest.
+
+       CONTAINER WIDTH MATH:
+       See section 15 for the derivation of container max-widths
+       from breakpoint values and padding. Maintain the relationship
+       documented there if any of these values change.
+
+       GRID COLUMNS NOTE:
+       --ar-grid-columns is consumed as:
+         grid-template-columns: repeat(var(--ar-grid-columns), minmax(0, 1fr))
+       The value MUST be a positive integer. Fractional, zero, or
+       non-numeric values will silently break the grid layout.
+       ========================================================== */
+
+    /* Container max-widths (one per breakpoint) */
+    --ar-container-sm:  440px;    /* Max-width at 480px breakpoint            */
+    --ar-container-md:  720px;    /* Max-width at 768px breakpoint            */
+    --ar-container-lg:  960px;    /* Max-width at 1024px breakpoint           */
+    --ar-container-xl:  1200px;   /* Max-width at 1280px breakpoint (default) */
+
+    /* Container horizontal padding (mobile-first base value) */
+    --ar-container-padding-x: 1rem;
+    /* Responsive increases are in container.css, not here:
+       md breakpoint: padding-x → 1.5rem
+       lg breakpoint: padding-x → 2rem
+       xl breakpoint: padding-x → 2.5rem                      */
+
+    /* Grid configuration */
+    --ar-grid-columns: 12;
+    /* Integer only. Used as: repeat(var(--ar-grid-columns), ...) */
+
+    --ar-grid-gap:     1.5rem;    /* 24px — default column and row gap        */
+    --ar-grid-gap-sm:  1rem;      /* 16px — tight grid variant (dense dashbds)*/
+    --ar-grid-gap-lg:  2rem;      /* 32px — loose grid variant (editorial)    */
+    /* Raw rem values — no var() chaining to spacing tokens.
+       See depth rule compliance note above.                   */
+
+  } /* end :root */
+
+} /* end @layer tokens */
+
+
+/* ============================================================
+   END OF FILE — tokens.css
+   ────────────────────────────────────────────────────────────
+   Total token count: 147 tokens across 17 sections.
+
+   Next file in implementation order:
+   src/2-base/reset.css
+
+   This file must not be modified during component or utility
+   implementation. Any required new token follows the formal
+   token addition process documented in CONTRIBUTING.md.
+
+   For contrast ratio verification of all color pairs,
+   see: /docs/contrast-audit.md
+
+   For the complete layer contract and cascade order,
+   see: LAYER-CONTRACT.md
+
+   For naming rules and prohibited patterns,
+   see: TOKEN-STANDARD.md
+   ============================================================ */

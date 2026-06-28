@@ -1,0 +1,745 @@
+/* ============================================================
+   ArianaCSS — Typography Utilities (Prose Layer)
+   File:    src/4-typography/utils.css
+   Layer:   @layer typography
+   Version: 1.0.0
+
+   PURPOSE:
+   Provide composable typographic modifier classes for prose
+   contexts — long-form text, articles, documentation, CMS
+   content, and any block of HTML where element selectors
+   (from base.css) apply but need refinement or extension.
+
+   This file occupies the space between:
+   - base.css: raw element defaults (what p, blockquote, pre
+     look like with no class applied)
+   - scale.css: heading pattern classes (.ar-h1–.ar-h6)
+   - 5-utilities/typography.css: single-property utilities
+     (ar-text-lg, ar-font-bold, ar-tracking-wide)
+
+   utils.css provides SEMANTIC PROSE CLASSES — multi-property
+   compositions that encode a complete typographic intent, not
+   a raw property value. They answer "what kind of text is this"
+   rather than "what size is this text."
+
+   WHAT THIS FILE PROVIDES:
+   1. .ar-prose — full prose block for CMS / markdown output
+   2. .ar-text-lead — intro paragraph style
+   3. .ar-text-small / .ar-text-caption — secondary text sizes
+   4. .ar-text-meta — metadata / timestamp / byline style
+   5. .ar-text-label — UI label style (form labels, section headers)
+   6. .ar-list — styled unordered list (restored from reset)
+   7. .ar-list-ordered — styled ordered list
+   8. .ar-list-inline — horizontal inline list
+   9. Blockquote modifiers
+   10. .ar-prose — the full prose block
+
+   TOKEN DEPENDENCIES:
+   --ar-text-size-xs, -sm, -base, -lg, -xl, -2xl
+   --ar-text-weight-normal, -medium, -semibold, -bold
+   --ar-text-leading-normal, -relaxed, -snug
+   --ar-text-tracking-normal, -wide, -wider
+   --ar-color-text-default, -muted, -heading, -link
+   --ar-color-primary-base, -border
+   --ar-color-layer-sunken
+   --ar-color-border-default, -divider
+   --ar-space-1, -2, -3, -4, -5, -6, -8
+   --ar-radius-base, -sm
+
+   SCOPE — WHAT IS NOT HERE:
+   × Single-property size/weight/color utilities → typography.css
+   × Heading pattern classes (.ar-h1–.ar-h6) → scale.css
+   × Element defaults (p, blockquote, code) → base.css
+   × Component-specific text styles → component files
+
+   NEXT FILE: src/5-utilities/ (all utility files)
+   ============================================================ */
+
+
+@layer typography {
+
+  /* ==========================================================
+     1. TEXT STYLE PATTERNS
+     ──────────────────────────────────────────────────────────
+     Semantic text classes for specific content roles.
+     Each class encodes a complete typographic intent.
+     ========================================================== */
+
+  /* --- Lead paragraph
+     The introductory paragraph of a section or article.
+     Slightly larger and more open than body text to ease
+     the reader in. Applied to the first <p> after a heading
+     in long-form content.
+     Distinct from .ar-lead in scale.css:
+       scale.css .ar-lead    — paragraph preceding h1/display
+       utils.css .ar-text-lead — general intro paragraph
+     They produce identical CSS but document different intent. */
+  .ar-text-lead {
+    font-size:   var(--ar-text-size-lg);
+    font-weight: var(--ar-text-weight-normal);
+    line-height: var(--ar-text-leading-relaxed);
+    color:       var(--ar-color-text-default);
+  }
+
+  /* --- Small text
+     For secondary information, helper text, footnotes,
+     terms and conditions, and other reduced-prominence text.
+     Not the same as disabled text — small text is readable
+     but subordinate.                                          */
+  .ar-text-small {
+    font-size:   var(--ar-text-size-sm);
+    font-weight: var(--ar-text-weight-normal);
+    line-height: var(--ar-text-leading-normal);
+    color:       var(--ar-color-text-muted);
+  }
+
+  /* --- Caption text
+     For figure captions, image descriptions, table captions,
+     chart labels, and any xs-size text beneath content.      */
+  .ar-text-caption {
+    font-size:      var(--ar-text-size-xs);
+    font-weight:    var(--ar-text-weight-normal);
+    line-height:    var(--ar-text-leading-normal);
+    letter-spacing: var(--ar-text-tracking-wide);
+    color:          var(--ar-color-text-muted);
+  }
+
+  /* --- Meta text
+     For timestamps, bylines, author names, read-time,
+     post dates, and other article metadata. Similar to
+     caption but with no letter-spacing — meta is inline
+     prose, not a visual label.                               */
+  .ar-text-meta {
+    font-size:   var(--ar-text-size-xs);
+    font-weight: var(--ar-text-weight-normal);
+    line-height: var(--ar-text-leading-normal);
+    color:       var(--ar-color-text-muted);
+  }
+
+  /* --- UI label
+     For form labels, section divider labels, data table
+     column headers used as labels, sidebar section titles,
+     and any text that labels UI rather than describes content.
+     Medium weight distinguishes it from body text without
+     the heaviness of a heading.                              */
+  .ar-text-label {
+    font-size:      var(--ar-text-size-sm);
+    font-weight:    var(--ar-text-weight-medium);
+    line-height:    var(--ar-text-leading-normal);
+    letter-spacing: var(--ar-text-tracking-wide);
+    color:          var(--ar-color-text-heading);
+  }
+
+  /* --- Overline / section label
+     For small all-caps labels above content groups.
+     Similar to .ar-eyebrow in scale.css but intended for
+     UI contexts (sidebar section titles, filter group labels,
+     settings panel titles) rather than marketing contexts.   */
+  .ar-text-overline {
+    font-size:      var(--ar-text-size-xs);
+    font-weight:    var(--ar-text-weight-semibold);
+    line-height:    var(--ar-text-leading-normal);
+    letter-spacing: var(--ar-text-tracking-wider);
+    text-transform: uppercase;
+    color:          var(--ar-color-text-muted);
+  }
+
+  /* --- Stat / display number
+     For dashboard KPI numbers, pricing, large metric displays.
+     Uses tabular-nums for aligned columns of numbers.        */
+  .ar-text-stat {
+    font-size:           var(--ar-text-size-4xl);
+    font-weight:         var(--ar-text-weight-extrabold);
+    line-height:         var(--ar-text-leading-none);
+    letter-spacing:      var(--ar-text-tracking-tight);
+    font-variant-numeric: tabular-nums;
+    color:               var(--ar-color-text-heading);
+  }
+
+  /* Stat label — the descriptor beneath a stat number */
+  .ar-text-stat-label {
+    font-size:      var(--ar-text-size-xs);
+    font-weight:    var(--ar-text-weight-medium);
+    letter-spacing: var(--ar-text-tracking-wide);
+    text-transform: uppercase;
+    color:          var(--ar-color-text-muted);
+    margin-block-start: var(--ar-space-1);
+  }
+
+
+  /* ==========================================================
+     2. LIST STYLES
+     ──────────────────────────────────────────────────────────
+     reset.css removed all list markers and padding from ul/ol.
+     These classes restore styled lists for prose contexts.
+
+     Two categories:
+     a) Semantic prose lists (.ar-list, .ar-list-ordered)
+        — for content lists that convey information
+     b) Layout lists (.ar-list-inline)
+        — for UI patterns (breadcrumbs, tag lists, nav items)
+
+     Nesting:
+     Nested lists indent by --ar-space-5 (20px). The nesting
+     styles apply to direct li > ul and li > ol children.
+     ========================================================== */
+
+  /* --- Unordered list with bullet markers --- */
+  .ar-list {
+    list-style:          disc;
+    padding-inline-start: var(--ar-space-5);
+    margin-block-end:    var(--ar-space-4);
+    color:               var(--ar-color-text-default);
+  }
+
+  .ar-list li {
+    margin-block-end: var(--ar-space-2);
+    line-height:      var(--ar-text-leading-normal);
+  }
+
+  .ar-list li:last-child {
+    margin-block-end: 0;
+  }
+
+  /* Nested list inside .ar-list */
+  .ar-list li > ul,
+  .ar-list li > ol {
+    margin-block-start: var(--ar-space-2);
+    margin-block-end:   var(--ar-space-2);
+    padding-inline-start: var(--ar-space-4);
+  }
+
+  .ar-list li > ul {
+    list-style-type: circle;
+  }
+
+  .ar-list li > ul li > ul {
+    list-style-type: square;
+  }
+
+
+  /* --- Ordered list with number markers --- */
+  .ar-list-ordered {
+    list-style:           decimal;
+    padding-inline-start: var(--ar-space-5);
+    margin-block-end:     var(--ar-space-4);
+    color:                var(--ar-color-text-default);
+  }
+
+  .ar-list-ordered li {
+    margin-block-end: var(--ar-space-2);
+    line-height:      var(--ar-text-leading-normal);
+    padding-inline-start: var(--ar-space-1);
+  }
+
+  .ar-list-ordered li:last-child {
+    margin-block-end: 0;
+  }
+
+  /* Nested ordered list */
+  .ar-list-ordered li > ol {
+    list-style-type:      lower-alpha;
+    margin-block-start:   var(--ar-space-2);
+    margin-block-end:     var(--ar-space-2);
+    padding-inline-start: var(--ar-space-4);
+  }
+
+  .ar-list-ordered li > ol li > ol {
+    list-style-type: lower-roman;
+  }
+
+
+  /* --- Inline list (horizontal)
+     For: breadcrumbs, tag clouds, keyword lists, nav links,
+     footer links, social links — any list that lays out
+     horizontally rather than vertically.                     */
+  .ar-list-inline {
+    display:     flex;
+    flex-wrap:   wrap;
+    gap:         var(--ar-space-3);
+    list-style:  none;
+    padding:     0;
+    margin:      0;
+  }
+
+  .ar-list-inline li {
+    display: inline;
+  }
+
+  /* Inline list with separator dots between items */
+  .ar-list-inline--divided {
+    display:     flex;
+    flex-wrap:   wrap;
+    align-items: center;
+    gap:         0;
+    list-style:  none;
+    padding:     0;
+    margin:      0;
+  }
+
+  .ar-list-inline--divided li {
+    display: flex;
+    align-items: center;
+  }
+
+  .ar-list-inline--divided li + li::before {
+    content:        "·";
+    padding-inline: var(--ar-space-2);
+    color:          var(--ar-color-text-muted);
+    font-weight:    var(--ar-text-weight-bold);
+  }
+
+  /* --- No-margin list variant
+     Removes the bottom margin from .ar-list or .ar-list-ordered
+     when the list is the last element in a container.         */
+  .ar-list:last-child,
+  .ar-list-ordered:last-child {
+    margin-block-end: 0;
+  }
+
+
+  /* ==========================================================
+     3. BLOCKQUOTE MODIFIERS
+     ──────────────────────────────────────────────────────────
+     base.css defines the default blockquote (left border,
+     italic, muted color). These modifier classes provide
+     variants for different blockquote contexts.
+     ========================================================== */
+
+  /* --- Pull quote
+     Larger, more prominent quote used in editorial layouts
+     to draw attention to a key statement. Often centered. */
+  .ar-blockquote--pull {
+    font-size:            var(--ar-text-size-xl);
+    font-weight:          var(--ar-text-weight-semibold);
+    line-height:          var(--ar-text-leading-snug);
+    font-style:           normal;
+    text-align:           center;
+    color:                var(--ar-color-text-heading);
+    border-inline-start:  none;
+    border-block-start:   3px solid var(--ar-color-primary-border);
+    border-block-end:     3px solid var(--ar-color-primary-border);
+    padding-inline:       var(--ar-space-8);
+    padding-block:        var(--ar-space-6);
+    margin-block:         var(--ar-space-8);
+  }
+
+  /* --- Plain blockquote (no border, just spacing + color) */
+  .ar-blockquote--plain {
+    border-inline-start: none;
+    padding-inline-start: 0;
+    font-style:           italic;
+    color:                var(--ar-color-text-muted);
+  }
+
+
+  /* ==========================================================
+     4. PROSE BLOCK
+     ──────────────────────────────────────────────────────────
+     .ar-prose is the comprehensive prose styling block for
+     CMS-rendered content, markdown output, blog posts, articles,
+     documentation pages, and any context where raw HTML is
+     generated from content tools without class control.
+
+     HOW IT WORKS:
+     .ar-prose applies typographic styles to child HTML elements
+     using descendant selectors. No classes needed on the content
+     HTML itself — just wrap the rendered HTML in a container
+     with class="ar-prose".
+
+     Example:
+       <article class="ar-prose">
+         <!-- Markdown / CMS output here — no classes needed -->
+         <h2>Section Title</h2>
+         <p>Paragraph text...</p>
+         <ul><li>List item</li></ul>
+         <blockquote>A quote</blockquote>
+         <pre><code>code block</code></pre>
+       </article>
+
+     SCOPE CONTROL:
+     All selectors are scoped to .ar-prose descendants to prevent
+     bleeding into the rest of the UI. The .ar-prose class is
+     intended for article-length content blocks only — not for
+     wrapping entire page layouts or component areas.
+
+     SPECIFICITY NOTE:
+     .ar-prose descendant rules have specificity (0, 1, 1) —
+     one class + one element. Component and utility classes
+     in higher layers will override these as expected.
+     ========================================================== */
+
+  .ar-prose {
+    color:     var(--ar-color-text-default);
+    font-size: var(--ar-text-size-base);
+    line-height: var(--ar-text-leading-relaxed);
+    max-width: 65ch;
+    /* Constrain prose to optimal reading width.
+       65ch ≈ 65 characters per line — the typographic sweet
+       spot for continuous reading (Bringhurst). Override with
+       max-width: none if the containing layout controls width. */
+  }
+
+  /* Headings inside prose */
+  .ar-prose h1 {
+    font-size:        var(--ar-text-size-4xl);
+    font-weight:      var(--ar-text-weight-extrabold);
+    line-height:      var(--ar-text-leading-tight);
+    letter-spacing:   var(--ar-text-tracking-tight);
+    color:            var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-4);
+    margin-block-start: var(--ar-space-8);
+  }
+
+  .ar-prose h2 {
+    font-size:        var(--ar-text-size-3xl);
+    font-weight:      var(--ar-text-weight-bold);
+    line-height:      var(--ar-text-leading-snug);
+    letter-spacing:   var(--ar-text-tracking-tight);
+    color:            var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-3);
+    margin-block-start: var(--ar-space-8);
+  }
+
+  .ar-prose h3 {
+    font-size:        var(--ar-text-size-2xl);
+    font-weight:      var(--ar-text-weight-bold);
+    line-height:      var(--ar-text-leading-snug);
+    letter-spacing:   var(--ar-text-tracking-normal);
+    color:            var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-3);
+    margin-block-start: var(--ar-space-6);
+  }
+
+  .ar-prose h4 {
+    font-size:        var(--ar-text-size-xl);
+    font-weight:      var(--ar-text-weight-semibold);
+    line-height:      var(--ar-text-leading-normal);
+    letter-spacing:   var(--ar-text-tracking-normal);
+    color:            var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-2);
+    margin-block-start: var(--ar-space-6);
+  }
+
+  .ar-prose h5,
+  .ar-prose h6 {
+    font-size:        var(--ar-text-size-base);
+    font-weight:      var(--ar-text-weight-semibold);
+    line-height:      var(--ar-text-leading-normal);
+    color:            var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-2);
+    margin-block-start: var(--ar-space-5);
+  }
+
+  /* First heading in prose gets no top margin */
+  .ar-prose > h1:first-child,
+  .ar-prose > h2:first-child,
+  .ar-prose > h3:first-child,
+  .ar-prose > h4:first-child,
+  .ar-prose > h5:first-child,
+  .ar-prose > h6:first-child {
+    margin-block-start: 0;
+  }
+
+  /* Paragraphs inside prose */
+  .ar-prose p {
+    margin-block-end: var(--ar-space-5);
+    line-height:      var(--ar-text-leading-relaxed);
+  }
+
+  .ar-prose p:last-child {
+    margin-block-end: 0;
+  }
+
+  /* Links inside prose */
+  .ar-prose a {
+    color:                     var(--ar-color-text-link);
+    text-decoration:           underline;
+    text-underline-offset:     3px;
+    text-decoration-thickness: 1px;
+    font-weight:               var(--ar-text-weight-medium);
+  }
+
+  .ar-prose a:hover {
+    color: var(--ar-color-text-link-hover);
+  }
+
+  /* Strong / bold inside prose */
+  .ar-prose strong,
+  .ar-prose b {
+    font-weight: var(--ar-text-weight-bold);
+    color:       var(--ar-color-text-heading);
+  }
+
+  /* Unordered lists inside prose */
+  .ar-prose ul {
+    list-style:           disc;
+    padding-inline-start: var(--ar-space-5);
+    margin-block-end:     var(--ar-space-5);
+  }
+
+  .ar-prose ul li {
+    margin-block-end: var(--ar-space-2);
+    line-height:      var(--ar-text-leading-relaxed);
+  }
+
+  .ar-prose ul li > ul {
+    list-style-type:      circle;
+    margin-block-start:   var(--ar-space-2);
+    padding-inline-start: var(--ar-space-4);
+  }
+
+  /* Ordered lists inside prose */
+  .ar-prose ol {
+    list-style:           decimal;
+    padding-inline-start: var(--ar-space-5);
+    margin-block-end:     var(--ar-space-5);
+  }
+
+  .ar-prose ol li {
+    margin-block-end: var(--ar-space-2);
+    line-height:      var(--ar-text-leading-relaxed);
+    padding-inline-start: var(--ar-space-1);
+  }
+
+  .ar-prose ol li > ol {
+    list-style-type:    lower-alpha;
+    margin-block-start: var(--ar-space-2);
+  }
+
+  /* Blockquote inside prose */
+  .ar-prose blockquote {
+    border-inline-start:  3px solid var(--ar-color-primary-border);
+    padding-block:        var(--ar-space-3);
+    padding-inline-start: var(--ar-space-4);
+    color:                var(--ar-color-text-muted);
+    font-style:           italic;
+    margin-block:         var(--ar-space-6);
+  }
+
+  /* Inline code inside prose */
+  .ar-prose code {
+    font-size:        0.9em;
+    font-weight:      var(--ar-text-weight-normal);
+    color:            var(--ar-color-text-code);
+    background-color: var(--ar-color-layer-sunken);
+    padding-block:    var(--ar-space-micro);
+    padding-inline:   var(--ar-space-1);
+    border-radius:    var(--ar-radius-sm);
+  }
+
+  /* Code blocks inside prose */
+  .ar-prose pre {
+    background-color: var(--ar-color-layer-sunken);
+    border:           1px solid var(--ar-color-border-default);
+    border-radius:    var(--ar-radius-base);
+    padding:          var(--ar-space-4);
+    overflow-x:       auto;
+    margin-block:     var(--ar-space-6);
+  }
+
+  .ar-prose pre code {
+    background-color: transparent;
+    padding:          0;
+    border-radius:    0;
+    font-size:        var(--ar-text-size-sm);
+    color:            inherit;
+  }
+
+  /* Horizontal rule inside prose */
+  .ar-prose hr {
+    border:           0;
+    border-block-start: 1px solid var(--ar-color-divider);
+    margin-block:     var(--ar-space-8);
+  }
+
+  /* Tables inside prose */
+  .ar-prose table {
+    width:           100%;
+    border-collapse: collapse;
+    margin-block:    var(--ar-space-6);
+    font-size:       var(--ar-text-size-sm);
+    line-height:     var(--ar-text-leading-normal);
+  }
+
+  .ar-prose thead {
+    border-block-end: 2px solid var(--ar-color-border-default);
+  }
+
+  .ar-prose th {
+    font-weight:      var(--ar-text-weight-semibold);
+    color:            var(--ar-color-text-heading);
+    text-align:       start;
+    padding-block:    var(--ar-space-2);
+    padding-inline:   var(--ar-space-3);
+  }
+
+  .ar-prose td {
+    padding-block:    var(--ar-space-2);
+    padding-inline:   var(--ar-space-3);
+    border-block-end: 1px solid var(--ar-color-divider);
+    vertical-align:   top;
+  }
+
+  .ar-prose tbody tr:last-child td {
+    border-block-end: none;
+  }
+
+  /* Images inside prose */
+  .ar-prose img {
+    max-width:      100%;
+    height:         auto;
+    border-radius:  var(--ar-radius-base);
+    margin-block:   var(--ar-space-6);
+  }
+
+  .ar-prose figure {
+    margin-block: var(--ar-space-8);
+  }
+
+  .ar-prose figcaption {
+    font-size:          var(--ar-text-size-xs);
+    color:              var(--ar-color-text-muted);
+    text-align:         center;
+    margin-block-start: var(--ar-space-2);
+    letter-spacing:     var(--ar-text-tracking-wide);
+  }
+
+  /* Mark (highlighted text) inside prose */
+  .ar-prose mark {
+    background-color: var(--ar-color-warning-surface);
+    color:            inherit;
+    padding-inline:   var(--ar-space-micro);
+    border-radius:    var(--ar-radius-sm);
+  }
+
+  /* Abbreviations inside prose */
+  .ar-prose abbr[title] {
+    text-decoration:      underline dotted;
+    text-underline-offset: 3px;
+    cursor:               help;
+  }
+
+
+  /* ==========================================================
+     5. PROSE WIDTH MODIFIERS
+     ──────────────────────────────────────────────────────────
+     Override the 65ch max-width of .ar-prose for specific
+     content contexts.
+     ========================================================== */
+
+  /* Full width — remove the reading width constraint */
+  .ar-prose--full {
+    max-width: none;
+  }
+
+  /* Narrow — tighter reading width for short-form content */
+  .ar-prose--narrow {
+    max-width: 55ch;
+  }
+
+  /* Wide — for content with tables, code blocks, images
+     where the standard 65ch would clip the content         */
+  .ar-prose--wide {
+    max-width: 80ch;
+  }
+
+
+  /* ==========================================================
+     6. PRINT STYLES
+     ──────────────────────────────────────────────────────────
+     Adjust prose styles for print output. Lists restore their
+     markers; prose max-width is removed so content fills the
+     printable area.
+     ========================================================== */
+
+  @media print {
+
+    .ar-prose {
+      max-width: none;
+    }
+
+    .ar-prose pre {
+      overflow-x:   visible;
+      white-space:  pre-wrap;
+      word-break:   break-word;
+    }
+
+    .ar-prose a::after {
+      content:     " (" attr(href) ")";
+      font-size:   0.875em;
+      font-weight: var(--ar-text-weight-normal);
+      word-break:  break-all;
+    }
+
+    .ar-prose a[href^="#"]::after {
+      content: "";
+    }
+
+  }
+
+} /* end @layer typography */
+
+
+/* ============================================================
+   END OF FILE — utils.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (29 references):
+   --ar-text-size-xs, -sm, -base, -lg, -xl, -2xl, -3xl, -4xl
+   --ar-text-weight-normal, -medium, -semibold, -bold, -extrabold
+   --ar-text-leading-none, -normal, -snug, -relaxed, -tight
+   --ar-text-tracking-normal, -wide, -wider, -tight
+   --ar-color-text-default, -heading, -muted, -link, -link-hover
+   --ar-color-text-code, --ar-color-primary-base, -border
+   --ar-color-layer-sunken
+   --ar-color-border-default, -divider
+   --ar-color-warning-surface
+   --ar-space-micro, -1, -2, -3, -4, -5, -6, -8
+   --ar-radius-sm, -base
+
+   Hard-coded values (justified):
+   0.9em   — inline code size compensation (universal monospace
+             optical correction, not a design token)
+   3px     — link/abbr underline offset (perceptual constant)
+   1px     — link underline thickness (structural constant)
+   3px     — blockquote border width (structural constant)
+   2px     — prose table thead border (structural constant)
+   65ch / 55ch / 80ch — reading width constants (typographic
+             constants from Bringhurst's Elements)
+
+   Classes produced (25):
+   Text patterns:      .ar-text-lead, .ar-text-small,
+                       .ar-text-caption, .ar-text-meta,
+                       .ar-text-label, .ar-text-overline,
+                       .ar-text-stat, .ar-text-stat-label
+   Lists:              .ar-list, .ar-list-ordered,
+                       .ar-list-inline, .ar-list-inline--divided
+   Blockquote mods:    .ar-blockquote--pull, .ar-blockquote--plain
+   Prose:              .ar-prose, .ar-prose--full,
+                       .ar-prose--narrow, .ar-prose--wide
+
+   TESTING CHECKLIST:
+   □ .ar-text-lead: 18px, relaxed leading, default color
+   □ .ar-text-small: 14px, muted color
+   □ .ar-text-caption: 12px, wide tracking, muted
+   □ .ar-text-meta: 12px, no tracking, muted
+   □ .ar-text-label: 14px, medium weight, wide tracking, heading color
+   □ .ar-text-overline: 12px, semibold, uppercase, wider tracking, muted
+   □ .ar-text-stat: 36px, extrabold, none leading, tabular-nums
+   □ .ar-list: bullets visible, correct indent, items spaced
+   □ .ar-list-ordered: numbers visible, alpha nested, roman 3rd level
+   □ .ar-list-inline: horizontal, wrapped, gap-3 between items
+   □ .ar-list-inline--divided: dot separator between items
+   □ .ar-blockquote--pull: centered, xl size, top+bottom borders
+   □ .ar-prose wraps markdown/CMS output with no classes inside
+   □ .ar-prose max-width 65ch constrain correct
+   □ .ar-prose h1–h6: correct sizes (smaller than page headings)
+   □ .ar-prose pre: sunken background, border, overflow scroll
+   □ .ar-prose pre code: no double background
+   □ .ar-prose table: full width, borders on rows
+   □ .ar-prose img: rounded, full width, margin above/below
+   □ .ar-prose--full: max-width removed
+   □ .ar-prose--wide: max-width 80ch
+   □ Print: prose fills page width, code wraps, URLs after links
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

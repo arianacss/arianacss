@@ -1,0 +1,85 @@
+/* ============================================================
+   ArianaCSS — Color (Background) Utilities
+   File:    src/5-utilities/color.css
+   Layer:   @layer utilities
+   Version: 1.0.0
+
+   Token dependencies:
+   --ar-color-layer-base, -raised, -sunken, -inverse
+   --ar-color-primary-base, -surface
+   --ar-color-success-base, -surface
+   --ar-color-warning-base, -surface
+   --ar-color-danger-base, -surface
+   --ar-color-info-base, -surface
+   --ar-duration-fast, --ar-ease-standard
+
+   Responsive variants: none
+   Hover variants: yes — for interactive background elements
+
+   SEMANTIC NAMES ONLY:
+   No primitive palette classes (no ar-bg-lapis-600).
+   If a project needs a specific palette stop, it writes
+   background-color directly in its own CSS.
+
+   IMPORTANT — PAIRING WITH TEXT UTILITIES:
+   Background color utilities do not set text color.
+   Pairing guide:
+     ar-bg-inverse       → also apply ar-text-inverse
+     ar-bg-primary       → also apply ar-text-on-primary (white)
+     ar-bg-success       → also apply ar-text-on-success (white)
+     ar-bg-warning       → also apply ar-text-on-warning (white)
+     ar-bg-danger        → also apply ar-text-on-danger  (white)
+     ar-bg-info          → also apply ar-text-on-info    (white)
+   The surface variants (-surface) use semantic text tokens
+   from the matching role for readable text on tinted backgrounds.
+   ============================================================ */
+
+@layer utilities {
+
+  /* --- Layer backgrounds (UI depth planes) --- */
+  .ar-bg-base        { background-color: var(--ar-color-layer-base); }
+  .ar-bg-raised      { background-color: var(--ar-color-layer-raised); }
+  .ar-bg-sunken      { background-color: var(--ar-color-layer-sunken); }
+  .ar-bg-inverse     { background-color: var(--ar-color-layer-inverse); }
+  .ar-bg-transparent { background-color: transparent; }
+
+  /* --- Primary background --- */
+  .ar-bg-primary         { background-color: var(--ar-color-primary-base); }
+  .ar-bg-primary-surface { background-color: var(--ar-color-primary-surface); }
+
+  /* --- Status backgrounds — filled (use white text) --- */
+  .ar-bg-success { background-color: var(--ar-color-success-base); }
+  .ar-bg-warning { background-color: var(--ar-color-warning-base); }
+  .ar-bg-danger  { background-color: var(--ar-color-danger-base); }
+  .ar-bg-info    { background-color: var(--ar-color-info-base); }
+
+  /* --- Status backgrounds — surface (tinted, use role text color) --- */
+  .ar-bg-success-surface { background-color: var(--ar-color-success-surface); }
+  .ar-bg-warning-surface { background-color: var(--ar-color-warning-surface); }
+  .ar-bg-danger-surface  { background-color: var(--ar-color-danger-surface); }
+  .ar-bg-info-surface    { background-color: var(--ar-color-info-surface); }
+
+
+  /* --- Hover variants ---
+     For interactive containers (clickable sections, nav items,
+     table rows) that need a background change on hover.
+     Applies transition for smooth color change.              */
+
+  .ar-hover\:bg-base:hover        { background-color: var(--ar-color-layer-raised); transition: background-color var(--ar-duration-fast) var(--ar-ease-standard); }
+  .ar-hover\:bg-sunken:hover      { background-color: var(--ar-color-layer-sunken); transition: background-color var(--ar-duration-fast) var(--ar-ease-standard); }
+  .ar-hover\:bg-primary:hover     { background-color: var(--ar-color-primary-hover); transition: background-color var(--ar-duration-fast) var(--ar-ease-standard); }
+  .ar-hover\:bg-primary-surface:hover { background-color: var(--ar-color-primary-surface); transition: background-color var(--ar-duration-fast) var(--ar-ease-standard); }
+  .ar-hover\:bg-state:hover       { background-color: var(--ar-color-state-hover-bg); transition: background-color var(--ar-duration-fast) var(--ar-ease-standard); }
+  /* ar-hover:bg-state uses the neutral overlay — safe on any surface */
+
+  @media (prefers-reduced-motion: reduce) {
+    .ar-hover\:bg-base:hover,
+    .ar-hover\:bg-sunken:hover,
+    .ar-hover\:bg-primary:hover,
+    .ar-hover\:bg-primary-surface:hover,
+    .ar-hover\:bg-state:hover {
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+} /* end @layer utilities */

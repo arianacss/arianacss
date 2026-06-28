@@ -1,0 +1,299 @@
+/* ============================================================
+   ArianaCSS — Typography Utilities
+   File:    src/5-utilities/typography.css
+   Layer:   @layer utilities
+   Version: 1.0.0
+
+   Token dependencies:
+   --ar-text-size-*, --ar-text-weight-*, --ar-text-font-*
+   --ar-text-leading-*, --ar-text-tracking-*
+   --ar-color-text-default, -heading, -muted, -disabled,
+   --ar-color-text-inverse, -link, -link-hover, -code
+   --ar-color-primary-base
+   --ar-color-success-text, -warning-text, -danger-text, -info-text
+   --ar-duration-fast, --ar-ease-standard
+
+   Responsive variants: font-size and text-align only
+   Hover variants: text color utilities only
+
+   NOTE — heading PATTERN CLASSES (.ar-h1 through .ar-h6):
+   These are defined in src/4-typography/scale.css, NOT here.
+   They compose size + weight + leading + tracking into one
+   class. That is a typographic pattern, not a utility.
+   Utilities here set individual properties only.
+   ============================================================ */
+
+@layer utilities {
+
+  /* ==========================================================
+     FONT SIZE
+     ========================================================== */
+
+  .ar-text-xs   { font-size: var(--ar-text-size-xs); }
+  .ar-text-sm   { font-size: var(--ar-text-size-sm); }
+  .ar-text-base { font-size: var(--ar-text-size-base); }
+  .ar-text-lg   { font-size: var(--ar-text-size-lg); }
+  .ar-text-xl   { font-size: var(--ar-text-size-xl); }
+  .ar-text-2xl  { font-size: var(--ar-text-size-2xl); }
+  .ar-text-3xl  { font-size: var(--ar-text-size-3xl); }
+  .ar-text-4xl  { font-size: var(--ar-text-size-4xl); }
+  .ar-text-5xl  { font-size: var(--ar-text-size-5xl); }
+  .ar-text-6xl  { font-size: var(--ar-text-size-6xl); }
+
+  /* Responsive — sm (480px+) */
+  @media (min-width: 480px) {
+    .ar-sm\:text-xs   { font-size: var(--ar-text-size-xs); }
+    .ar-sm\:text-sm   { font-size: var(--ar-text-size-sm); }
+    .ar-sm\:text-base { font-size: var(--ar-text-size-base); }
+    .ar-sm\:text-lg   { font-size: var(--ar-text-size-lg); }
+    .ar-sm\:text-xl   { font-size: var(--ar-text-size-xl); }
+    .ar-sm\:text-2xl  { font-size: var(--ar-text-size-2xl); }
+    .ar-sm\:text-3xl  { font-size: var(--ar-text-size-3xl); }
+    .ar-sm\:text-4xl  { font-size: var(--ar-text-size-4xl); }
+    .ar-sm\:text-5xl  { font-size: var(--ar-text-size-5xl); }
+    .ar-sm\:text-6xl  { font-size: var(--ar-text-size-6xl); }
+  }
+
+  /* Responsive — md (768px+) */
+  @media (min-width: 768px) {
+    .ar-md\:text-xs   { font-size: var(--ar-text-size-xs); }
+    .ar-md\:text-sm   { font-size: var(--ar-text-size-sm); }
+    .ar-md\:text-base { font-size: var(--ar-text-size-base); }
+    .ar-md\:text-lg   { font-size: var(--ar-text-size-lg); }
+    .ar-md\:text-xl   { font-size: var(--ar-text-size-xl); }
+    .ar-md\:text-2xl  { font-size: var(--ar-text-size-2xl); }
+    .ar-md\:text-3xl  { font-size: var(--ar-text-size-3xl); }
+    .ar-md\:text-4xl  { font-size: var(--ar-text-size-4xl); }
+    .ar-md\:text-5xl  { font-size: var(--ar-text-size-5xl); }
+    .ar-md\:text-6xl  { font-size: var(--ar-text-size-6xl); }
+  }
+
+  /* Responsive — lg (1024px+) */
+  @media (min-width: 1024px) {
+    .ar-lg\:text-xs   { font-size: var(--ar-text-size-xs); }
+    .ar-lg\:text-sm   { font-size: var(--ar-text-size-sm); }
+    .ar-lg\:text-base { font-size: var(--ar-text-size-base); }
+    .ar-lg\:text-lg   { font-size: var(--ar-text-size-lg); }
+    .ar-lg\:text-xl   { font-size: var(--ar-text-size-xl); }
+    .ar-lg\:text-2xl  { font-size: var(--ar-text-size-2xl); }
+    .ar-lg\:text-3xl  { font-size: var(--ar-text-size-3xl); }
+    .ar-lg\:text-4xl  { font-size: var(--ar-text-size-4xl); }
+    .ar-lg\:text-5xl  { font-size: var(--ar-text-size-5xl); }
+    .ar-lg\:text-6xl  { font-size: var(--ar-text-size-6xl); }
+  }
+
+  /* Responsive — xl (1280px+) */
+  @media (min-width: 1280px) {
+    .ar-xl\:text-xs   { font-size: var(--ar-text-size-xs); }
+    .ar-xl\:text-sm   { font-size: var(--ar-text-size-sm); }
+    .ar-xl\:text-base { font-size: var(--ar-text-size-base); }
+    .ar-xl\:text-lg   { font-size: var(--ar-text-size-lg); }
+    .ar-xl\:text-xl   { font-size: var(--ar-text-size-xl); }
+    .ar-xl\:text-2xl  { font-size: var(--ar-text-size-2xl); }
+    .ar-xl\:text-3xl  { font-size: var(--ar-text-size-3xl); }
+    .ar-xl\:text-4xl  { font-size: var(--ar-text-size-4xl); }
+    .ar-xl\:text-5xl  { font-size: var(--ar-text-size-5xl); }
+    .ar-xl\:text-6xl  { font-size: var(--ar-text-size-6xl); }
+  }
+
+
+  /* ==========================================================
+     TEXT ALIGNMENT
+     ========================================================== */
+
+  .ar-text-left    { text-align: left; }
+  .ar-text-center  { text-align: center; }
+  .ar-text-right   { text-align: right; }
+  .ar-text-justify { text-align: justify; }
+  .ar-text-start   { text-align: start; }  /* logical — RTL aware */
+  .ar-text-end     { text-align: end; }    /* logical — RTL aware */
+
+  /* Responsive — sm (480px+) */
+  @media (min-width: 480px) {
+    .ar-sm\:text-left    { text-align: left; }
+    .ar-sm\:text-center  { text-align: center; }
+    .ar-sm\:text-right   { text-align: right; }
+    .ar-sm\:text-justify { text-align: justify; }
+    .ar-sm\:text-start   { text-align: start; }
+    .ar-sm\:text-end     { text-align: end; }
+  }
+
+  /* Responsive — md (768px+) */
+  @media (min-width: 768px) {
+    .ar-md\:text-left    { text-align: left; }
+    .ar-md\:text-center  { text-align: center; }
+    .ar-md\:text-right   { text-align: right; }
+    .ar-md\:text-justify { text-align: justify; }
+    .ar-md\:text-start   { text-align: start; }
+    .ar-md\:text-end     { text-align: end; }
+  }
+
+  /* Responsive — lg (1024px+) */
+  @media (min-width: 1024px) {
+    .ar-lg\:text-left    { text-align: left; }
+    .ar-lg\:text-center  { text-align: center; }
+    .ar-lg\:text-right   { text-align: right; }
+    .ar-lg\:text-justify { text-align: justify; }
+    .ar-lg\:text-start   { text-align: start; }
+    .ar-lg\:text-end     { text-align: end; }
+  }
+
+  /* Responsive — xl (1280px+) */
+  @media (min-width: 1280px) {
+    .ar-xl\:text-left    { text-align: left; }
+    .ar-xl\:text-center  { text-align: center; }
+    .ar-xl\:text-right   { text-align: right; }
+    .ar-xl\:text-justify { text-align: justify; }
+    .ar-xl\:text-start   { text-align: start; }
+    .ar-xl\:text-end     { text-align: end; }
+  }
+
+
+  /* ==========================================================
+     TEXT COLOR
+     ========================================================== */
+
+  .ar-text-default  { color: var(--ar-color-text-default); }
+  .ar-text-heading  { color: var(--ar-color-text-heading); }
+  .ar-text-muted    { color: var(--ar-color-text-muted); }
+  .ar-text-disabled { color: var(--ar-color-text-disabled); }
+  .ar-text-inverse  { color: var(--ar-color-text-inverse); }
+  .ar-text-inverse-muted { color: var(--ar-color-text-inverse-muted); }
+  .ar-text-link     { color: var(--ar-color-text-link); }
+  .ar-text-code     { color: var(--ar-color-text-code); }
+  .ar-text-primary  { color: var(--ar-color-primary-base); }
+  .ar-text-success  { color: var(--ar-color-success-text); }
+  .ar-text-warning  { color: var(--ar-color-warning-text); }
+  .ar-text-danger   { color: var(--ar-color-danger-text); }
+  .ar-text-info     { color: var(--ar-color-info-text); }
+
+  /* Hover variants — text color */
+  .ar-hover\:text-default:hover { color: var(--ar-color-text-default); transition: color var(--ar-duration-fast) var(--ar-ease-standard); }
+  .ar-hover\:text-heading:hover { color: var(--ar-color-text-heading); transition: color var(--ar-duration-fast) var(--ar-ease-standard); }
+  .ar-hover\:text-muted:hover   { color: var(--ar-color-text-muted);   transition: color var(--ar-duration-fast) var(--ar-ease-standard); }
+  .ar-hover\:text-primary:hover { color: var(--ar-color-primary-hover); transition: color var(--ar-duration-fast) var(--ar-ease-standard); }
+  .ar-hover\:text-link:hover    { color: var(--ar-color-text-link-hover); transition: color var(--ar-duration-fast) var(--ar-ease-standard); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ar-hover\:text-default:hover,
+    .ar-hover\:text-heading:hover,
+    .ar-hover\:text-muted:hover,
+    .ar-hover\:text-primary:hover,
+    .ar-hover\:text-link:hover {
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+
+  /* ==========================================================
+     FONT WEIGHT
+     ========================================================== */
+
+  .ar-font-normal    { font-weight: var(--ar-text-weight-normal); }
+  .ar-font-medium    { font-weight: var(--ar-text-weight-medium); }
+  .ar-font-semibold  { font-weight: var(--ar-text-weight-semibold); }
+  .ar-font-bold      { font-weight: var(--ar-text-weight-bold); }
+  .ar-font-extrabold { font-weight: var(--ar-text-weight-extrabold); }
+
+
+  /* ==========================================================
+     FONT FAMILY
+     ========================================================== */
+
+  .ar-font-sans { font-family: var(--ar-text-font-sans); }
+  .ar-font-mono { font-family: var(--ar-text-font-mono); }
+
+
+  /* ==========================================================
+     LINE HEIGHT
+     ========================================================== */
+
+  .ar-leading-none    { line-height: var(--ar-text-leading-none); }
+  .ar-leading-tight   { line-height: var(--ar-text-leading-tight); }
+  .ar-leading-snug    { line-height: var(--ar-text-leading-snug); }
+  .ar-leading-normal  { line-height: var(--ar-text-leading-normal); }
+  .ar-leading-relaxed { line-height: var(--ar-text-leading-relaxed); }
+  .ar-leading-code    { line-height: var(--ar-text-leading-code); }
+
+
+  /* ==========================================================
+     LETTER SPACING
+     ========================================================== */
+
+  .ar-tracking-tighter { letter-spacing: var(--ar-text-tracking-tighter); }
+  .ar-tracking-tight   { letter-spacing: var(--ar-text-tracking-tight); }
+  .ar-tracking-normal  { letter-spacing: var(--ar-text-tracking-normal); }
+  .ar-tracking-wide    { letter-spacing: var(--ar-text-tracking-wide); }
+  .ar-tracking-wider   { letter-spacing: var(--ar-text-tracking-wider); }
+
+
+  /* ==========================================================
+     TEXT DECORATION
+     ========================================================== */
+
+  .ar-underline    { text-decoration: underline; }
+  .ar-no-underline { text-decoration: none; }
+  .ar-line-through { text-decoration: line-through; }
+
+
+  /* ==========================================================
+     TEXT TRANSFORM
+     ========================================================== */
+
+  .ar-uppercase    { text-transform: uppercase; }
+  .ar-lowercase    { text-transform: lowercase; }
+  .ar-capitalize   { text-transform: capitalize; }
+  .ar-normal-case  { text-transform: none; }
+
+
+  /* ==========================================================
+     FONT STYLE
+     ========================================================== */
+
+  .ar-italic     { font-style: italic; }
+  .ar-not-italic { font-style: normal; }
+
+
+  /* ==========================================================
+     FONT VARIANT — TABULAR NUMBERS
+     For numeric columns in dashboards and data tables.
+     Makes all digits the same width so columns align.
+     ========================================================== */
+
+  .ar-tabular-nums { font-variant-numeric: tabular-nums; }
+
+
+  /* ==========================================================
+     WORD BREAK AND OVERFLOW WRAP
+     ========================================================== */
+
+  .ar-break-normal { overflow-wrap: normal; word-break: normal; }
+  .ar-break-words  { overflow-wrap: break-word; }
+  .ar-break-all    { word-break: break-all; }
+  .ar-break-keep   { word-break: keep-all; }
+
+
+  /* ==========================================================
+     WHITE SPACE
+     ========================================================== */
+
+  .ar-whitespace-normal    { white-space: normal; }
+  .ar-whitespace-nowrap    { white-space: nowrap; }
+  .ar-whitespace-pre       { white-space: pre; }
+  .ar-whitespace-pre-line  { white-space: pre-line; }
+  .ar-whitespace-pre-wrap  { white-space: pre-wrap; }
+
+
+  /* ==========================================================
+     TRUNCATE (composite — three properties always together)
+     Single-line text overflow with ellipsis.
+     Requires a constrained width on the element or an ancestor.
+     ========================================================== */
+
+  .ar-truncate {
+    overflow:      hidden;
+    text-overflow: ellipsis;
+    white-space:   nowrap;
+  }
+
+} /* end @layer utilities */

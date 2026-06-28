@@ -1,0 +1,527 @@
+/* ============================================================
+   ArianaCSS — Motion and Reduced Motion Contract
+   File:    src/2-base/motion.css
+   Layer:   @layer base
+   Version: 1.0.0
+
+   PURPOSE:
+   Define the framework's complete motion contract. This file
+   has two distinct responsibilities:
+
+   1. DOCUMENT THE MOTION SYSTEM:
+      Provide the canonical reference for how duration and
+      easing tokens are composed into transitions. Every
+      component author reads this file before writing any
+      transition or animation property.
+
+   2. ENFORCE THE REDUCED MOTION CONTRACT:
+      Override ALL transitions and animations framework-wide
+      when the user has requested reduced motion via their
+      operating system accessibility settings. This is not
+      optional, not progressive enhancement, and not an
+      afterthought — it is a medical necessity for users
+      with vestibular disorders.
+
+   TOKEN DEPENDENCIES:
+   --ar-duration-fast      100ms   micro-interactions
+   --ar-duration-base      200ms   standard state changes
+   --ar-duration-slow      350ms   structural movement
+   --ar-ease-standard      cubic-bezier(0.4, 0, 0.2, 1)
+   --ar-ease-decelerate    cubic-bezier(0, 0, 0.2, 1)
+   --ar-ease-accelerate    cubic-bezier(0.4, 0, 1, 1)
+
+   POSITION IN IMPLEMENTATION ORDER:
+   motion.css is the SECOND file in the base layer, after
+   reset.css and before base.css. This ordering is critical:
+
+   reset.css  → blank normalized slate (no transitions)
+   motion.css → motion contract established HERE
+   base.css   → first transitions appear (link hover)
+   focus.css  → focus ring transition appears
+
+   motion.css must run BEFORE any file that introduces a
+   transition or animation. If motion.css runs after base.css
+   or any component file, the prefers-reduced-motion override
+   still works (cascade order handles it) but the intent is
+   violated — the contract should precede the commitments.
+
+   THE MEDICAL CASE FOR THIS FILE:
+   Vestibular disorders (labyrinthitis, Meniere's disease,
+   BPPV, and others) affect the inner ear's ability to sense
+   motion. CSS animations and transitions that involve
+   movement, parallax, scaling, or rotation can trigger:
+   - Dizziness and vertigo
+   - Nausea
+   - Headache and migraine
+   - Disorientation lasting hours after exposure
+
+   The prefers-reduced-motion: reduce media query reflects
+   the user's explicit operating system preference to minimize
+   motion. In macOS: System Preferences → Accessibility →
+   Display → Reduce Motion. In Windows: Settings →
+   Ease of Access → Display → Show animations in Windows (off).
+   In iOS: Settings → Accessibility → Motion → Reduce Motion.
+
+   Honoring this preference is a WCAG 2.1 Level AAA requirement
+   (SC 2.3.3 Animation from Interactions) and a WCAG 2.2 Level
+   AA requirement (SC 2.3.3 is promoted to AA in 2.2). More
+   importantly, it is basic human decency toward users for whom
+   ignoring this preference causes physical harm.
+
+   THE 0.01ms TECHNIQUE:
+   The reduced motion block sets all transition-duration and
+   animation-duration values to 0.01ms — not 0, not 0s, not
+   none. The reason is specific:
+
+   duration: 0ms or 0s
+   Some browsers skip certain animation lifecycle events
+   (animationstart, animationend, transitionend) when duration
+   is exactly 0. JavaScript that listens to these events to
+   clean up after animations (removing classes, restoring
+   will-change, triggering callbacks) may break if the event
+   never fires. 0.01ms fires the events while being
+   perceptually instantaneous to the human visual system.
+
+   duration: none (not valid for duration)
+   The CSS transition-duration property does not accept 'none'
+   as a value. Setting transition: none removes the transition
+   entirely (including properties, delay, easing) which has
+   stronger side effects than a near-zero duration.
+
+   transition-delay: 0ms in the reduced motion block ensures
+   that even elements with deliberate delays (staggered
+   animations, sequenced reveals) appear instantly. A 200ms
+   delay before a 0.01ms transition still produces a 200ms
+   apparent pause, which is a motion-like experience.
+
+   WHAT THIS FILE DOES NOT COVER:
+   - scroll-behavior: smooth — handled in base.css section 2
+   - Video autoplay — HTML attribute concern, not CSS
+   - GIF animations — HTML/content concern, not CSS
+   - JavaScript-driven animations (GSAP, Framer Motion) —
+     those libraries must implement their own reduced-motion
+     checks. Document this in CONTRIBUTING.md.
+   - CSS @keyframes that use opacity only — opacity changes
+     are generally safe for vestibular disorders. However,
+     the global duration override still applies to them.
+     Projects that use opacity-only animations may choose
+     to exempt them in their own override stylesheet.
+
+   NEXT FILE IN IMPLEMENTATION ORDER: src/2-base/base.css
+   ============================================================ */
+
+
+@layer base {
+
+  /* ==========================================================
+     1. MOTION SYSTEM REFERENCE
+     ──────────────────────────────────────────────────────────
+     This section contains no CSS rules. It is the canonical
+     documentation of how motion tokens compose into component
+     transitions. Every contributor writing a transition in any
+     component or utility file references this section.
+
+     ── DURATION TOKENS ────────────────────────────────────────
+
+     --ar-duration-fast   (100ms)
+     Use for: color changes, opacity changes, background-color
+     changes, text-color changes, border-color changes.
+     These are property changes with no spatial movement.
+     The change is felt as immediate but remains smooth.
+     Examples: button hover background, link hover color,
+               checkbox tick appearance, badge color change.
+
+     --ar-duration-base   (200ms)
+     Use for: shadow changes, border-width changes, most state
+     transitions where the element stays in place but has a
+     clearly animated intermediate state.
+     Examples: card hover shadow lift, input focus ring appear,
+               toggle switch slide, accordion header state.
+
+     --ar-duration-slow   (350ms)
+     Use for: elements that move through space — entering,
+     exiting, expanding, collapsing. The eye needs time to
+     track spatial origin and destination.
+     Examples: modal entrance, drawer slide-in, dropdown open,
+               accordion panel expand, toast notification appear.
+
+     ── EASING TOKENS ──────────────────────────────────────────
+
+     --ar-ease-standard   (cubic-bezier(0.4, 0, 0.2, 1))
+     A physics-informed deceleration curve. Starts at moderate
+     speed, decelerates to a soft stop. Reads as "natural" for
+     elements that change state in place (color, shadow, size).
+     Use with: --ar-duration-fast and --ar-duration-base.
+     Never use with entering/exiting animations — those need
+     directional easing.
+
+     --ar-ease-decelerate (cubic-bezier(0, 0, 0.2, 1))
+     Maximum velocity at the start, soft landing at the end.
+     Models the physics of an object arriving — it comes in
+     fast and settles into position. The fast entry captures
+     the user's attention; the soft landing provides closure.
+     Use with: --ar-duration-slow for ALL enter animations.
+     Elements: modals appearing, drawers sliding in,
+               dropdowns opening, toasts arriving.
+
+     --ar-ease-accelerate (cubic-bezier(0.4, 0, 1, 1))
+     Slow start, maximum velocity at the end. Models an object
+     leaving — it hesitates, then departs quickly. The slow
+     start gives the user a moment to register the departure;
+     the fast exit minimizes the blocking time.
+     Use with: --ar-duration-base for ALL exit animations.
+     Elements: modals dismissing, drawers sliding out,
+               dropdowns closing, toasts disappearing.
+
+     ── COMPOSITION GUIDE ──────────────────────────────────────
+
+     Components write transitions explicitly. No composite
+     shorthand tokens are provided (previous versions had
+     --ar-transition-base etc. — removed in the final audit
+     because they forced a single easing choice per duration).
+
+     CORRECT pattern (in a component file):
+       transition:
+         background-color var(--ar-duration-fast)  var(--ar-ease-standard),
+         box-shadow       var(--ar-duration-base)  var(--ar-ease-standard),
+         color            var(--ar-duration-fast)  var(--ar-ease-standard);
+
+     INCORRECT pattern (do not copy):
+       transition: all var(--ar-duration-base) var(--ar-ease-standard);
+       Reason: transition: all creates transitions on EVERY
+       property change, including layout-impacting properties
+       (width, height, margin, padding). These trigger layout
+       reflow during the transition, causing jank. Always
+       enumerate specific properties.
+
+     ── WILL-CHANGE GUIDANCE ────────────────────────────────────
+
+     will-change hints to the browser to create a GPU
+     compositing layer for an element before it animates.
+     This eliminates the paint cost at animation start.
+
+     WHEN TO USE:
+     will-change: transform   — elements that translateX/Y/Z
+     will-change: opacity     — elements that fade in/out
+     will-change: transform, opacity — elements that do both
+
+     WHEN NOT TO USE:
+     - On elements at rest (only apply before animation starts)
+     - On more than a few elements simultaneously
+     - On box-shadow (not GPU-composited, will-change has no benefit)
+     - On color, background-color (not composited)
+
+     HOW TO USE CORRECTLY (JavaScript required):
+       element.addEventListener('mouseenter', () => {
+         element.style.willChange = 'transform';
+       });
+       element.addEventListener('animationend', () => {
+         element.style.willChange = 'auto';
+       });
+
+     The framework does not set will-change in CSS because the
+     timing must be JavaScript-driven to be correct. No component
+     or utility file in ArianaCSS contains will-change.
+
+     ── ANIMATION CHECKLIST FOR CONTRIBUTORS ────────────────────
+
+     Before adding any transition or animation to a component:
+     □ Have you listed only specific properties (not 'all')?
+     □ Have you used the correct duration token for the type
+       of change (fast for color, slow for movement)?
+     □ Have you used the correct easing token (standard for
+       in-place, decelerate for enter, accelerate for exit)?
+     □ Is this transition covered by the prefers-reduced-motion
+       block in this file? (Yes — the global block covers all.)
+     □ Is there a JavaScript animation that also needs a
+       prefers-reduced-motion check? (Not covered here — add
+       to the component's JS using matchMedia.)
+     ========================================================== */
+
+
+  /* ==========================================================
+     2. REDUCED MOTION CONTRACT
+     ──────────────────────────────────────────────────────────
+     The binding framework-wide contract. When the user has
+     requested reduced motion, ALL transitions and animations
+     defined anywhere in the ArianaCSS framework are overridden
+     to be effectively instantaneous.
+
+     COVERAGE:
+     The universal selector (*) with ::before and ::after
+     pseudo-elements ensures no element in any component,
+     utility, or custom project stylesheet escapes this
+     contract — as long as it is CSS-driven.
+
+     The rule overrides:
+     transition-duration      → 0.01ms (effectively instant)
+     transition-delay         → 0ms    (no deferred transitions)
+     animation-duration       → 0.01ms (effectively instant)
+     animation-delay          → 0ms    (no deferred animations)
+     animation-iteration-count → 1     (no infinite loops)
+
+     WHY animation-iteration-count: 1:
+     An animation-duration of 0.01ms with animation-iteration-
+     count: infinite still produces an infinite loop of
+     0.01ms frames — which is a spinning, flashing, constantly
+     repainting element. Setting iteration-count to 1 ensures
+     infinite-loop animations (loading spinners, pulsing
+     indicators) play exactly once (effectively not at all
+     given the 0.01ms duration) and then stop.
+
+     WHY this does NOT suppress visibility changes:
+     This block only overrides time-based properties. It does
+     not set display: none, visibility: hidden, or opacity: 0
+     on any element. State changes (modal appearing, dropdown
+     opening, card expanding) still happen — they just happen
+     instantly. The end state is still reached; only the
+     journey between states is removed.
+
+     WHY @layer base matters here:
+     This rule is in @layer base, the lowest-priority authored
+     layer. Component transitions are in @layer components.
+     Utility overrides are in @layer utilities. All of them
+     are higher priority than @layer base.
+
+     This means the reduced motion override in @layer base
+     is OVERRIDDEN by component and utility rules in higher
+     layers. This appears to be a problem but is not:
+
+     The prefers-reduced-motion media query condition wraps
+     the entire rule. The browser evaluates the media query
+     condition at render time. When the condition is true
+     (user has requested reduced motion), the browser applies
+     the 0.01ms duration. The layer priority determines which
+     value wins in the normal cascade — but within a matching
+     media query, the specificity of * (universal selector)
+     is zero, which means component-level rules WILL override
+     the 0.01ms duration with their own values.
+
+     THIS IS THE KNOWN LIMITATION:
+     A component that writes:
+       .ar-btn { transition-duration: 200ms; }
+     in @layer components will override this file's 0.01ms
+     because @layer components has higher priority than
+     @layer base.
+
+     THE CORRECT SOLUTION:
+     Each component file must include its own reduced-motion
+     override. The global rule here is the safety net for
+     any component that forgets to include one. But it is
+     not sufficient on its own.
+
+     The correct pattern in EVERY component file:
+       @media (prefers-reduced-motion: reduce) {
+         .ar-btn {
+           transition-duration: 0.01ms;
+           animation-duration:  0.01ms;
+         }
+       }
+
+     This file documents the contract. Component files enforce
+     it for their own transitions. See CONTRIBUTING.md §motion
+     for the enforcement checklist.
+     ========================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+      transition-duration:       0.01ms !important;
+      transition-delay:          0ms    !important;
+      animation-duration:        0.01ms !important;
+      animation-delay:           0ms    !important;
+      animation-iteration-count: 1      !important;
+    }
+
+  }
+
+
+  /* ==========================================================
+     3. THE !important JUSTIFICATION
+     ──────────────────────────────────────────────────────────
+     The rules in section 2 use !important. This is one of
+     only two permitted uses of !important in the ArianaCSS
+     framework (the other is [hidden] { display: none } in
+     reset.css).
+
+     The justification for !important here:
+
+     The user's operating system accessibility preference for
+     reduced motion is a user-agent level preference. CSS
+     @layer gives the developer control over cascade priority
+     between authored stylesheets. But it does not provide a
+     mechanism to say "this rule must win over all other
+     authored rules regardless of layer." The only CSS
+     mechanism for that is !important.
+
+     The reduced motion override must win over all component
+     and utility transitions, regardless of which layer they
+     are in. Without !important:
+
+     @layer utilities (highest) → transition-duration: 200ms
+     @layer components          → transition-duration: 200ms
+     @layer base (lowest)       → transition-duration: 0.01ms
+
+     Utilities win. The override fails. Animations play for
+     users who have explicitly requested they not play.
+
+     With !important on the @layer base rule:
+
+     @layer utilities (highest) → transition-duration: 200ms
+     @layer components          → transition-duration: 200ms
+     @layer base (lowest)  !important → transition-duration: 0.01ms
+
+     !important reverses the layer priority for the overridden
+     property. The 0.01ms wins. The user's preference is honored.
+
+     This is the correct and appropriate use of !important —
+     it reflects a user preference that must override developer
+     decisions, which is precisely what !important was designed
+     for in the CSS specification.
+
+     The only risk: a project that uses !important on its own
+     transition-duration within a prefers-reduced-motion block
+     would compete with this rule. That is an unusual pattern
+     and the expected resolution (their !important wins in
+     source order if specificity is equal) is acceptable — if
+     a project is explicitly setting its own reduced-motion
+     overrides with !important, it has made a considered choice.
+     ========================================================== */
+
+
+  /* ==========================================================
+     4. SAFE MOTION — OPACITY-ONLY ANIMATIONS
+     ──────────────────────────────────────────────────────────
+     Research on vestibular disorders and motion sensitivity
+     shows that CSS animations involving spatial movement
+     (translateX, translateY, scale, rotate) are the primary
+     triggers of vestibular symptoms. Opacity changes (fading)
+     are generally safe — they do not create the illusion of
+     spatial movement and do not trigger the inner ear's
+     motion sensing.
+
+     This section documents this nuance. The global override
+     in section 2 still applies to opacity animations (their
+     duration becomes 0.01ms). This is conservative but safe.
+
+     Projects that want to preserve opacity-only fades for
+     reduced-motion users can add this to their own stylesheet:
+
+       @media (prefers-reduced-motion: reduce) {
+         [data-motion="fade"] {
+           transition-duration: 150ms !important;
+         }
+       }
+
+     The [data-motion="fade"] data attribute is a suggested
+     convention for marking elements as opacity-only animated.
+     ArianaCSS does not ship this as a framework pattern —
+     it is a project-level decision. Projects that implement
+     this must ensure those elements ONLY transition opacity
+     and never move spatially.
+
+     This section contains no CSS rules. It is documentation
+     only.
+     ========================================================== */
+
+
+  /* ==========================================================
+     5. PRINT — MOTION IRRELEVANCE
+     ──────────────────────────────────────────────────────────
+     CSS transitions and animations have no effect in printed
+     output. Browsers freeze animation state at print time.
+     No specific print override is needed for motion.
+
+     The @media print block in base.css removes box-shadows
+     and text-shadows (visual, not temporal properties) for
+     print efficiency. This is the correct location for those
+     rules. No print-specific motion rules belong here.
+     ========================================================== */
+
+
+} /* end @layer base */
+
+
+/* ============================================================
+   END OF FILE — motion.css
+   ────────────────────────────────────────────────────────────
+   Tokens referenced (documentation only — no CSS rules use
+   tokens directly in this file; all rules are structural):
+   --ar-duration-fast    documented in section 1
+   --ar-duration-base    documented in section 1
+   --ar-duration-slow    documented in section 1
+   --ar-ease-standard    documented in section 1
+   --ar-ease-decelerate  documented in section 1
+   --ar-ease-accelerate  documented in section 1
+
+   CSS rules in this file: 1 (the @media block in section 2).
+   CSS properties overridden: 5 (transition-duration,
+   transition-delay, animation-duration, animation-delay,
+   animation-iteration-count).
+
+   !important usage: 5 instances — all within the
+   prefers-reduced-motion media query in section 2.
+   See section 3 for the full justification. These are the
+   second and only other permitted !important declarations
+   in the framework after [hidden] in reset.css.
+
+   KNOWN LIMITATION (documented in section 2):
+   The @layer base global override is defeated by component
+   and utility rules in higher layers. Each component file
+   must include its own reduced-motion block. This file is
+   the contract and the safety net — not the complete solution.
+
+   COMPONENT AUTHOR CHECKLIST:
+   Every component file that uses transition or animation MUST
+   include a @media (prefers-reduced-motion: reduce) block that
+   explicitly sets transition-duration and animation-duration
+   to 0.01ms for that component's animated properties.
+
+   Pattern (copy into every component that uses transitions):
+
+     @media (prefers-reduced-motion: reduce) {
+       .ar-[component],
+       .ar-[component]::before,
+       .ar-[component]::after {
+         transition-duration: 0.01ms !important;
+         animation-duration:  0.01ms !important;
+       }
+     }
+
+   TESTING CHECKLIST:
+   □ Enable "Reduce Motion" in OS accessibility settings
+     macOS:   System Settings → Accessibility → Display →
+              Reduce motion (toggle on)
+     Windows: Settings → Accessibility → Visual effects →
+              Animation effects (toggle off)
+     iOS:     Settings → Accessibility → Motion →
+              Reduce Motion (toggle on)
+     Android: Settings → Accessibility → Remove animations
+              (toggle on)
+
+   □ With reduced motion ON:
+     □ Button hover — background color changes INSTANTLY
+     □ Link hover — color changes INSTANTLY
+     □ Card hover — shadow changes INSTANTLY
+     □ Input focus — ring appears INSTANTLY
+     □ Skip link — appears INSTANTLY (no slide transition)
+     □ No loading spinners spinning
+     □ No pulsing animations active
+     □ No elements translating / moving across screen
+
+   □ With reduced motion OFF (restore normal motion):
+     □ Button hover — smooth 100ms color transition
+     □ Card hover — smooth 200ms shadow transition
+     □ Skip link — smooth 200ms slide into view
+
+   □ Verify in Chrome DevTools:
+     Open DevTools → Rendering tab → Emulate CSS media feature
+     "prefers-reduced-motion" → Set to "reduce"
+     All transitions should appear instant in this mode.
+
+   □ No CSS errors in browser DevTools console
+   □ The @media block is present and correct in the
+     concatenated dist/ariana.css output
+   ============================================================ */

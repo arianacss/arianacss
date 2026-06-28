@@ -1,0 +1,118 @@
+/* ============================================================
+   ArianaCSS — Aspect Ratio Utilities
+   File:    src/5-utilities/ratio.css
+   Layer:   @layer utilities
+   Version: 1.0.0
+
+   Token dependencies: none
+   Aspect ratio values are fixed mathematical ratios —
+   they are not design decisions and have no tokens.
+
+   Responsive variants: yes (ratio often changes at breakpoints)
+   Hover variants: none
+
+   BROWSER SUPPORT:
+   Uses the modern CSS aspect-ratio property exclusively.
+   Supported in all target browsers: Chrome 88+, Firefox 89+,
+   Safari 15+. No padding-bottom hack needed.
+
+   USAGE:
+   Apply to a container. Content inside must use
+   object-fit: cover (for img/video) to fill the ratio
+   without distortion. The ratio utility does not set
+   object-fit — that is a single-responsibility concern
+   for the content element or its component.
+
+   Example:
+     <div class="ar-ratio-video">
+       <img src="..." alt="..." style="object-fit:cover;width:100%;height:100%;">
+     </div>
+
+   Or with utility classes:
+     <div class="ar-ratio-video ar-rounded-lg ar-overflow-hidden">
+       <img src="..." alt="...">
+     </div>
+   ============================================================ */
+
+@layer utilities {
+
+  /* --- Named aspect ratios --- */
+
+  .ar-ratio-square   { aspect-ratio: 1 / 1; }
+  /* Use: avatar containers, icon boxes, square thumbnails,
+     square product images, profile photo placeholders.        */
+
+  .ar-ratio-video    { aspect-ratio: 16 / 9; }
+  /* Use: YouTube embeds, Vimeo embeds, video thumbnails,
+     widescreen hero images, presentation slides.              */
+
+  .ar-ratio-photo    { aspect-ratio: 4 / 3; }
+  /* Use: DSLR landscape photos, classic photo albums,
+     product images, standard blog post feature images.        */
+
+  .ar-ratio-portrait { aspect-ratio: 3 / 4; }
+  /* Use: mobile photography, portrait cards, book covers,
+     tall product cards, profile banners.                      */
+
+  .ar-ratio-wide     { aspect-ratio: 21 / 9; }
+  /* Use: cinema-format hero sections, ultra-wide banners,
+     panoramic landscape imagery, full-width page headers.     */
+
+  .ar-ratio-golden   { aspect-ratio: 1.618 / 1; }
+  /* Use: aesthetically-balanced feature cards, editorial
+     image containers, marketing section backgrounds. The
+     golden ratio (φ ≈ 1.618) produces proportions that
+     feel naturally balanced to the human eye.                 */
+
+
+  /* --- Ratio removal --- */
+  .ar-ratio-auto { aspect-ratio: auto; }
+  /* Restores natural intrinsic ratio at a breakpoint.
+     Example: ar-ratio-video ar-lg:ratio-auto              */
+
+
+  /* ==========================================================
+     RESPONSIVE VARIANTS
+     ========================================================== */
+
+  @media (min-width: 480px) {
+    .ar-sm\:ratio-square   { aspect-ratio: 1 / 1; }
+    .ar-sm\:ratio-video    { aspect-ratio: 16 / 9; }
+    .ar-sm\:ratio-photo    { aspect-ratio: 4 / 3; }
+    .ar-sm\:ratio-portrait { aspect-ratio: 3 / 4; }
+    .ar-sm\:ratio-wide     { aspect-ratio: 21 / 9; }
+    .ar-sm\:ratio-golden   { aspect-ratio: 1.618 / 1; }
+    .ar-sm\:ratio-auto     { aspect-ratio: auto; }
+  }
+
+  @media (min-width: 768px) {
+    .ar-md\:ratio-square   { aspect-ratio: 1 / 1; }
+    .ar-md\:ratio-video    { aspect-ratio: 16 / 9; }
+    .ar-md\:ratio-photo    { aspect-ratio: 4 / 3; }
+    .ar-md\:ratio-portrait { aspect-ratio: 3 / 4; }
+    .ar-md\:ratio-wide     { aspect-ratio: 21 / 9; }
+    .ar-md\:ratio-golden   { aspect-ratio: 1.618 / 1; }
+    .ar-md\:ratio-auto     { aspect-ratio: auto; }
+  }
+
+  @media (min-width: 1024px) {
+    .ar-lg\:ratio-square   { aspect-ratio: 1 / 1; }
+    .ar-lg\:ratio-video    { aspect-ratio: 16 / 9; }
+    .ar-lg\:ratio-photo    { aspect-ratio: 4 / 3; }
+    .ar-lg\:ratio-portrait { aspect-ratio: 3 / 4; }
+    .ar-lg\:ratio-wide     { aspect-ratio: 21 / 9; }
+    .ar-lg\:ratio-golden   { aspect-ratio: 1.618 / 1; }
+    .ar-lg\:ratio-auto     { aspect-ratio: auto; }
+  }
+
+  @media (min-width: 1280px) {
+    .ar-xl\:ratio-square   { aspect-ratio: 1 / 1; }
+    .ar-xl\:ratio-video    { aspect-ratio: 16 / 9; }
+    .ar-xl\:ratio-photo    { aspect-ratio: 4 / 3; }
+    .ar-xl\:ratio-portrait { aspect-ratio: 3 / 4; }
+    .ar-xl\:ratio-wide     { aspect-ratio: 21 / 9; }
+    .ar-xl\:ratio-golden   { aspect-ratio: 1.618 / 1; }
+    .ar-xl\:ratio-auto     { aspect-ratio: auto; }
+  }
+
+} /* end @layer utilities */

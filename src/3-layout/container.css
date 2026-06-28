@@ -1,0 +1,367 @@
+/* ============================================================
+   ArianaCSS — Responsive Container
+   File:    src/3-layout/container.css
+   Layer:   @layer layout
+   Version: 1.0.0
+
+   PURPOSE:
+   Provide a centered, max-width-constrained, horizontally
+   padded content wrapper that responds to viewport width.
+   The container is the outermost layout primitive — everything
+   in a page layout lives inside a container or deliberately
+   breaks out of one.
+
+   TOKEN DEPENDENCIES:
+   --ar-container-sm          440px  max-width at sm breakpoint
+   --ar-container-md          720px  max-width at md breakpoint
+   --ar-container-lg          960px  max-width at lg breakpoint
+   --ar-container-xl          1200px max-width at xl breakpoint
+   --ar-container-padding-x   1rem   base horizontal padding (mobile)
+
+   Responsive padding increases are implemented here via @media
+   queries — NOT via additional tokens. The token defines the
+   mobile-first base value only. This file owns the rest.
+
+   BREAKPOINT VALUES (hardcoded — see tokens.css section 15):
+   480px  → --ar-bp-sm
+   768px  → --ar-bp-md
+   1024px → --ar-bp-lg
+   1280px → --ar-bp-xl
+
+   CONTAINER WIDTH MATH (documented in tokens.css section 15):
+   The container max-widths are derived from:
+     breakpoint − (2 × padding-x at that breakpoint)
+     480px  − (2 × 20px) = 440px  → --ar-container-sm
+     768px  − (2 × 24px) = 720px  → --ar-container-md
+     1024px − (2 × 32px) = 960px  → --ar-container-lg
+     1280px − (2 × 40px) = 1200px → --ar-container-xl
+
+   This relationship ensures the content inside the container
+   always has visible breathing room from the viewport edge,
+   even at the exact breakpoint boundary.
+
+   TWO CONTAINER VARIANTS:
+   .ar-container       Standard centered, max-width container.
+                       Use for: page content, section wrappers,
+                       navigation inner content, footer content.
+
+   .ar-container--fluid Full-width container with horizontal
+                       padding but no max-width constraint.
+                       Use for: full-bleed hero sections that
+                       still need consistent internal padding,
+                       full-width navigation bars, edge-to-edge
+                       banners with padded content inside.
+
+   NESTING CONTAINERS:
+   Containers may be nested but rarely should be. The correct
+   pattern is one container at the page level, with layout
+   grids inside it. Nested containers create double-padding
+   that compresses content unpredictably. Document this in
+   the usage examples.
+
+   NEXT FILE: src/3-layout/grid.css
+   ============================================================ */
+
+
+@layer layout {
+
+  /* ==========================================================
+     BASE CONTAINER
+     ──────────────────────────────────────────────────────────
+     Mobile-first. No max-width at base — the container fills
+     the full viewport width on narrow screens. Max-width is
+     progressively applied at each breakpoint via @media blocks.
+
+     width: 100%:
+     Ensures the container fills its parent's width. Without
+     this, a block element inside a flex or grid parent may
+     shrink to its content's intrinsic width.
+
+     margin-inline: auto:
+     Centers the container horizontally when max-width is in
+     effect. Uses logical property for RTL compatibility —
+     equivalent to margin-left: auto + margin-right: auto.
+
+     padding-inline: var(--ar-container-padding-x):
+     Applies horizontal padding so content never touches the
+     viewport edge. Uses the token's mobile value (1rem = 16px)
+     as the base. Increases at md and lg breakpoints below.
+     Uses logical property so padding correctly applies to
+     reading-start and reading-end edges in RTL.
+
+     box-sizing: border-box:
+     Explicitly set (even though reset.css applies this via
+     inheritance) because container is a layout-critical
+     element. belt-and-suspenders correctness here ensures
+     the padding-inline is included in the width calculation,
+     not added to it.
+     ========================================================== */
+
+  .ar-container {
+    width:          100%;
+    max-width:      100%;
+    margin-inline:  auto;
+    padding-inline: var(--ar-container-padding-x); /* 1rem (16px) at mobile */
+    box-sizing:     border-box;
+  }
+
+
+  /* ==========================================================
+     RESPONSIVE MAX-WIDTHS AND PADDING INCREASES
+     ──────────────────────────────────────────────────────────
+     At each breakpoint, two things happen simultaneously:
+     1. max-width is applied (content stops growing past this)
+     2. padding-inline increases (more breathing room on wider screens)
+
+     The padding increase maintains the proportional relationship
+     between content width and viewport width at each tier.
+     On a 768px screen, 24px padding feels right. On a 1024px
+     screen, 32px. On 1280px+, 40px.
+
+     Why increase padding at breakpoints:
+     On a 320px phone, 16px padding (5% of width) provides
+     adequate breathing room. On a 1280px desktop, 16px padding
+     (1.25% of width) feels cramped — the content appears to
+     float at the very edge of a wide expanse. Progressive
+     padding creates proportionally consistent margins at all
+     viewport sizes.
+     ========================================================== */
+
+  /* sm (480px+) — apply sm max-width, increase padding slightly */
+  @media (min-width: 480px) {
+    .ar-container {
+      max-width:      var(--ar-container-sm); /* 440px */
+      padding-inline: 1.25rem;               /* 20px  */
+    }
+  }
+
+  /* md (768px+) — apply md max-width, increase padding */
+  @media (min-width: 768px) {
+    .ar-container {
+      max-width:      var(--ar-container-md); /* 720px */
+      padding-inline: 1.5rem;                /* 24px  */
+    }
+  }
+
+  /* lg (1024px+) — apply lg max-width, increase padding */
+  @media (min-width: 1024px) {
+    .ar-container {
+      max-width:      var(--ar-container-lg); /* 960px */
+      padding-inline: 2rem;                  /* 32px  */
+    }
+  }
+
+  /* xl (1280px+) — apply xl max-width, final padding */
+  @media (min-width: 1280px) {
+    .ar-container {
+      max-width:      var(--ar-container-xl); /* 1200px */
+      padding-inline: 2.5rem;                /* 40px   */
+    }
+  }
+
+
+  /* ==========================================================
+     FLUID CONTAINER
+     ──────────────────────────────────────────────────────────
+     Full-width at all breakpoints. No max-width ever applied.
+     Padding increases progressively, same as the standard
+     container, to maintain content breathing room.
+
+     Use cases:
+     - Full-bleed hero sections with padded inner content
+     - Site-wide navigation bars (full width, padded content)
+     - Dashboard layouts that use the full viewport width
+     - Edge-to-edge background banners with internal padding
+
+     The fluid container is most useful as a section wrapper
+     when a background color or image needs to extend to the
+     full viewport edge while its content still aligns with
+     the page's horizontal rhythm.
+
+     Example:
+       <section class="ar-container--fluid ar-bg-primary">
+         <div class="ar-container">
+           <!-- Content constrained by inner standard container -->
+         </div>
+       </section>
+     ========================================================== */
+
+  .ar-container--fluid {
+    width:          100%;
+    margin-inline:  auto;
+    padding-inline: var(--ar-container-padding-x); /* 1rem (16px) at mobile */
+    box-sizing:     border-box;
+  }
+
+  @media (min-width: 480px) {
+    .ar-container--fluid {
+      padding-inline: 1.25rem; /* 20px */
+    }
+  }
+
+  @media (min-width: 768px) {
+    .ar-container--fluid {
+      padding-inline: 1.5rem; /* 24px */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ar-container--fluid {
+      padding-inline: 2rem; /* 32px */
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .ar-container--fluid {
+      padding-inline: 2.5rem; /* 40px */
+    }
+  }
+
+
+  /* ==========================================================
+     CONTAINER BREAKOUT UTILITY
+     ──────────────────────────────────────────────────────────
+     .ar-breakout allows a child element to visually escape
+     the container's horizontal constraints and extend to the
+     full viewport width — while keeping the container's
+     centered layout for all sibling elements.
+
+     Use cases:
+     - Full-bleed images inside a constrained article
+     - Full-width dividers inside a max-width content column
+     - Edge-to-edge code blocks or data tables in documentation
+     - Pull-quotes or callouts that bleed past the content column
+
+     HOW IT WORKS:
+     The negative margin pulls the element left by 50vw from
+     its center, then shifts it right by 50% of its own width.
+     Setting width: 100vw makes it span the full viewport.
+     The result: the element is full-viewport-width while its
+     siblings remain within the container's max-width.
+
+     CAVEAT:
+     This technique causes horizontal scroll if the page has
+     any element that creates overflow-x. Ensure the html or
+     body element has overflow-x: hidden (set in base.css)
+     before using .ar-breakout.
+
+     .ar-breakout does not receive responsive variants because
+     breakout elements are either always full-bleed or never
+     full-bleed — they do not change at breakpoints.
+     ========================================================== */
+
+  .ar-breakout {
+    width:         100vw;
+    margin-inline: calc(50% - 50vw);
+    /* How this works:
+       margin-inline-start: calc(50% - 50vw)
+       → 50% of the container's width, minus 50% of the viewport.
+       On a 960px container inside a 1280px viewport:
+         50% of 960px = 480px
+         50% of 1280px = 640px
+         margin-start = 480 - 640 = -160px
+       The element pulls left by 160px and gains 160px on
+       each side, exactly reaching the viewport edges.       */
+  }
+
+
+  /* ==========================================================
+     NARROW CONTENT CONTAINER
+     ──────────────────────────────────────────────────────────
+     .ar-container--narrow constrains content to a readable
+     line length. Used for long-form prose, article bodies,
+     blog posts, and documentation paragraphs where the full
+     container width would produce uncomfortably long lines.
+
+     The 65ch max-width (approximately 65 characters per line)
+     is the typographic sweet spot for comfortable reading:
+     - Below 45ch: too narrow, excessive eye movement vertically
+     - 50–75ch: optimal reading range (Bringhurst, The Elements
+       of Typographic Style)
+     - Above 85ch: fatiguing for continuous reading
+
+     ch unit: width of the "0" glyph in the current font.
+     At Inter 16px, 65ch ≈ 540–560px depending on content.
+     This makes the narrow container font-size-relative —
+     if the user increases their browser font size, the
+     container grows proportionally, maintaining the correct
+     character count per line.
+
+     .ar-container--narrow inherits all padding from
+     .ar-container when used as a modifier. It does not
+     set its own padding — it only constrains max-width.
+     Usage: <div class="ar-container ar-container--narrow">
+     ========================================================== */
+
+  .ar-container--narrow {
+    max-width: 65ch;
+  }
+
+
+  /* ==========================================================
+     PRINT STYLES
+     ──────────────────────────────────────────────────────────
+     Remove padding constraints in printed output. Printed
+     pages have their own margin model (controlled by the
+     browser's print dialog and @page rules). Container
+     padding in print wastes printable area.
+     ========================================================== */
+
+  @media print {
+    .ar-container,
+    .ar-container--fluid {
+      max-width:      100%;
+      padding-inline: 0;
+    }
+  }
+
+} /* end @layer layout */
+
+
+/* ============================================================
+   END OF FILE — container.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (5 references):
+   --ar-container-sm          max-width at sm
+   --ar-container-md          max-width at md
+   --ar-container-lg          max-width at lg
+   --ar-container-xl          max-width at xl
+   --ar-container-padding-x   base padding (mobile)
+
+   Hard-coded values (justified — responsive padding increases
+   documented in tokens.css section 15 and here):
+   1.25rem (20px) — sm padding-inline
+   1.5rem  (24px) — md padding-inline
+   2rem    (32px) — lg padding-inline
+   2.5rem  (40px) — xl padding-inline
+   65ch           — narrow container reading width (typographic
+                    constant, not a design token)
+   100vw          — breakout full-viewport width (CSS viewport
+                    unit, not a design decision)
+
+   Classes produced: 4
+   .ar-container          standard centered + max-width
+   .ar-container--fluid   full-width + padding only
+   .ar-container--narrow  prose reading-width (65ch)
+   .ar-breakout           full-viewport bleed from inside container
+
+   TESTING CHECKLIST:
+   □ At 320px: container fills full width, 16px padding each side
+   □ At 480px: container max-width 440px, centered, 20px padding
+   □ At 768px: container max-width 720px, centered, 24px padding
+   □ At 1024px: container max-width 960px, centered, 32px padding
+   □ At 1280px: container max-width 1200px, centered, 40px padding
+   □ At 1600px: container stays at 1200px, centered in excess space
+   □ Fluid container: full width at all viewport sizes
+   □ Fluid container: padding increases match standard container
+   □ Narrow container: max-width 65ch, font-size relative
+   □ Narrow container: grows if user increases browser font size
+   □ Breakout: child element reaches viewport edges
+   □ Breakout: siblings remain within container bounds
+   □ No horizontal scroll from breakout (base.css overflow-x hidden)
+   □ Print: container and fluid are full-width, no padding
+   □ RTL: padding-inline applies to reading-start and reading-end
+   □ Nested containers: inner container creates double-padding
+     (document as anti-pattern in usage guidelines)
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

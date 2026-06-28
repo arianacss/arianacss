@@ -1,0 +1,745 @@
+/* ============================================================
+   ArianaCSS — Focus Ring System
+   File:    src/2-base/focus.css
+   Layer:   @layer base
+   Version: 1.0.0
+
+   PURPOSE:
+   Define the complete keyboard focus ring system for the
+   framework. Every interactive element that receives keyboard
+   focus will render a consistent, accessible, and visually
+   clear focus indicator through the rules in this file.
+
+   This file is the ONLY place in the framework where focus
+   ring styles are defined globally. Component files apply
+   state-specific color overrides (e.g. danger input focus)
+   but never redefine the ring geometry. No other file may
+   set outline, outline-width, outline-offset, or outline-color
+   as a global focus style.
+
+   TOKEN DEPENDENCIES:
+   --ar-focus-ring-width          3px ring width
+   --ar-focus-ring-offset         2px offset from element edge
+   --ar-focus-ring-style          solid line style
+   --ar-focus-ring-color-default  primary base (lapis-600)
+   --ar-focus-ring-color-danger   danger base (ember-600)
+   --ar-focus-ring-color-success  success base (cedar-600)
+   --ar-color-layer-base          white gap between element + ring
+   --ar-duration-fast             100ms transition duration
+   --ar-ease-standard             cubic-bezier easing
+
+   ARCHITECTURE — :focus-visible EXCLUSIVELY:
+   This file uses :focus-visible throughout. Never :focus.
+
+   :focus         fires on ALL focus events — mouse click,
+                  touch tap, keyboard Tab, and programmatic
+                  focus via JavaScript .focus().
+
+   :focus-visible fires only when the browser heuristic
+                  determines a visible focus indicator is
+                  appropriate. In practice this means:
+                  keyboard Tab navigation → ring appears
+                  mouse click            → ring does NOT appear
+                  touch tap              → ring does NOT appear
+                  programmatic focus     → browser decides
+                    (ring appears if no recent pointer event)
+
+   Using :focus-visible means keyboard users always see the
+   ring; mouse users never see it during click interactions.
+   This is the correct behaviour for modern UI. Bootstrap's
+   historical use of :focus produced rings on mouse clicks,
+   which was visually noisy and led many developers to
+   suppress focus rings entirely — causing keyboard
+   inaccessibility. ArianaCSS never suppresses focus rings.
+
+   THE TWO-LAYER RING TECHNIQUE:
+   A single-color ring becomes invisible when the element's
+   own background color matches the ring color. For example,
+   a primary-colored button (lapis-600 background) with a
+   lapis-600 outline ring has zero contrast between ring and
+   button — the ring is invisible.
+
+   The solution is a two-layer ring:
+     Layer 1: outline in the ring color (lapis-600) at 3px
+     Layer 2: outline-offset of 2px creates a physical gap
+              between the element's edge and the ring
+
+   The 2px gap exposes the element's surrounding background
+   (typically white or a near-white surface). This white gap
+   creates contrast between the element and the ring on ALL
+   background colors:
+     Light surface: element → white gap → lapis ring ✓
+     Dark surface:  element → dark gap  → lapis ring ✓
+     Lapis element: lapis   → white gap → lapis ring ✓
+
+   WCAG 2.2 COMPLIANCE:
+   Success Criterion 2.4.11 Focus Appearance (AA, new in 2.2):
+   The focus indicator must have:
+   - An area of at least the perimeter of the unfocused component
+     × 1px CSS pixels (minimum)
+   - A contrast ratio of at least 3:1 between focused and
+     unfocused states for the pixels of the focus indicator
+
+   A 3px solid outline around a 140px × 40px button produces
+   a perimeter area of (140+40+140+40) × 3px = 960px² which
+   far exceeds the minimum. The lapis-600 ring against a white
+   gap achieves the required contrast.
+
+   POSITION IN IMPLEMENTATION ORDER:
+   focus.css is the fourth file in the base layer, after:
+     1. tokens.css  (defines the focus ring tokens)
+     2. reset.css   (does NOT suppress :focus or :focus-visible)
+     3. motion.css  (handles reduced-motion for transitions)
+     4. base.css    (does NOT define focus styles)
+   → 5. focus.css  (this file — the focus ring system)
+
+   Components load after all base files. When a component
+   needs a state-specific focus ring color (input--error),
+   it overrides only outline-color using the appropriate
+   focus ring color token. The width, offset, and style
+   are inherited from this file's rules.
+
+   NEXT FILE: src/3-layout/container.css
+   ============================================================ */
+
+
+@layer base {
+
+  /* ==========================================================
+     1. GLOBAL FOCUS RESET
+     ──────────────────────────────────────────────────────────
+     Remove the browser's native :focus outline from all
+     elements. This is the ONLY place in the framework where
+     a :focus rule (not :focus-visible) is used, and it
+     exists specifically to prevent the browser's default
+     :focus ring from appearing alongside the framework's
+     :focus-visible ring — which would produce two overlapping
+     rings on keyboard-navigated elements.
+
+     Without this reset, some browsers (Firefox in particular)
+     render their native dotted :focus outline at the same
+     time as CSS-defined :focus-visible outlines, creating a
+     visually confusing double ring.
+
+     IMPORTANT: This reset is safe ONLY because every
+     interactive element in this file and every component
+     in the framework defines a :focus-visible rule that
+     restores a visible focus indicator. This reset must
+     never be applied without the :focus-visible rules
+     that follow it in this same file.
+
+     outline: 0 is used rather than outline: none because
+     outline: 0 preserves the outline property in the cascade
+     (it remains overridable) while outline: none sets the
+     outline-style to none which behaves slightly differently
+     in the cascade. Both produce the same visual result
+     (invisible outline) but 0 is the more composable value.
+     ========================================================== */
+
+  *:focus {
+    outline: 0;
+  }
+
+
+  /* ==========================================================
+     2. THE FRAMEWORK FOCUS RING
+     ──────────────────────────────────────────────────────────
+     The primary focus ring rule. Applied to all focusable
+     elements via the universal selector + :focus-visible.
+
+     This rule establishes the baseline ring that ALL
+     interactive elements in the framework will display on
+     keyboard focus. It is intentionally broad — component
+     files narrow it for specific elements if needed, but
+     they never define a ring from scratch.
+
+     outline shorthand:
+     The three focus ring tokens compose into the outline
+     property: width | style | color.
+     Result: 3px solid hsl(226 72% 46%)
+
+     outline-offset:
+     2px gap between the element's border-box edge and the
+     start of the outline ring. This gap is the critical
+     visual separation that makes the ring visible on any
+     element background color. See the TWO-LAYER RING
+     TECHNIQUE explanation in the file header.
+
+     outline-color transition:
+     The color transitions when switching between focus ring
+     color variants (default → danger → success). This is
+     especially visible on forms where a user tabs through
+     fields — the ring color smoothly changes as they enter
+     an error field. The transition uses fast duration because
+     focus ring color change is a micro-interaction.
+
+     WHAT IS NOT TRANSITIONED:
+     outline-width and outline-offset are NOT transitioned.
+     Animating these properties causes layout reflow during
+     the transition, which is both a performance concern and
+     a motion concern for users with vestibular disorders.
+     Only color is transitioned — a composited GPU operation
+     with no layout impact.
+
+     border-radius on outlines:
+     outline does not follow border-radius by default in older
+     browsers. In all target browsers (Chrome 90+, Firefox 90+,
+     Safari 14+) outline respects border-radius natively.
+     No additional CSS is required for pill-shaped rings on
+     rounded buttons.
+     ========================================================== */
+
+  *:focus-visible {
+    outline:        var(--ar-focus-ring-width)
+                    var(--ar-focus-ring-style)
+                    var(--ar-focus-ring-color-default);
+    outline-offset: var(--ar-focus-ring-offset);
+    transition:     outline-color var(--ar-duration-fast) var(--ar-ease-standard);
+  }
+
+
+  /* ==========================================================
+     3. REDUCED MOTION — FOCUS TRANSITION
+     ──────────────────────────────────────────────────────────
+     The focus ring color transition (from section 2) is a
+     motion effect. Users who have requested reduced motion
+     should see the focus ring appear and change color
+     instantly, without the 100ms transition.
+
+     motion.css handles all transition overrides globally via:
+       transition-duration: 0.01ms
+     That global rule covers this transition automatically.
+
+     This explicit block exists as documentation — to make
+     clear that this transition IS considered and IS covered
+     by the motion.css contract. The rule here is redundant
+     with motion.css but serves as an explicit safety net
+     in case motion.css is not loaded for any reason.
+     ========================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    *:focus-visible {
+      transition: none;
+    }
+  }
+
+
+  /* ==========================================================
+     4. FOCUS RING ON SPECIFIC ELEMENT TYPES
+     ──────────────────────────────────────────────────────────
+     The universal *:focus-visible rule in section 2 correctly
+     handles most elements. Some elements have specific focus
+     ring requirements due to their geometry, their role, or
+     browser rendering quirks. These rules refine the universal
+     ring for those specific cases.
+
+     Each rule in this section either:
+     a) Adjusts outline-offset for elements where 2px is wrong
+     b) Adjusts border-radius for elements with unusual shapes
+     c) Suppresses the ring for elements where a custom focus
+        treatment is provided by the component
+     ========================================================== */
+
+  /* --- Buttons
+     Buttons use the standard ring from section 2 without
+     modification. The default 2px offset is correct for
+     buttons. No override needed.
+     Listed here for explicit documentation that buttons
+     are covered and intentionally unchanged.              --- */
+
+  /* button:focus-visible — uses universal rule, no override */
+
+
+  /* --- Text inputs, textareas, selects
+     Form inputs sit inside a container (the ar-field wrapper
+     in most cases). The 2px outline offset is correct.
+     However, inputs have a 1px border that the offset must
+     clear visually — the standard 2px offset achieves this.
+
+     Input-specific focus ring colors (default, danger, success)
+     are applied in src/6-components/input.css via the
+     state modifier classes (.ar-input--error, .ar-input--success).
+     The base ring color applied here is the default (lapis).
+     Component overrides win because @layer components comes
+     after @layer base in the cascade.                      --- */
+
+  /* input:focus-visible,
+     textarea:focus-visible,
+     select:focus-visible — uses universal rule, no override  */
+
+
+  /* --- Anchors (links)
+     Links inside dense text benefit from a slightly tighter
+     offset. The 2px offset on a link within a paragraph can
+     visually overlap with the line above. Using 1px brings
+     the ring closer to the link text without losing the
+     gap-contrast technique.
+
+     This is a micro-refinement. The ring remains fully visible
+     and accessible — only the aesthetic spacing changes.    --- */
+
+  a:focus-visible {
+    outline-offset: 1px;
+    border-radius:  2px;
+    /* 2px radius softens the rectangular ring on inline text
+       links. Links have no border-radius of their own, so the
+       browser renders a rectangular ring by default. A 2px
+       radius is barely perceptible but reads as intentional
+       rather than mechanical.                               */
+  }
+
+
+  /* --- Checkboxes and radio buttons
+     Native checkboxes and radios are small (typically 16–18px)
+     square or circular elements. The 2px outline offset is
+     correct. The ring appears just outside the native control.
+
+     On Safari, checkboxes and radios in their native form
+     have an appearance that makes the outline render outside
+     the perceived control boundary. No override is needed for
+     ArianaCSS's target browser set — native checkbox focus
+     is handled acceptably by the universal rule.           --- */
+
+  /* [type="checkbox"]:focus-visible,
+     [type="radio"]:focus-visible — uses universal rule      */
+
+
+  /* --- Range inputs
+     Range inputs (sliders) have an elongated geometry. The
+     standard 2px offset produces a visible ring around the
+     entire track, which is the correct visual for a range.
+     No override needed.                                    --- */
+
+  /* [type="range"]:focus-visible — uses universal rule       */
+
+
+  /* --- Summary (disclosure widget toggle)
+     The <details>/<summary> native disclosure widget uses
+     display: block (set in reset.css and base.css), which
+     makes summary a block-level element. The ring correctly
+     wraps the full block. Offset 2px is correct.          --- */
+
+  /* summary:focus-visible — uses universal rule               */
+
+
+  /* --- [tabindex="0"] elements
+     Elements made keyboard-focusable via tabindex="0" that
+     are not natively interactive (div, span, section used as
+     interactive regions) receive the standard ring. No special
+     treatment — the universal rule handles them.           --- */
+
+  /* [tabindex="0"]:focus-visible — uses universal rule        */
+
+
+  /* ==========================================================
+     5. PROGRAMMATICALLY FOCUSED ELEMENTS (tabindex="-1")
+     ──────────────────────────────────────────────────────────
+     Elements with tabindex="-1" are focusable via JavaScript
+     (.focus()) but are NOT reachable by keyboard Tab. They
+     are used for:
+     - Modal dialog focus management (focus trapped inside modal)
+     - Skip navigation targets (<main id="main" tabindex="-1">)
+     - Scroll-to anchors that receive programmatic focus
+
+     These elements should NOT show a visible focus ring because:
+     1. They cannot be reached by keyboard Tab — so the ring
+        would never appear during normal keyboard navigation
+     2. They receive focus programmatically, which is a browser-
+        triggered event, not a user keyboard event
+     3. :focus-visible typically does not fire for programmatic
+        focus (the browser heuristic excludes it in most cases)
+
+     However, browser behaviour for programmatic focus and
+     :focus-visible varies. Firefox occasionally renders the
+     ring on tabindex="-1" elements. This explicit suppression
+     ensures consistency.
+
+     reset.css already handles:
+       [tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
+     This covers the case where :focus fires but :focus-visible
+     does not. The rule below covers the edge case where
+     :focus-visible fires on a tabindex="-1" element.
+
+     Exception: If a tabindex="-1" element is a modal dialog
+     itself (the dialog element receives focus when opened), a
+     component-level rule in the modal component may restore
+     a visible indicator if required by the design.
+     ========================================================== */
+
+  [tabindex="-1"]:focus-visible {
+    outline: 0;
+  }
+
+
+  /* ==========================================================
+     6. SKIP NAVIGATION LINK
+     ──────────────────────────────────────────────────────────
+     The skip navigation link (commonly "Skip to main content")
+     is a WCAG 2.4.1 (Bypass Blocks) mechanism that allows
+     keyboard users to jump past repeated navigation to the
+     main content area.
+
+     ArianaCSS provides a base style for the skip link that:
+     - Is visually hidden until focused
+     - Appears prominently on focus (high contrast, prominent
+       position)
+     - Uses the framework's primary color for brand consistency
+
+     The .ar-skip-link class is applied in HTML:
+       <a href="#main-content" class="ar-skip-link">
+         Skip to main content
+       </a>
+
+     The target:
+       <main id="main-content" tabindex="-1">
+
+     HOW IT WORKS:
+     The link is positioned fixed at the top of the viewport
+     but translated off-screen upward by its own height. On
+     :focus-visible, it translates back to position 0 — visible
+     at the very top of the page, above all other content.
+
+     The translate approach (not clip or absolute positioning)
+     is used because:
+     - It does not affect document flow (no reflow on focus)
+     - The translation is GPU-composited (smooth performance)
+     - It works correctly regardless of page scroll position
+
+     Z-index uses --ar-z-toast (500) — the highest framework
+     layer — because the skip link must appear above all other
+     elements including modals and overlays. If the user can
+     focus it, they must be able to see it.
+     ========================================================== */
+
+  .ar-skip-link {
+    position:        fixed;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index:         var(--ar-z-toast);
+    padding-block:   var(--ar-space-3);
+    padding-inline:  var(--ar-space-6);
+    background-color: var(--ar-color-primary-base);
+    color:           var(--ar-color-text-on-primary);
+    font-family:     var(--ar-text-font-sans);
+    font-size:       var(--ar-text-size-base);
+    font-weight:     var(--ar-text-weight-medium);
+    line-height:     var(--ar-text-leading-normal);
+    text-decoration: none;
+    border-radius:   0 0 var(--ar-radius-base) 0;
+    /* Bottom-right radius only: top-left and top-left edges are
+       flush with the viewport corner. The single radius on the
+       visible inner corner is intentional.                     */
+    transform:       translateY(-100%);
+    transition:      transform var(--ar-duration-base) var(--ar-ease-decelerate);
+  }
+
+  .ar-skip-link:focus-visible {
+    outline:         var(--ar-focus-ring-width)
+                     var(--ar-focus-ring-style)
+                     var(--ar-color-text-on-primary);
+    /* The skip link's own background is the primary color.
+       Using the default lapis ring would be invisible against
+       the lapis background. The ring uses the on-primary text
+       color (white) to guarantee visibility.                  */
+    outline-offset:  calc(var(--ar-focus-ring-offset) * -1);
+    /* Negative offset draws the ring INSIDE the element
+       boundary. On the skip link — which is flush with the
+       viewport edge — an outward ring would be clipped by the
+       viewport. The inward ring remains fully visible.        */
+    transform:       translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ar-skip-link {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .ar-skip-link {
+      background-color: ButtonFace;
+      color:            ButtonText;
+      border:           2px solid ButtonBorder;
+      forced-color-adjust: none;
+    }
+
+    .ar-skip-link:focus-visible {
+      outline-color: Highlight;
+    }
+  }
+
+
+  /* ==========================================================
+     7. FOCUS RING ON DARK BACKGROUNDS
+     ──────────────────────────────────────────────────────────
+     The standard lapis-600 ring is visible on light surfaces
+     (contrast against white: approximately 7:1). However, on
+     dark inverse surfaces (dark nav, dark sidebars, dark hero
+     sections) the same lapis-600 ring has insufficient contrast
+     against the dark background.
+
+     The solution: elements within a dark-layered ancestor
+     receive a lighter ring that works against both the dark
+     background and any element color within that section.
+
+     The [data-theme="dark"] and [data-layer="inverse"]
+     attributes are the framework's mechanism for inverse
+     sections. When a section uses the dark layer tokens,
+     it is marked with one of these attributes in HTML:
+       <nav data-layer="inverse">...</nav>
+       <section data-theme="dark">...</section>
+
+     Within these containers, focus rings switch to white
+     (hsl 0 0% 100%) which achieves high contrast against
+     any dark surface and retains the two-layer gap technique.
+
+     The 2px offset gap exposes the dark background beneath
+     the element, and the white ring has approximately 18:1
+     contrast against the dark layer-inverse color. This
+     exceeds WCAG 2.2 SC 2.4.11 requirements comfortably.
+     ========================================================== */
+
+  [data-layer="inverse"] *:focus-visible,
+  [data-theme="dark"] *:focus-visible {
+    outline-color: hsl(0 0% 100%);
+  }
+
+  /* Exception: the skip link has its own focus ring (section 6)
+     and must not be overridden by this rule.                   */
+  [data-layer="inverse"] .ar-skip-link:focus-visible,
+  [data-theme="dark"] .ar-skip-link:focus-visible {
+    outline-color: var(--ar-color-text-on-primary);
+  }
+
+
+  /* ==========================================================
+     8. FOCUS WITHIN — FIELD GROUP INDICATOR
+     ──────────────────────────────────────────────────────────
+     The :focus-within pseudo-class applies to a container
+     when any of its descendants has focus. ArianaCSS uses
+     this for the .ar-field wrapper — when the input inside
+     a field group receives focus, the wrapper can receive
+     a subtle visual treatment indicating the active field.
+
+     This is a supplement to, not a replacement for, the
+     focus ring on the input itself. The input's own ring
+     (applied by the universal rule in section 2) remains
+     the primary focus indicator. The :focus-within on the
+     wrapper provides an additional, subtle group highlight
+     for dense form layouts where the active field group
+     context is helpful.
+
+     The treatment here is intentionally minimal — a border
+     color change on the wrapper. The full implementation of
+     field group focus is in src/6-components/input.css, which
+     builds on this base rule.
+
+     WHY :focus-within IS ACCESSIBLE:
+     :focus-within does not replace the element-level ring.
+     It adds context. Screen readers and keyboard users still
+     receive the element-level focus ring as their primary
+     indicator. :focus-within is a visual enhancement for
+     sighted keyboard users only.
+     ========================================================== */
+
+  .ar-field:focus-within {
+    /* Base rule — establishes the focus-within hook.
+       Specific visual treatment is in input.css where the
+       .ar-field component has full context (border, padding,
+       border-radius tokens) to apply a meaningful style.
+
+       This empty rule block intentionally exists to:
+       1. Document that :focus-within is used on .ar-field
+       2. Serve as the cascade anchor for input.css overrides
+       3. Prevent contributors from adding :focus-within rules
+          in component files without cross-referencing here   */
+  }
+
+
+  /* ==========================================================
+     9. FOCUS RING COLOR VARIANT HOOKS
+     ──────────────────────────────────────────────────────────
+     Component files apply state-specific focus ring colors
+     using outline-color overrides. These hooks are the
+     documented contract between focus.css and component files.
+
+     Components use this pattern:
+       .ar-input--error:focus-visible {
+         outline-color: var(--ar-focus-ring-color-danger);
+       }
+       .ar-input--success:focus-visible {
+         outline-color: var(--ar-focus-ring-color-success);
+       }
+
+     This section documents the available color tokens and
+     their intended component consumers. It contains no
+     additional CSS rules — the documentation here is the
+     contract that component authors reference.
+
+     AVAILABLE FOCUS RING COLORS:
+     --ar-focus-ring-color-default → primary / default state
+       Consumers: all interactive elements (default)
+
+     --ar-focus-ring-color-danger  → error / destructive state
+       Consumers: .ar-input--error
+                  .ar-btn--danger (optional — see note below)
+
+     --ar-focus-ring-color-success → valid / confirmed state
+       Consumers: .ar-input--success
+
+     NOTE ON DANGER BUTTONS:
+     .ar-btn--danger uses a filled danger-colored background.
+     The default lapis ring would have sufficient contrast
+     against the ember-600 background (the 2px white gap
+     maintains the contrast). Switching to a danger-colored
+     ring on a danger button is not recommended — it reduces
+     the ring's contrast against the button itself.
+     .ar-btn--danger keeps the default lapis ring.
+     ========================================================== */
+
+
+  /* ==========================================================
+     10. HIGH CONTRAST MODE (FORCED COLORS)
+     ──────────────────────────────────────────────────────────
+     When forced-colors: active is detected (Windows High
+     Contrast Mode and similar OS-level contrast settings),
+     the browser replaces all CSS color values with system
+     colors. The lapis-600 outline-color is replaced by the
+     browser with a system color — typically the Highlight
+     or ButtonText system color.
+
+     In most cases, forced-colors mode produces a perfectly
+     visible focus ring automatically because the browser
+     maps outline-color to the appropriate system color.
+
+     However, the outline-offset gap technique (the white
+     gap between element and ring) can be problematic in
+     forced-colors mode: the "white" gap becomes whatever
+     the Canvas background system color is, which may not
+     create visible separation.
+
+     The forced-colors block below ensures the ring is
+     clearly visible by using the Highlight system color
+     (the OS-defined selection/focus color, always high
+     contrast against the Canvas) and removing the offset
+     to eliminate the gap variable.
+
+     forced-color-adjust: none prevents the browser from
+     remapping the outline-color we explicitly set in this
+     block. Without it, the browser would apply its own
+     mapping on top of our already-mapped value.
+     ========================================================== */
+
+  @media (forced-colors: active) {
+
+    *:focus-visible {
+      outline-color:       Highlight;
+      outline-offset:      var(--ar-focus-ring-offset);
+      forced-color-adjust: none;
+    }
+
+    /* The skip link uses its own forced-colors block (section 6).
+       No additional override needed here.                       */
+
+  }
+
+
+  /* ==========================================================
+     11. DEBUGGING AID (DEVELOPMENT ONLY)
+     ──────────────────────────────────────────────────────────
+     This block is commented out in production but documented
+     here for contributors who need to audit focus behaviour
+     during development.
+
+     Uncomment to make ALL focusable elements show a bright
+     magenta ring at all times (not just on :focus-visible).
+     This makes it trivially easy to identify every focusable
+     element on a page and verify no element is missing a
+     focus state.
+
+     Remove or comment out before committing any file that
+     uses this aid. It must never ship to production.
+
+     Usage: uncomment the block below, load the page, Tab
+     through all elements. Every interactive element should
+     have a visible magenta ring. If any does not, that element
+     has suppressed focus in violation of framework rules.
+
+  *:focus {
+    outline: 3px solid hsl(300 100% 50%) !important;
+    outline-offset: 2px !important;
+  }
+     ========================================================== */
+
+
+} /* end @layer base */
+
+
+/* ============================================================
+   END OF FILE — focus.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (12 references):
+   --ar-focus-ring-width
+   --ar-focus-ring-offset
+   --ar-focus-ring-style
+   --ar-focus-ring-color-default
+   --ar-color-text-on-primary       (skip link ring on lapis bg)
+   --ar-color-primary-base          (skip link background)
+   --ar-color-text-on-primary       (skip link text)
+   --ar-z-toast                     (skip link z-index)
+   --ar-space-3, --ar-space-6       (skip link padding)
+   --ar-text-font-sans              (skip link font)
+   --ar-text-size-base              (skip link font size)
+   --ar-text-weight-medium          (skip link font weight)
+   --ar-text-leading-normal         (skip link line height)
+   --ar-radius-base                 (skip link border-radius)
+   --ar-duration-base               (skip link transition)
+   --ar-duration-fast               (ring color transition)
+   --ar-ease-standard               (ring color transition)
+   --ar-ease-decelerate             (skip link enter transition)
+
+   Hard-coded values (justified exceptions):
+   0          — outline: 0 for global :focus reset (structural)
+   1px        — link focus-visible border-radius (perceptual constant)
+   2px        — link focus-visible border-radius (perceptual constant)
+   hsl(0 0% 100%) — white ring on dark surfaces (structural contrast)
+   calc(var(--ar-focus-ring-offset) * -1) — inward ring on skip link
+
+   !important usage: none.
+
+   COMPONENT CONTRACT:
+   Components that need a state-specific focus ring color
+   add ONE rule in their component file:
+     .ar-[component]--[state]:focus-visible {
+       outline-color: var(--ar-focus-ring-color-[state]);
+     }
+   They do NOT redefine outline-width, outline-style, or
+   outline-offset. Those are owned by this file.
+
+   TESTING CHECKLIST:
+   □ Tab through page: ring visible on all interactive elements
+   □ Mouse click on button: NO ring appears
+   □ Mouse click on link: NO ring appears
+   □ Touch tap on mobile: NO ring appears
+   □ Tab to button: ring appears; click button: ring disappears
+   □ Ring shape follows border-radius on pill buttons
+   □ Ring shape follows border-radius on rounded cards (if focusable)
+   □ Skip link: invisible until tabbed to, then appears at top
+   □ Skip link: clicking it moves focus to #main-content
+   □ Skip link: Enter key on focused skip link jumps to content
+   □ Skip link transition: smooth slide-down on focus
+   □ Skip link: correct ring (white on lapis background)
+   □ Ring on dark section: white ring replaces lapis ring
+   □ Link ring: 1px offset (tighter than button 2px)
+   □ Link ring: 2px border-radius (slightly softened)
+   □ tabindex="-1" elements: NO ring on focus (modal close btn target)
+   □ prefers-reduced-motion: ring color change is instant (no transition)
+   □ Skip link prefers-reduced-motion: appears instantly (no slide)
+   □ Windows High Contrast Mode (Edge): ring visible, uses Highlight color
+   □ Safari 14+ on macOS: :focus-visible behaves correctly
+   □ Firefox 90+: no double ring (native + framework)
+   □ Chrome 90+: ring renders with correct border-radius on rounded elements
+   □ WCAG 2.4.11: measure ring area on a standard button (must exceed
+     perimeter × 1px CSS pixels minimum area requirement)
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

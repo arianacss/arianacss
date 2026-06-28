@@ -1,0 +1,542 @@
+/* ============================================================
+   ArianaCSS — 12-Column Layout Grid System
+   File:    src/3-layout/grid.css
+   Layer:   @layer layout
+   Version: 1.0.0
+
+   PURPOSE:
+   Provide the primary page layout system — a 12-column CSS
+   Grid that structures page-level composition: sidebars, main
+   content areas, multi-column sections, and responsive layouts.
+
+   TOKEN DEPENDENCIES:
+   --ar-grid-columns   12      number of columns
+   --ar-grid-gap       1.5rem  default gap (24px)
+   --ar-grid-gap-sm    1rem    tight gap variant (16px)
+   --ar-grid-gap-lg    2rem    loose gap variant (32px)
+
+   BREAKPOINT VALUES (hardcoded — see tokens.css section 15):
+   480px  → --ar-bp-sm
+   768px  → --ar-bp-md
+   1024px → --ar-bp-lg
+   1280px → --ar-bp-xl
+
+   DISTINCTION FROM 5-utilities/grid.css:
+   This file (3-layout/grid.css) — the 12-COLUMN LAYOUT SYSTEM.
+   Purpose: page-level structural layout.
+   Classes: .ar-grid (the container), .ar-col-* (column spans)
+   with responsive variants for all 12 columns at all 4 breakpoints.
+
+   5-utilities/grid.css — ARBITRARY GRID UTILITIES.
+   Purpose: custom grid configurations inside sections.
+   Classes: .ar-grid-cols-*, .ar-col-start-*, .ar-auto-rows-*, etc.
+
+   The two systems are designed to work together:
+     <div class="ar-container">
+       <div class="ar-grid">                    ← layout grid
+         <main class="ar-col-8">
+           <div class="ar-grid-cols-2 ar-gap-4"> ← utility grid
+             <div class="ar-col-1">...</div>
+             <div class="ar-col-1">...</div>
+           </div>
+         </main>
+         <aside class="ar-col-4">...</aside>
+       </div>
+     </div>
+
+   IMPLEMENTATION APPROACH — CSS GRID (not Flexbox):
+   The layout grid uses CSS Grid exclusively.
+   - No float hacks (Bootstrap 3 era)
+   - No Flexbox workarounds (Bootstrap 4 era)
+   - Native CSS Grid provides: auto-placement, named lines,
+     implicit rows, and gap without margin calculations.
+
+   minmax(0, 1fr) vs 1fr:
+   All columns use minmax(0, 1fr) not plain 1fr. The difference:
+   - 1fr: column cannot shrink below its content's min-content
+     width. A column with a wide image can force all columns
+     wider than their fair share.
+   - minmax(0, 1fr): minimum is 0, allowing columns to shrink
+     below content size. Content is responsible for its own
+     overflow (overflow: hidden, min-width: 0, etc.).
+   minmax(0, 1fr) is the correct choice for a layout system.
+
+   ALSO IN THIS FILE — FLEX LAYOUT HELPERS:
+   As specified in the implementation blueprint, flex direction
+   and alignment utilities that were specified to "live in the
+   grid module" are included at the end of this file. These are
+   the basic flex helpers used for internal layout composition
+   within grid cells — not the full flex utility system
+   (which lives in 5-utilities/flex.css).
+
+   NEXT FILE: src/4-typography/scale.css
+   ============================================================ */
+
+
+@layer layout {
+
+  /* ==========================================================
+     1. GRID CONTAINER
+     ──────────────────────────────────────────────────────────
+     .ar-grid establishes the 12-column CSS Grid.
+
+     The gap tokens are raw rem values (not var() references to
+     spacing tokens) per the depth-limit rule in CONTRIBUTING.md.
+     The three gap variants cover the three common use cases:
+       default (24px) — standard page layout, card grids
+       sm (16px)      — dense dashboard layouts, data tables
+       lg (32px)      — editorial layouts, generous spacing
+
+     width: 100%:
+     Ensures the grid fills its container. Without this, a grid
+     inside a flex parent may shrink to min-content width.
+     ========================================================== */
+
+  .ar-grid {
+    display:               grid;
+    grid-template-columns: repeat(var(--ar-grid-columns), minmax(0, 1fr));
+    gap:                   var(--ar-grid-gap);
+    width:                 100%;
+  }
+
+  /* Gap variants */
+  .ar-grid--gap-sm { gap: var(--ar-grid-gap-sm); }
+  .ar-grid--gap-lg { gap: var(--ar-grid-gap-lg); }
+
+  /* Column-gap only (row-gap inherits from gap) */
+  .ar-grid--col-gap-sm { column-gap: var(--ar-grid-gap-sm); }
+  .ar-grid--col-gap-lg { column-gap: var(--ar-grid-gap-lg); }
+
+  /* Row-gap only (column-gap inherits from gap) */
+  .ar-grid--row-gap-sm { row-gap: var(--ar-grid-gap-sm); }
+  .ar-grid--row-gap-lg { row-gap: var(--ar-grid-gap-lg); }
+
+  /* No gap — columns flush against each other */
+  .ar-grid--no-gap { gap: 0; }
+
+
+  /* ==========================================================
+     2. COLUMN SPANS — BASE (mobile-first, all 12 columns)
+     ──────────────────────────────────────────────────────────
+     At mobile (below 480px), all column classes default to
+     full-width (span 12 of 12). This is mobile-first: every
+     column stacks vertically on narrow screens by default.
+
+     The mobile default is set once here (span 12 / auto) and
+     then overridden at each breakpoint via the responsive
+     variants in sections 3–6.
+
+     WHY SPAN 12 AS MOBILE DEFAULT:
+     On a 320–479px screen, a "half-width" column (ar-col-6)
+     should stack to full-width. Setting the base to full-width
+     means the developer only adds responsive classes for wider
+     viewports:
+       class="ar-col-12 ar-md:col-6 ar-lg:col-4"
+     becomes:
+       class="ar-col-6 ar-md:col-6 ar-lg:col-4"
+     then simplified to:
+       class="ar-col-6 ar-lg:col-4"
+     because ar-col-6 at mobile would still be full-width.
+
+     ALTERNATIVE APPROACH:
+     Some projects want ar-col-6 to actually be 6 columns even
+     on mobile. Those projects add ar-grid-cols-* at mobile via
+     the utility grid. The layout grid's mobile-default-full
+     approach is the safer, more common pattern.
+     ========================================================== */
+
+  /* Mobile default: all columns stack full-width */
+  [class*="ar-col-"] {
+    grid-column: 1 / -1;
+  }
+  /* The attribute selector [class*="ar-col-"] targets any
+     element with an ar-col-* class. This sets the mobile
+     default without repeating 12 separate rules.
+     Note: this also catches ar-col-full from the utility
+     grid — which is fine, ar-col-full also means full-width. */
+
+
+  /* ==========================================================
+     3. COLUMN SPANS — sm BREAKPOINT (480px+)
+     ──────────────────────────────────────────────────────────
+     At sm (480px+), columns begin taking their declared span.
+     This breakpoint is for narrow tablet and large phone
+     layouts where a two-column layout becomes viable.
+     ========================================================== */
+
+  @media (min-width: 480px) {
+
+    .ar-sm\:col-1  { grid-column: span 1  / span 1; }
+    .ar-sm\:col-2  { grid-column: span 2  / span 2; }
+    .ar-sm\:col-3  { grid-column: span 3  / span 3; }
+    .ar-sm\:col-4  { grid-column: span 4  / span 4; }
+    .ar-sm\:col-5  { grid-column: span 5  / span 5; }
+    .ar-sm\:col-6  { grid-column: span 6  / span 6; }
+    .ar-sm\:col-7  { grid-column: span 7  / span 7; }
+    .ar-sm\:col-8  { grid-column: span 8  / span 8; }
+    .ar-sm\:col-9  { grid-column: span 9  / span 9; }
+    .ar-sm\:col-10 { grid-column: span 10 / span 10; }
+    .ar-sm\:col-11 { grid-column: span 11 / span 11; }
+    .ar-sm\:col-12 { grid-column: span 12 / span 12; }
+    .ar-sm\:col-full { grid-column: 1 / -1; }
+    .ar-sm\:col-auto { grid-column: auto; }
+
+  }
+
+
+  /* ==========================================================
+     4. COLUMN SPANS — md BREAKPOINT (768px+)
+     ──────────────────────────────────────────────────────────
+     The primary responsive breakpoint for most layouts.
+     Phone → tablet transition. Two and three-column layouts
+     become standard. Sidebar + content patterns activate here.
+     ========================================================== */
+
+  @media (min-width: 768px) {
+
+    .ar-md\:col-1  { grid-column: span 1  / span 1; }
+    .ar-md\:col-2  { grid-column: span 2  / span 2; }
+    .ar-md\:col-3  { grid-column: span 3  / span 3; }
+    .ar-md\:col-4  { grid-column: span 4  / span 4; }
+    .ar-md\:col-5  { grid-column: span 5  / span 5; }
+    .ar-md\:col-6  { grid-column: span 6  / span 6; }
+    .ar-md\:col-7  { grid-column: span 7  / span 7; }
+    .ar-md\:col-8  { grid-column: span 8  / span 8; }
+    .ar-md\:col-9  { grid-column: span 9  / span 9; }
+    .ar-md\:col-10 { grid-column: span 10 / span 10; }
+    .ar-md\:col-11 { grid-column: span 11 / span 11; }
+    .ar-md\:col-12 { grid-column: span 12 / span 12; }
+    .ar-md\:col-full { grid-column: 1 / -1; }
+    .ar-md\:col-auto { grid-column: auto; }
+
+  }
+
+
+  /* ==========================================================
+     5. COLUMN SPANS — lg BREAKPOINT (1024px+)
+     ──────────────────────────────────────────────────────────
+     Tablet → laptop transition. Hover states become reliable.
+     Multi-column layouts with narrow sidebars (3/9, 4/8)
+     and three-column equal grids (4+4+4) are standard here.
+     ========================================================== */
+
+  @media (min-width: 1024px) {
+
+    .ar-lg\:col-1  { grid-column: span 1  / span 1; }
+    .ar-lg\:col-2  { grid-column: span 2  / span 2; }
+    .ar-lg\:col-3  { grid-column: span 3  / span 3; }
+    .ar-lg\:col-4  { grid-column: span 4  / span 4; }
+    .ar-lg\:col-5  { grid-column: span 5  / span 5; }
+    .ar-lg\:col-6  { grid-column: span 6  / span 6; }
+    .ar-lg\:col-7  { grid-column: span 7  / span 7; }
+    .ar-lg\:col-8  { grid-column: span 8  / span 8; }
+    .ar-lg\:col-9  { grid-column: span 9  / span 9; }
+    .ar-lg\:col-10 { grid-column: span 10 / span 10; }
+    .ar-lg\:col-11 { grid-column: span 11 / span 11; }
+    .ar-lg\:col-12 { grid-column: span 12 / span 12; }
+    .ar-lg\:col-full { grid-column: 1 / -1; }
+    .ar-lg\:col-auto { grid-column: auto; }
+
+  }
+
+
+  /* ==========================================================
+     6. COLUMN SPANS — xl BREAKPOINT (1280px+)
+     ──────────────────────────────────────────────────────────
+     Laptop → wide desktop. Wide multi-column layouts, dense
+     dashboard panels. The content max-width (1200px from the
+     container) means truly wide layouts are already constrained
+     — xl breakpoint column changes are for fine-tuning density.
+     ========================================================== */
+
+  @media (min-width: 1280px) {
+
+    .ar-xl\:col-1  { grid-column: span 1  / span 1; }
+    .ar-xl\:col-2  { grid-column: span 2  / span 2; }
+    .ar-xl\:col-3  { grid-column: span 3  / span 3; }
+    .ar-xl\:col-4  { grid-column: span 4  / span 4; }
+    .ar-xl\:col-5  { grid-column: span 5  / span 5; }
+    .ar-xl\:col-6  { grid-column: span 6  / span 6; }
+    .ar-xl\:col-7  { grid-column: span 7  / span 7; }
+    .ar-xl\:col-8  { grid-column: span 8  / span 8; }
+    .ar-xl\:col-9  { grid-column: span 9  / span 9; }
+    .ar-xl\:col-10 { grid-column: span 10 / span 10; }
+    .ar-xl\:col-11 { grid-column: span 11 / span 11; }
+    .ar-xl\:col-12 { grid-column: span 12 / span 12; }
+    .ar-xl\:col-full { grid-column: 1 / -1; }
+    .ar-xl\:col-auto { grid-column: auto; }
+
+  }
+
+
+  /* ==========================================================
+     7. COMMON LAYOUT PATTERNS
+     ──────────────────────────────────────────────────────────
+     Pre-composed layout helpers for the most frequent
+     page-level structural patterns. These are not utility
+     classes — they are layout shortcut classes that encode
+     common multi-column decisions into a single class.
+
+     These are the only multi-property layout classes in the
+     framework outside of components. They exist because these
+     exact patterns appear in nearly every product layout and
+     encoding them reduces repetitive class combinations.
+     ========================================================== */
+
+  /* --- Sidebar + content patterns --- */
+
+  .ar-layout-sidebar-left {
+    display:               grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap:                   var(--ar-grid-gap);
+    width:                 100%;
+    /* Fixed sidebar (280px) + flexible content column.
+       Stacks vertically below md breakpoint.              */
+  }
+
+  .ar-layout-sidebar-right {
+    display:               grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap:                   var(--ar-grid-gap);
+    width:                 100%;
+  }
+
+  /* Stack on mobile, side-by-side on tablet+ */
+  @media (max-width: 767px) {
+    .ar-layout-sidebar-left,
+    .ar-layout-sidebar-right {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Narrow sidebar variant (240px) */
+  .ar-layout-sidebar-left--sm {
+    display:               grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap:                   var(--ar-grid-gap);
+    width:                 100%;
+  }
+
+  @media (max-width: 767px) {
+    .ar-layout-sidebar-left--sm {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  /* --- Holy grail: left sidebar + content + right sidebar --- */
+
+  .ar-layout-holy-grail {
+    display:               grid;
+    grid-template-columns: 240px minmax(0, 1fr) 240px;
+    gap:                   var(--ar-grid-gap);
+    width:                 100%;
+  }
+
+  @media (max-width: 1023px) {
+    .ar-layout-holy-grail {
+      grid-template-columns: 240px minmax(0, 1fr);
+    }
+
+    /* Third column (right sidebar) stacks below content on tablet */
+    .ar-layout-holy-grail > *:nth-child(3) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ar-layout-holy-grail {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  /* --- Two-column equal split --- */
+
+  .ar-layout-halves {
+    display:               grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap:                   var(--ar-grid-gap);
+    width:                 100%;
+  }
+
+  @media (max-width: 767px) {
+    .ar-layout-halves {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  /* --- Three-column equal split --- */
+
+  .ar-layout-thirds {
+    display:               grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap:                   var(--ar-grid-gap);
+    width:                 100%;
+  }
+
+  @media (max-width: 1023px) {
+    .ar-layout-thirds {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ar-layout-thirds {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  /* --- Four-column equal split --- */
+
+  .ar-layout-quarters {
+    display:               grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap:                   var(--ar-grid-gap);
+    width:                 100%;
+  }
+
+  @media (max-width: 1023px) {
+    .ar-layout-quarters {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 479px) {
+    .ar-layout-quarters {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  /* ==========================================================
+     8. ROW UTILITIES
+     ──────────────────────────────────────────────────────────
+     Flex-based row containers for horizontal arrangements
+     within grid cells. These are lighter than the full flex
+     utility system and handle the most common in-cell layout
+     patterns without requiring display: flex from the utility
+     layer (which loads after this file in the cascade but is
+     available in the final concatenated output).
+     ========================================================== */
+
+  /* Basic horizontal row */
+  .ar-row {
+    display:     flex;
+    flex-wrap:   wrap;
+    gap:         var(--ar-grid-gap);
+    width:       100%;
+  }
+
+  .ar-row--no-wrap { flex-wrap: nowrap; }
+  .ar-row--gap-sm  { gap: var(--ar-grid-gap-sm); }
+  .ar-row--gap-lg  { gap: var(--ar-grid-gap-lg); }
+  .ar-row--no-gap  { gap: 0; }
+
+  /* Alignment helpers on row containers */
+  .ar-row--center         { align-items: center; }
+  .ar-row--start          { align-items: flex-start; }
+  .ar-row--end            { align-items: flex-end; }
+  .ar-row--justify-center { justify-content: center; }
+  .ar-row--justify-end    { justify-content: flex-end; }
+  .ar-row--between        { justify-content: space-between; }
+  .ar-row--evenly         { justify-content: space-evenly; }
+
+
+  /* ==========================================================
+     9. PRINT STYLES
+     ──────────────────────────────────────────────────────────
+     In print, all grid columns collapse to full-width and
+     layout becomes single-column. Sidebar layouts, multi-
+     column layouts, and holy grail layouts all stack vertically
+     for clean printed output.
+     ========================================================== */
+
+  @media print {
+
+    .ar-grid,
+    .ar-layout-sidebar-left,
+    .ar-layout-sidebar-left--sm,
+    .ar-layout-sidebar-right,
+    .ar-layout-holy-grail,
+    .ar-layout-halves,
+    .ar-layout-thirds,
+    .ar-layout-quarters {
+      display: block;
+    }
+
+    [class*="ar-col-"] {
+      grid-column: 1 / -1;
+      display:     block;
+      width:       100%;
+    }
+
+    .ar-row {
+      display: block;
+    }
+
+  }
+
+} /* end @layer layout */
+
+
+/* ============================================================
+   END OF FILE — src/3-layout/grid.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (4 references):
+   --ar-grid-columns    repeat() column count
+   --ar-grid-gap        default gap
+   --ar-grid-gap-sm     tight gap variant
+   --ar-grid-gap-lg     loose gap variant
+
+   Hard-coded values (justified):
+   280px   — sidebar width (standard dashboard sidebar size,
+             a structural constant not a design token)
+   240px   — narrow sidebar / holy grail sidebar width
+   minmax(0, 1fr) — standard flexible column sizing
+
+   Classes produced:
+   GRID CONTAINER (7):
+   .ar-grid, .ar-grid--gap-sm, .ar-grid--gap-lg,
+   .ar-grid--col-gap-sm, .ar-grid--col-gap-lg,
+   .ar-grid--row-gap-sm, .ar-grid--row-gap-lg,
+   .ar-grid--no-gap
+
+   COLUMN SPANS — base (2): [class*="ar-col-"], reset rule
+   COLUMN SPANS — sm  (14): .ar-sm:col-1 through col-12, full, auto
+   COLUMN SPANS — md  (14): .ar-md:col-1 through col-12, full, auto
+   COLUMN SPANS — lg  (14): .ar-lg:col-1 through col-12, full, auto
+   COLUMN SPANS — xl  (14): .ar-xl:col-1 through col-12, full, auto
+
+   LAYOUT PATTERNS (8):
+   .ar-layout-sidebar-left, .ar-layout-sidebar-left--sm,
+   .ar-layout-sidebar-right, .ar-layout-holy-grail,
+   .ar-layout-halves, .ar-layout-thirds, .ar-layout-quarters
+
+   ROW UTILITIES (12):
+   .ar-row, .ar-row--no-wrap, .ar-row--gap-sm, .ar-row--gap-lg,
+   .ar-row--no-gap, .ar-row--center, .ar-row--start,
+   .ar-row--end, .ar-row--justify-center, .ar-row--justify-end,
+   .ar-row--between, .ar-row--evenly
+
+   TESTING CHECKLIST:
+   □ 12-column grid renders 12 equal columns at 1200px
+   □ All columns stack full-width on 320px viewport
+   □ ar-col-6 ar-md:col-6 → full on mobile, half on tablet+
+   □ ar-col-12 ar-md:col-4 → full on mobile, third on tablet+
+   □ Column splits verified: 12+0, 6+6, 4+4+4, 3+3+3+3, 8+4, 9+3
+   □ ar-col-full spans all 12 columns regardless of row siblings
+   □ ar-grid--gap-sm: 16px gap; ar-grid--gap-lg: 32px gap
+   □ ar-layout-sidebar-left: side-by-side at md+, stacked below
+   □ ar-layout-thirds: 3-col at lg+, 2-col at md, 1-col at sm
+   □ ar-layout-quarters: 4-col at lg+, 2-col at md+, 1-col at sm
+   □ ar-layout-holy-grail: 3-col at xl+, 2-col at lg, 1-col at sm
+   □ Print: all layouts collapse to single column
+   □ Nested grids: inner grid cells don't bleed outside container
+   □ minmax(0,1fr): wide image inside ar-col-6 doesn't expand column
+   □ RTL: column order reversal works correctly with grid-column span
+   □ Gap tokens use raw rem values (no var() chaining)
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

@@ -1,0 +1,1045 @@
+/* ============================================================
+   ArianaCSS — Document Base Styles
+   File:    src/2-base/base.css
+   Layer:   @layer base
+   Version: 1.0.0
+
+   PURPOSE:
+   Apply the framework's visual foundation to root elements and
+   core semantic HTML elements. This file picks up where reset.css
+   left off — reset.css produced a blank, normalized slate;
+   base.css applies the first layer of intentional design on top
+   of that slate using the token system.
+
+   TOKEN DEPENDENCIES:
+   --ar-text-font-sans         root font family
+   --ar-text-font-mono         monospace font family
+   --ar-text-size-base         body font size reference
+   --ar-text-size-sm           small / secondary text
+   --ar-text-size-xs           sub-text (sub, sup, small)
+   --ar-text-weight-normal     body font weight
+   --ar-text-weight-semibold   strong / b weight
+   --ar-text-leading-normal    body line height
+   --ar-text-leading-code      pre / code line height
+   --ar-text-tracking-normal   body letter spacing
+   --ar-color-layer-base       html / body background
+   --ar-color-text-default     body text color
+   --ar-color-text-heading     heading / strong emphasis color
+   --ar-color-text-muted       secondary / small text color
+   --ar-color-text-link        anchor default color
+   --ar-color-text-link-hover  anchor hover color
+   --ar-color-text-code        inline code / kbd / samp color
+   --ar-color-layer-sunken     pre / code block background
+   --ar-color-divider          hr color
+   --ar-color-selection-bg     ::selection background
+   --ar-color-selection-text   ::selection text color
+   --ar-color-scrollbar-track  scrollbar track (webkit + standard)
+   --ar-color-scrollbar-thumb  scrollbar thumb (webkit + standard)
+   --ar-color-scrollbar-thumb-hover scrollbar thumb hover (webkit)
+   --ar-scrollbar-width        scrollbar width (webkit)
+   --ar-space-1                micro padding (sup/sub nudge)
+   --ar-space-3                blockquote padding, pre padding y
+   --ar-space-4                pre / blockquote padding x, hr margin
+   --ar-space-6                paragraph margin-block-end
+   --ar-radius-base            code / pre border-radius
+   --ar-radius-sm              inline code border-radius
+
+   SCOPE — WHAT BELONGS HERE:
+   ✓  html and body root styles (font, color, background, scroll)
+   ✓  Text rendering hints for the document root
+   ✓  Semantic inline elements (a, strong, em, code, kbd, samp, mark)
+   ✓  Semantic block elements with no class (p, blockquote, pre, hr)
+   ✓  The ::selection pseudo-element
+   ✓  Scrollbar styling (webkit progressive enhancement + standard)
+   ✓  Focus-visible root restoration (outline reset undone here)
+
+   SCOPE — WHAT DOES NOT BELONG HERE:
+   ✗  Heading styles (h1–h6) → scale.css owns these
+   ✗  List styles → utilities and components own these
+   ✗  Table styles → table component owns these
+   ✗  Form element styles → input component owns these
+   ✗  Any class-based rules → components and utilities own those
+   ✗  Layout rules → layout layer owns these
+   ✗  Any hard-coded color, size, or spacing values — use tokens
+
+   RELATIONSHIP TO OTHER BASE FILES:
+   reset.css   → runs before this file (normalized blank slate)
+   motion.css  → runs after this file (reduced-motion contract)
+   focus.css   → runs after this file (focus ring system)
+
+   base.css applies positive styles. It does not undo reset.css.
+   If a style in base.css seems to conflict with reset.css, that
+   is a sign the rule belongs in a component, not in base.css.
+
+   NEXT FILE: src/2-base/motion.css
+   ============================================================ */
+
+
+@layer base {
+
+  /* ==========================================================
+     1. DOCUMENT ROOT
+     ──────────────────────────────────────────────────────────
+     Styles applied to the html element cascade to the entire
+     document. Every font, color, and scroll behavior set here
+     forms the inheritance baseline for all other elements.
+
+     font-family:
+     The sans-serif stack from tokens. Inter is listed first;
+     if not installed or loaded, the stack falls through to OS
+     system fonts. The framework does not load Inter — projects
+     that want Inter include it themselves (Google Fonts, local
+     font, or npm package). The fallback stack is professional
+     on all major platforms:
+       Inter (if loaded)
+       Segoe UI (Windows 10/11)
+       system-ui (modern cross-platform)
+       -apple-system (macOS/iOS legacy)
+       BlinkMacSystemFont (Chrome on macOS legacy)
+       sans-serif (ultimate fallback)
+
+     font-size:
+     NOT set here. The browser default (1rem = 16px) is the
+     correct value. Overriding it would break WCAG 1.4.4
+     (Resize Text) for users who have set a custom browser
+     font size. The base token --ar-text-size-base exists as
+     a reference value (1rem) for documentation purposes —
+     it is not applied to the html element.
+
+     line-height:
+     Applied here to establish the document rhythm. 1.5 is the
+     body line height from the token scale. It cascades to all
+     text content and is overridden by specific elements
+     (headings use tighter leading, code uses code-specific
+     leading, single-line UI elements use leading-none).
+
+     color and background-color:
+     Applied to html (not body) so the background extends to
+     cover the full viewport, including any area exposed when
+     the user rubber-band-scrolls past the page boundary on
+     macOS and iOS. On those platforms, the overscroll area
+     shows the html element's background, not body's.
+
+     -webkit-font-smoothing and -moz-osx-font-smoothing:
+     These are non-standard but universally used text rendering
+     hints. antialiased produces thinner, crisper text on
+     high-DPI screens (Retina / HiDPI). On low-DPI screens,
+     subpixel-antialiased is technically more accurate — but
+     the majority of target devices are HiDPI and antialiased
+     is the preferred render on those displays. The tradeoff
+     is accepted. Setting these on html cascades to all text.
+
+     text-rendering: optimizeLegibility:
+     Enables kerning and ligatures in CSS. Has a minor
+     performance cost on very large amounts of text, but for
+     UI text (labels, headings, body paragraphs) it produces
+     visibly better typographic output. Applies to all text
+     via inheritance from html.
+
+     scroll-behavior: smooth:
+     Enables smooth scrolling for anchor links (#section-id)
+     and JavaScript-driven scrollIntoView() calls. Respects
+     the prefers-reduced-motion media query — when reduced
+     motion is requested, motion.css's global duration override
+     does not affect scroll-behavior (it is not transition-based).
+     The @media prefers-reduced-motion block in section 2 of
+     this file explicitly resets scroll-behavior: auto.
+
+     -webkit-text-size-adjust: 100%:
+     Prevents Safari on iOS from automatically increasing font
+     sizes when the device is rotated to landscape orientation.
+     Without this, Safari applies a text size inflation
+     algorithm that overrides the document's intended sizes.
+     100% disables inflation. none would also work but 100% is
+     more explicit about the intended behavior.
+
+     overflow-x: hidden:
+     Prevents horizontal scrollbar from appearing due to
+     elements (animations, images, absolute-positioned elements)
+     that accidentally overflow the viewport horizontally.
+     Applied to html rather than body to catch cases where
+     overflow originates from children of body.
+
+     tab-size: 4:
+     Set on the root so all pre/code elements inherit a
+     consistent tab width. Already set in reset.css on pre
+     specifically; setting here on html ensures inheritance
+     for elements that might not be inside pre.
+     ========================================================== */
+
+  html {
+    font-family:                var(--ar-text-font-sans);
+    font-weight:                var(--ar-text-weight-normal);
+    line-height:                var(--ar-text-leading-normal);
+    letter-spacing:             var(--ar-text-tracking-normal);
+    color:                      var(--ar-color-text-default);
+    background-color:           var(--ar-color-layer-base);
+    -webkit-font-smoothing:     antialiased;
+    -moz-osx-font-smoothing:    grayscale;
+    text-rendering:             optimizeLegibility;
+    -webkit-text-size-adjust:   100%;
+    text-size-adjust:           100%;
+    scroll-behavior:            smooth;
+    overflow-x:                 hidden;
+    tab-size:                   4;
+    -moz-tab-size:              4;
+    scrollbar-color:            var(--ar-color-scrollbar-thumb)
+                                var(--ar-color-scrollbar-track);
+    scrollbar-width:            thin;
+  }
+
+  body {
+    min-height: 100dvh;
+    /* dvh (dynamic viewport height) accounts for browser chrome
+       on mobile (address bar expanding/collapsing). On browsers
+       that don't support dvh, it falls back to 100vh via the
+       cascade — no explicit fallback needed since 100vh is the
+       initial value. min-height (not height) allows the body
+       to grow taller than the viewport for scrollable content. */
+  }
+
+
+  /* ==========================================================
+     2. REDUCED MOTION — SCROLL BEHAVIOR
+     ──────────────────────────────────────────────────────────
+     motion.css handles all transition and animation overrides
+     globally. However, scroll-behavior: smooth is not a
+     transition or animation — it is a scroll property — and
+     therefore falls outside motion.css's scope.
+
+     Users who request reduced motion should not experience
+     smooth scroll animation. This is the only motion-related
+     rule in base.css. All other reduced-motion handling is
+     in motion.css.
+     ========================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+
+  /* ==========================================================
+     3. WEBKIT SCROLLBAR (Progressive Enhancement)
+     ──────────────────────────────────────────────────────────
+     Custom scrollbar styling for Chromium-based browsers and
+     Safari. These rules are progressive enhancement — browsers
+     that do not support ::-webkit-scrollbar pseudo-elements
+     (Firefox uses scrollbar-color and scrollbar-width on html,
+     already set above) simply render their native scrollbar.
+
+     The standard CSS scrollbar properties (scrollbar-color,
+     scrollbar-width) are set on html in section 1 above,
+     covering Firefox and Chrome 121+. The webkit pseudo-element
+     rules below provide the same visual result in older Chrome
+     and all current Safari versions.
+
+     scrollbar-width: var(--ar-scrollbar-width) (8px):
+     8px is wide enough to be easily grabbable on desktop,
+     narrow enough to not compete with content for visual
+     attention. The standard scrollbar-width property only
+     accepts 'auto', 'thin', or 'none' — the pixel value
+     is webkit-specific and gives precise control.
+
+     Design intent:
+     - Track (the rail): page background color — invisible
+     - Thumb (the handle): default border color — unobtrusive
+     - Thumb hover: muted text color — responsive to interaction
+     The scrollbar should feel like part of the page, not a
+     chrome artifact. Warm Stone tones match the neutral palette.
+     ========================================================== */
+
+  ::-webkit-scrollbar {
+    width:  var(--ar-scrollbar-width);
+    height: var(--ar-scrollbar-width);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--ar-color-scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background:    var(--ar-color-scrollbar-thumb);
+    border-radius: var(--ar-radius-full);
+    border:        2px solid var(--ar-color-scrollbar-track);
+    /* 2px border matching the track color creates the appearance
+       of space between the thumb and the track edges. This is a
+       pure visual technique — border-radius alone on the thumb
+       would not produce this inset appearance.                  */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--ar-color-scrollbar-thumb-hover);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--ar-color-scrollbar-track);
+    /* The corner where horizontal and vertical scrollbars meet.
+       Match the track color to prevent a dark corner artifact. */
+  }
+
+
+  /* ==========================================================
+     4. TEXT SELECTION
+     ──────────────────────────────────────────────────────────
+     Style the browser's text selection highlight to use the
+     framework's primary color at low opacity, maintaining
+     readability while indicating the selection with brand-
+     consistent color.
+
+     Why primary color at 18% opacity:
+     Full-opacity primary would make selected text unreadable
+     (white text on lapis-600 is the on-color pattern for filled
+     elements, not text selection). 18% opacity creates a visible
+     tinted highlight while the underlying text color remains
+     readable through the tint.
+
+     color: inherit:
+     Keeps the text color unchanged during selection. The
+     highlight provides sufficient visual feedback; changing
+     text color adds unnecessary contrast complexity.
+
+     Note: ::selection cannot be nested and does not accept
+     all CSS properties. Only background-color, color, text-shadow,
+     and text-decoration-color are reliably supported.
+     ========================================================== */
+
+  ::selection {
+    background-color: var(--ar-color-selection-bg);
+    color:            var(--ar-color-selection-text);
+  }
+
+
+  /* ==========================================================
+     5. ANCHOR ELEMENTS
+     ──────────────────────────────────────────────────────────
+     Base link styles. These apply to all anchor elements that
+     have no class applied. Component-specific link styles
+     (nav links, button-style links, breadcrumb links) are
+     handled in their respective component files, which
+     override these base styles via the layer cascade.
+
+     color:
+     Uses --ar-color-text-link (lapis-600) — the primary
+     interactive hue. Links are visually connected to primary
+     buttons and selected states through this shared color.
+
+     text-decoration: underline:
+     Links are underlined by default. This is a WCAG 1.4.1
+     (Use of Color) requirement — color must not be the only
+     means of identifying a link. The underline provides a
+     non-color visual differentiator. Components that use links
+     in contexts where underline is inappropriate (navigation,
+     cards with clear link affordance) suppress the underline
+     in their own styles.
+
+     text-underline-offset: 3px:
+     Moves the underline slightly below the text baseline,
+     preventing the underline from intersecting descenders
+     (g, p, y, etc.) and improving legibility. The value is
+     a presentation preference, not a token — it is a constant
+     independent of type size. text-underline-offset does not
+     scale with font-size because the optimal gap is perceptual,
+     not proportional.
+
+     text-decoration-thickness: 1px:
+     A hairline underline. The browser default underline
+     thickness can be distractingly heavy on some platforms.
+     1px is consistent across all target browsers and font sizes.
+
+     Hover state:
+     Color deepens to --ar-color-text-link-hover (lapis-700)
+     for a visible but subtle response. text-decoration-color
+     is set explicitly on hover because some browsers render
+     the hover underline color independently of the text color
+     change. Setting both ensures the hover state is consistent.
+
+     :visited:
+     The visited link color is intentionally left at the default
+     (browser-native purple) for content links. Changing visited
+     color requires including all three pseudo-classes in the
+     correct order (:visited, :hover, :active) and the framework
+     does not have an explicit visited-link token. Projects that
+     need custom visited color override here.
+     ========================================================== */
+
+  a {
+    color:                    var(--ar-color-text-link);
+    text-decoration:          underline;
+    text-underline-offset:    3px;
+    text-decoration-thickness: 1px;
+    text-decoration-color:    currentColor;
+    transition:               color var(--ar-duration-fast) var(--ar-ease-standard),
+                              text-decoration-color var(--ar-duration-fast) var(--ar-ease-standard);
+  }
+
+  a:hover {
+    color:                   var(--ar-color-text-link-hover);
+    text-decoration-color:   currentColor;
+  }
+
+  a:active {
+    color: var(--ar-color-primary-active);
+  }
+
+  /* Remove underline and default link color for anchors
+     that are used as interactive controls (contain a role
+     attribute indicating they function as buttons or tabs).
+     These elements have component-level styles applied.      */
+  a[role="button"],
+  a[role="tab"],
+  a[role="menuitem"] {
+    text-decoration: none;
+  }
+
+  @media (forced-colors: active) {
+    a {
+      color:           LinkText;
+      text-decoration: underline;
+    }
+
+    a:hover {
+      color: ActiveText;
+    }
+  }
+
+
+  /* ==========================================================
+     6. PARAGRAPH
+     ──────────────────────────────────────────────────────────
+     Restore paragraph spacing removed by reset.css.
+     reset.css zeroed paragraph margins to avoid inconsistent
+     browser defaults. base.css restores the correct spacing
+     using a token value.
+
+     margin-block-end only (not margin-block-start):
+     Spacing below each paragraph creates separation from the
+     next paragraph or element. Top margin on a paragraph
+     inside a container would create unexpected spacing from
+     the container's padding edge. Using end-only margin is
+     the most predictable pattern.
+
+     The last paragraph in a container should not have a
+     bottom margin that creates extra space at the bottom of
+     its parent. The :last-child selector removes it.
+
+     max-width on paragraphs:
+     NOT applied here. Line length control (limiting paragraphs
+     to 60–75 characters) is a layout and typography utility
+     concern, not a base style. Long-line prose is a content
+     context decision, not a framework default.
+     ========================================================== */
+
+  p {
+    margin-block-end: var(--ar-space-4);
+  }
+
+  p:last-child {
+    margin-block-end: 0;
+  }
+
+
+  /* ==========================================================
+     7. STRONG AND EMPHASIS
+     ──────────────────────────────────────────────────────────
+     The reset.css sets strong and b to font-weight: bolder
+     (a relative value that increases weight from the inherited
+     weight). base.css refines this to the framework's explicit
+     semibold weight and the heading text color.
+
+     WHY semibold (600) instead of bold (700):
+     At body text size (16px), 700 weight inside a 400 weight
+     paragraph looks aggressive — it pulls the eye too strongly.
+     Semibold (600) at body size provides sufficient emphasis
+     without typographic shouting. Headings use 700 and 800
+     because their larger size and spacing provides context
+     for heavier weight. Inline strong at body size uses 600.
+
+     WHY heading color for strong:
+     --ar-color-text-heading is slightly darker than the default
+     body text (stone-900 vs stone-700). The small contrast
+     difference between body text and strong text at the same
+     weight often feels insufficient. The darkened color adds
+     a second visual dimension (weight + darkness) that makes
+     emphasis clearly distinct.
+
+     em: Italic alone is sufficient for emphasis. No color or
+     weight change — changing those too would make em look
+     like a link or a heading.
+     ========================================================== */
+
+  strong,
+  b {
+    font-weight: var(--ar-text-weight-semibold);
+    color:       var(--ar-color-text-heading);
+  }
+
+  em,
+  i {
+    font-style: italic;
+  }
+
+
+  /* ==========================================================
+     8. INLINE CODE, KBD, AND SAMP
+     ──────────────────────────────────────────────────────────
+     Inline code, keyboard input, and sample output elements
+     share a monospace base style. They appear inside prose to
+     denote technical content.
+
+     font-family: The monospace token stack from tokens.css.
+     Reset.css makes form elements inherit font, but code
+     elements inherit from the document — which uses the sans
+     stack. Explicitly applying the mono stack here ensures
+     inline code uses the correct typeface regardless of where
+     it appears in the document.
+
+     font-size: 0.9em (relative to parent):
+     Monospace fonts appear visually larger than sans-serif
+     at the same absolute size because their letter forms have
+     more uniform, wide proportions. 0.9em compensates for
+     this optical size difference. This is a presentation
+     constant, not a token — it is a universal monospace-to-
+     sans compensation and does not change with theming.
+
+     color: --ar-color-text-code (lapis-700):
+     Uses the primary emphasis hue to signal "this is technical
+     content." The color connection to the primary palette
+     (same hue as buttons and links, darker stop) creates
+     a meaningful semantic association without requiring a
+     background color.
+
+     background-color and border-radius:
+     A subtle sunken background on inline code visually
+     distinguishes it from surrounding prose. The sunken layer
+     color (warm light gray) creates separation without the
+     harsh contrast of a bright yellow or green background.
+
+     padding:
+     A small vertical and horizontal padding ensures the
+     background does not clip into the text's ascenders or
+     descenders. The padding-inline is slightly wider than
+     padding-block to optically center the text within the
+     background pill.
+
+     border-radius: --ar-radius-sm:
+     Inline code uses the smallest radius (4px) because it is
+     a small, inline element. The base radius (6px) would make
+     inline code look like a pill, which is the badge/tag shape.
+     4px reads as a background highlight, not a shape.
+
+     kbd:
+     Keyboard input traditionally uses a border to evoke a
+     physical keycap. The border and slightly stronger border-
+     radius differentiate kbd from code visually within prose.
+
+     samp:
+     Sample output uses the same base style as code but without
+     a background — it is typically used for terminal/command
+     output in larger blocks. Inline samp keeps the monospace
+     and color but sits closer to prose visually.
+     ========================================================== */
+
+  code {
+    font-family:      var(--ar-text-font-mono);
+    font-size:        0.9em;
+    font-weight:      var(--ar-text-weight-normal);
+    color:            var(--ar-color-text-code);
+    background-color: var(--ar-color-layer-sunken);
+    padding-block:    var(--ar-space-micro);
+    padding-inline:   var(--ar-space-1);
+    border-radius:    var(--ar-radius-sm);
+    white-space:      break-spaces;
+  }
+
+  kbd {
+    font-family:      var(--ar-text-font-mono);
+    font-size:        0.875em;
+    font-weight:      var(--ar-text-weight-medium);
+    color:            var(--ar-color-text-default);
+    background-color: var(--ar-color-layer-sunken);
+    padding-block:    var(--ar-space-micro);
+    padding-inline:   var(--ar-space-1);
+    border:           1px solid var(--ar-color-border-default);
+    border-radius:    var(--ar-radius-sm);
+    white-space:      nowrap;
+    /* nowrap: key names don't wrap mid-key ("Shift" stays on one line) */
+  }
+
+  samp {
+    font-family: var(--ar-text-font-mono);
+    font-size:   0.9em;
+    color:       var(--ar-color-text-code);
+  }
+
+
+  /* ==========================================================
+     9. PREFORMATTED TEXT AND CODE BLOCKS
+     ──────────────────────────────────────────────────────────
+     Block-level preformatted content. reset.css set pre to
+     white-space: pre-wrap and overflow-x: auto. base.css adds
+     the visual presentation: font, colors, padding, radius.
+
+     pre > code:
+     Inside a pre element, a code element resets some of its
+     inline styles. The pre provides the block container
+     (background, padding, radius); the nested code is purely
+     for semantic markup and should not add a second layer
+     of background or padding.
+     ========================================================== */
+
+  pre {
+    font-family:      var(--ar-text-font-mono);
+    font-size:        var(--ar-text-size-sm);
+    line-height:      var(--ar-text-leading-code);
+    color:            var(--ar-color-text-default);
+    background-color: var(--ar-color-layer-sunken);
+    padding-block:    var(--ar-space-4);
+    padding-inline:   var(--ar-space-4);
+    border-radius:    var(--ar-radius-base);
+    border:           1px solid var(--ar-color-border-default);
+    overflow-x:       auto;
+    /* overflow-x overrides reset.css's scroll-x auto to be
+       explicit — for wider code blocks, horizontal scroll is
+       preferable to wrapping which breaks code indentation.  */
+  }
+
+  /* When a code element is a direct child of pre, strip the
+     inline code decoration — the pre block provides the context. */
+  pre > code {
+    font-size:        inherit;
+    color:            inherit;
+    background-color: transparent;
+    padding:          0;
+    border-radius:    0;
+    white-space:      inherit;
+  }
+
+
+  /* ==========================================================
+     10. BLOCKQUOTE
+     ──────────────────────────────────────────────────────────
+     Pulled quotations from external sources or emphasis quotes
+     within prose. The visual treatment uses a colored left
+     border (primary border token) to connect blockquotes with
+     the framework's primary hue without using color fills.
+
+     The left border pattern:
+     - More semantically appropriate than quotation marks
+       (which are already present in HTML via CSS content)
+     - More readable than background-tinted blockquotes
+     - More distinctive than the browser default italic indent
+
+     padding-inline-start only:
+     Padding on the left (start in logical CSS) creates space
+     between the border and the text. No padding-inline-end —
+     the blockquote aligns with body text on the right edge,
+     letting it feel like part of the prose flow rather than
+     a boxed element.
+
+     color: --ar-color-text-muted:
+     Quoted text is rendered in the muted text color, slightly
+     lighter than body text, to visually distinguish the quote
+     from the surrounding author's prose.
+     ========================================================== */
+
+  blockquote {
+    border-inline-start: 3px solid var(--ar-color-primary-border);
+    padding-block:       var(--ar-space-3);
+    padding-inline-start: var(--ar-space-4);
+    color:               var(--ar-color-text-muted);
+    font-style:          italic;
+    margin-block:        var(--ar-space-6);
+  }
+
+  blockquote:last-child {
+    margin-block-end: 0;
+  }
+
+  /* The cite element within a blockquote — attribution line.  */
+  blockquote cite {
+    display:     block;
+    font-style:  normal;
+    font-size:   var(--ar-text-size-sm);
+    color:       var(--ar-color-text-muted);
+    margin-block-start: var(--ar-space-2);
+  }
+
+  blockquote cite::before {
+    content: "— ";
+  }
+
+
+  /* ==========================================================
+     11. HORIZONTAL RULE
+     ──────────────────────────────────────────────────────────
+     The hr element was stripped of its border in reset.css
+     (normalize to height: 0, border: 0). Here it is rebuilt
+     as a clean 1px divider using the divider color token.
+
+     Implemented as a top border rather than a background-color
+     height, which is more semantically correct and renders
+     consistently across all target browsers.
+
+     margin-block: provides vertical breathing room above and
+     below the divider. Using space-6 (24px) places the
+     divider clearly within section-level spacing rhythm.
+     ========================================================== */
+
+  hr {
+    display:             block;
+    height:              0;
+    border:              0;
+    border-block-start:  1px solid var(--ar-color-divider);
+    margin-block:        var(--ar-space-6);
+  }
+
+
+  /* ==========================================================
+     12. MARK (HIGHLIGHTED TEXT)
+     ──────────────────────────────────────────────────────────
+     The mark element highlights text of interest, typically
+     in search results or reference contexts. It should feel
+     like a yellow highlighter pen — prominent but not harsh.
+
+     Uses the saffron surface (lightest warning tint) as the
+     background. The saffron hue evokes a highlighter pen
+     culturally and is semantically connected to the "attention"
+     signal used by the warning role throughout the framework.
+
+     color: inherit:
+     The text inside mark retains its surrounding context's
+     color. Mark does not impose its own text color — it only
+     adds background emphasis. This ensures mark works correctly
+     inside headings, links, strong, and other colored contexts.
+     ========================================================== */
+
+  mark {
+    background-color: var(--ar-color-warning-surface);
+    color:            inherit;
+    padding-block:    var(--ar-space-micro);
+    padding-inline:   var(--ar-space-micro);
+    border-radius:    var(--ar-radius-sm);
+  }
+
+  @media (forced-colors: active) {
+    mark {
+      background-color: Mark;
+      color:            MarkText;
+    }
+  }
+
+
+  /* ==========================================================
+     13. ABBREVIATION
+     ──────────────────────────────────────────────────────────
+     reset.css applied text-decoration: underline dotted to
+     abbr[title]. base.css adds the pointer change from
+     'default' to 'help' and confirms the dotted underline
+     offset matches the link underline offset for visual
+     consistency.
+
+     Note: this rule is already partially in reset.css
+     (abbreviation normalization). The reset covers the
+     cross-browser decoration; base.css adds the visual
+     refinement that depends on the framework's presentation.
+     ========================================================== */
+
+  abbr[title] {
+    text-underline-offset: 3px;
+    /* Matches the link underline offset for visual rhythm.
+       The dotted style is set in reset.css.                  */
+  }
+
+
+  /* ==========================================================
+     14. DETAILS AND SUMMARY
+     ──────────────────────────────────────────────────────────
+     Native disclosure widgets. reset.css set summary to
+     display: block (removing the list-item disclosure triangle
+     in some browsers) and cursor: pointer. base.css adds the
+     visual spacing and the custom disclosure indicator using
+     the primary color.
+
+     The native disclosure arrow is hidden (display: block on
+     summary removes it in most browsers; the ::-webkit-details-
+     marker rule removes the Safari fallback). A CSS-drawn
+     chevron using border provides a framework-consistent
+     indicator at the correct color and weight.
+     ========================================================== */
+
+  details {
+    border:           1px solid var(--ar-color-border-default);
+    border-radius:    var(--ar-radius-base);
+    padding:          var(--ar-space-4);
+  }
+
+  details[open] {
+    padding-block-end: var(--ar-space-4);
+  }
+
+  summary {
+    font-weight:          var(--ar-text-weight-medium);
+    color:                var(--ar-color-text-heading);
+    padding:              var(--ar-space-1) 0;
+    list-style:           none;
+    /* list-style: none removes the default triangle in Firefox */
+    user-select:          none;
+    -webkit-user-select:  none;
+  }
+
+  /* Remove the default disclosure arrow in WebKit/Blink       */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details[open] > summary {
+    margin-block-end:   var(--ar-space-3);
+    padding-block-end:  var(--ar-space-3);
+    border-block-end:   1px solid var(--ar-color-divider);
+  }
+
+
+  /* ==========================================================
+     15. FIGURE AND FIGCAPTION
+     ──────────────────────────────────────────────────────────
+     reset.css removed margin from figure. base.css adds
+     bottom spacing for figures that appear within prose and
+     styles the figcaption as a caption label.
+
+     figcaption appears below the figure content (image, table,
+     code block) and provides attribution or description.
+     ========================================================== */
+
+  figure {
+    margin-block: var(--ar-space-6);
+  }
+
+  figure:last-child {
+    margin-block-end: 0;
+  }
+
+  figcaption {
+    font-size:         var(--ar-text-size-xs);
+    color:             var(--ar-color-text-muted);
+    text-align:        center;
+    margin-block-start: var(--ar-space-2);
+    letter-spacing:    var(--ar-text-tracking-wide);
+  }
+
+
+  /* ==========================================================
+     16. DEFINITION LISTS
+     ──────────────────────────────────────────────────────────
+     reset.css removed margin and padding from dl and dd.
+     base.css restores semantic spacing for definition lists
+     used in prose contexts. dl elements used for UI (metadata
+     grids, key-value displays) apply their own layout via
+     utility classes or component styles.
+     ========================================================== */
+
+  dt {
+    font-weight: var(--ar-text-weight-semibold);
+    color:       var(--ar-color-text-heading);
+  }
+
+  dd {
+    color:              var(--ar-color-text-default);
+    margin-block-end:   var(--ar-space-2);
+    padding-inline-start: var(--ar-space-4);
+    /* Logical indent: indents from the reading start edge.
+       In RTL contexts (Dari/Pashto), this correctly indents
+       from the right edge.                                   */
+  }
+
+  dd:last-child {
+    margin-block-end: 0;
+  }
+
+
+  /* ==========================================================
+     17. IMAGE AND MEDIA ACCESSIBILITY
+     ──────────────────────────────────────────────────────────
+     Decorative images (those with alt="") should not be
+     announced by screen readers, and they should not receive
+     focus. Base styles cannot enforce alt attribute usage
+     (that's an HTML authoring concern), but they can set
+     correct pointer behavior for interactive media.
+
+     img:not([alt]):
+     Images without an alt attribute are a potential
+     accessibility gap. Apply a visible indicator in
+     development contexts. This rule uses an outline that
+     is only visible in development and disappears in
+     production when alt attributes are present. This is a
+     development aid, not a production style.
+     ========================================================== */
+
+  /* Images with empty alt are decorative — pointer: default
+     prevents them from signaling interactivity.              */
+  img[alt=""] {
+    pointer-events: none;
+  }
+
+
+  /* ==========================================================
+     18. FOCUS VISIBILITY RESTORATION
+     ──────────────────────────────────────────────────────────
+     Some CSS resets aggressively set outline: none on :focus
+     for all elements. ArianaCSS's reset.css does not do this —
+     it is a deliberate decision. However, browser stylesheets
+     can apply focus styles that conflict with the framework's
+     focus ring system in focus.css.
+
+     This section does not suppress focus styles. Instead, it
+     ensures that the browser's native :focus styles (which may
+     appear on elements before focus.css loads in development)
+     are correctly handled.
+
+     The actual focus ring implementation is in focus.css,
+     which runs after this file. This section serves as a
+     documented acknowledgment that focus styling is owned by
+     focus.css, not base.css.
+
+     DO NOT add outline: none or outline: 0 here.
+     DO NOT suppress :focus styles here.
+     DO NOT suppress :focus-visible styles here.
+
+     The one exception — tabindex="-1" elements — is handled
+     in reset.css where it is correctly contextualized.
+     ========================================================== */
+
+  /* Focus ring is fully implemented in src/2-base/focus.css.
+     No focus suppression rules belong in this file.          */
+
+
+  /* ==========================================================
+     19. PRINT STYLES
+     ──────────────────────────────────────────────────────────
+     Supplement the print normalization in reset.css with
+     content-specific print optimizations. These apply only
+     when printing or when print preview is active.
+
+     The goal: printed output should be clean, legible, and
+     not waste ink on background colors or decorative shadows.
+
+     Link href printing:
+     When printing a web page, link text alone doesn't convey
+     the destination. Appending the URL after the link text
+     (::after content) gives printed readers the full URL.
+     Only http/https links and non-fragment anchor links are
+     targeted — internal page anchors (#section) print without
+     their hash since they are meaningless on paper.
+
+     body print defaults:
+     Black text on white background is the most efficient for
+     printing regardless of the screen theme.
+     ========================================================== */
+
+  @media print {
+
+    body {
+      color:            hsl(0 0% 0%);
+      background-color: hsl(0 0% 100%);
+    }
+
+    pre,
+    blockquote {
+      border:      1px solid hsl(0 0% 75%);
+      page-break-inside: avoid;
+    }
+
+    /* Print URLs after links for print readers             */
+    a[href^="http"]::after,
+    a[href^="https"]::after {
+      content: " (" attr(href) ")";
+      font-size:   0.875em;
+      font-weight: var(--ar-text-weight-normal);
+      word-break:  break-all;
+    }
+
+    /* Don't print URLs for internal anchors or JS links   */
+    a[href^="#"]::after,
+    a[href^="javascript:"]::after {
+      content: "";
+    }
+
+    /* Don't print navigation areas                        */
+    nav {
+      display: none;
+    }
+
+  } /* end @media print */
+
+
+} /* end @layer base */
+
+
+/* ============================================================
+   END OF FILE — base.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (19 references):
+   --ar-text-font-sans, --ar-text-font-mono,
+   --ar-text-size-base, --ar-text-size-sm, --ar-text-size-xs,
+   --ar-text-weight-normal, --ar-text-weight-medium,
+   --ar-text-weight-semibold,
+   --ar-text-leading-normal, --ar-text-leading-code,
+   --ar-text-tracking-normal,
+   --ar-color-layer-base, --ar-color-layer-sunken,
+   --ar-color-text-default, --ar-color-text-heading,
+   --ar-color-text-muted, --ar-color-text-code,
+   --ar-color-text-link, --ar-color-text-link-hover,
+   --ar-color-primary-active, --ar-color-primary-border,
+   --ar-color-warning-surface,
+   --ar-color-border-default, --ar-color-divider,
+   --ar-color-selection-bg, --ar-color-selection-text,
+   --ar-color-scrollbar-track, --ar-color-scrollbar-thumb,
+   --ar-color-scrollbar-thumb-hover, --ar-scrollbar-width,
+   --ar-space-micro, --ar-space-1, --ar-space-2, --ar-space-3,
+   --ar-space-4, --ar-space-6,
+   --ar-radius-sm, --ar-radius-base, --ar-radius-full,
+   --ar-duration-fast, --ar-ease-standard
+
+   Hard-coded values (justified exceptions):
+   0.9em       — monospace optical size compensation (universal constant)
+   0.875em     — kbd size compensation (universal constant)
+   3px         — link underline offset (perceptual constant, not scaled)
+   1px         — link / blockquote / border thickness (structural constant)
+   3px         — blockquote border width (structural constant)
+   2px         — scrollbar thumb border (visual technique, not a space)
+   100%        — -webkit-text-size-adjust (CSS spec value, not a size)
+
+   Next file in implementation order:
+   src/2-base/motion.css
+
+   TESTING CHECKLIST:
+   □ html background visible in browser chrome area (overscroll)
+   □ Font stack: Inter loads if available; fallback to system-ui
+   □ Text renders antialiased on macOS / HiDPI displays
+   □ Body min-height fills full viewport (check with short content)
+   □ Smooth scroll fires on #anchor links (click a same-page link)
+   □ Smooth scroll disabled when prefers-reduced-motion is on
+   □ Scrollbar visible, styled (warm tones), correct width
+   □ Scrollbar thumb changes color on hover
+   □ Text selection highlight is Lapis-tinted, text readable
+   □ Links: correct color, underlined, offset from baseline
+   □ Links: hover deepens color, active goes to primary-active
+   □ Links: transition is fast and smooth
+   □ strong / b: semibold weight + heading color
+   □ code: monospace, 90% size, sunken background, correct padding
+   □ kbd: border visible, nowrap (Shift stays on one line)
+   □ pre: monospace, sunken background, border, scrollable
+   □ pre > code: no double-background, no double-padding
+   □ blockquote: left border (primary-border), italic, muted color
+   □ blockquote cite: prefixed with em dash
+   □ hr: single 1px line, correct color, correct margin
+   □ mark: saffron tint, text color unchanged
+   □ details: bordered, summary medium weight
+   □ details[open] summary: bottom border separator
+   □ figcaption: xs size, muted, centered
+   □ dt: semibold, heading color; dd: indented
+   □ Print preview: black text, URLs after links, no nav
+   □ All forced-colors blocks tested in Windows High Contrast Mode
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

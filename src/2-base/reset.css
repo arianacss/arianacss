@@ -1,0 +1,746 @@
+/* ============================================================
+   ArianaCSS — Modern Targeted Reset
+   File:    src/2-base/reset.css
+   Layer:   @layer base
+   Version: 1.0.0
+
+   PURPOSE:
+   Remove inconsistent browser defaults so every subsequent
+   ArianaCSS file starts from a predictable, uniform baseline.
+   This file normalizes — it does not style. No color, no
+   typography, no spacing decisions live here. Those belong
+   in base.css, which builds on top of this normalized surface.
+
+   TOKEN DEPENDENCIES: None.
+   This file intentionally references zero CSS custom properties.
+   Every value here is a browser normalization constant — a
+   technical correction, not a design decision. If a value in
+   this file feels like a design decision, it belongs in base.css.
+
+   PHILOSOPHY — TARGETED, NOT TOTAL:
+   This is not a universal reset (à la Eric Meyer's * { margin: 0 })
+   and not a full normalization library (à la Normalize.css 8.x).
+   It targets only the properties that are genuinely inconsistent
+   across the supported browser set (Chrome 90+, Firefox 90+,
+   Safari 14+). Properties that are already consistent across
+   these browsers are left untouched — resetting them wastes
+   bytes and adds style recalculation work for the browser.
+
+   WHAT THIS FILE DOES:
+   1.  Box sizing — inherit border-box from html to all elements
+   2.  Margin and padding removal — headings, body, lists, figures
+   3.  Font inheritance — form elements that default to system fonts
+   4.  Border removal — images and replaced elements
+   5.  List style removal — ul/ol used for UI (not prose)
+   6.  Table normalization — border-collapse and spacing
+   7.  Media defaults — responsive images, video, svg
+   8.  Form element normalization — appearance, overflow, resize
+   9.  Interactive element normalization — button, summary cursor
+   10. Text normalization — hyphenation, word-break for pre
+   11. Accessibility defaults — reduced motion scaffold (in motion.css),
+       hidden attribute enforcement
+
+   WHAT THIS FILE DOES NOT DO:
+   - Apply any color (belongs in base.css)
+   - Apply any font-family (belongs in base.css)
+   - Apply any font-size (browser default 1rem is correct)
+   - Apply any line-height (belongs in base.css)
+   - Set background colors (belongs in base.css)
+   - Style links, headings, or any semantic element visually
+   - Override any property that is already consistent across
+     Chrome 90+, Firefox 90+, Safari 14+
+
+   TESTING REQUIREMENT:
+   Load this file alone (no other CSS) against an HTML file
+   containing every normalized element. The page must render
+   as a blank, browser-default-looking document with no visible
+   styling artifacts from this file. This file produces a
+   normalized blank slate, nothing more.
+
+   NEXT FILE: src/2-base/motion.css
+   ============================================================ */
+
+
+@layer base {
+
+  /* ==========================================================
+     1. BOX SIZING
+     ──────────────────────────────────────────────────────────
+     Set border-box on html, then inherit throughout the tree.
+
+     WHY INHERIT RATHER THAN *:
+     The universal selector (* { box-sizing: border-box }) is
+     slightly heavier and overrides third-party widgets that may
+     deliberately set content-box. The inherit pattern respects
+     those overrides: a component can opt out by setting
+     box-sizing: content-box on its root element, and all its
+     children inherit that correctly.
+
+     WHY THIS MATTERS:
+     Without border-box, padding and border are added to the
+     declared width. A 100px element with 16px padding becomes
+     132px wide — unpredictable and the source of countless
+     layout bugs. border-box makes width mean the full rendered
+     width including padding and border.
+     ========================================================== */
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+
+  html {
+    box-sizing: border-box;
+  }
+
+
+  /* ==========================================================
+     2. MARGIN AND PADDING REMOVAL
+     ──────────────────────────────────────────────────────────
+     Remove default margins that browsers apply to block elements.
+     These defaults vary in value across browsers and create
+     unpredictable vertical spacing before any framework styles
+     are applied.
+
+     WHY TARGETED, NOT UNIVERSAL:
+     The universal margin reset (* { margin: 0 }) removes margins
+     from every element including inline elements and table cells
+     where browser defaults are consistent and correct.
+     Targeted removal on the specific elements that have
+     inconsistent margins is more precise and more performant.
+
+     ELEMENTS TARGETED AND WHY:
+     body      — Chrome/Safari apply 8px, Firefox applies 8px.
+                 Consistent but non-zero — remove for clean layouts.
+     h1–h6     — All apply top+bottom margin that varies by heading
+                 level and browser. Framework typography (scale.css)
+                 defines the correct heading spacing via tokens.
+     p         — Browsers apply top+bottom margin to paragraphs.
+                 Base.css restores appropriate paragraph spacing.
+     figure    — Chrome/Firefox apply 40px inline margin for
+                 indentation. No indentation needed in a framework.
+     blockquote — Browsers apply 40px inline + 1em block margin.
+                 Typography utils define blockquote spacing via tokens.
+     dl, dd    — dd has a 40px inline-start margin in most browsers.
+     ol, ul    — Browsers apply padding-inline-start ~40px. Removed
+                 because list spacing is either component-managed
+                 (nav lists, custom lists) or restored by prose
+                 utility classes for actual content lists.
+     fieldset  — Browsers apply padding and a border by default.
+                 Form components define their own padding via tokens.
+     legend    — Has browser-specific padding and positioning quirks.
+     ========================================================== */
+
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  figure,
+  figcaption,
+  blockquote,
+  dl,
+  dd,
+  ol,
+  ul,
+  fieldset,
+  legend {
+    margin: 0;
+    padding: 0;
+  }
+
+
+  /* ==========================================================
+     3. FONT INHERITANCE FOR FORM ELEMENTS
+     ──────────────────────────────────────────────────────────
+     Form elements (input, button, select, textarea, optgroup)
+     do not inherit font properties from their parent in most
+     browsers by default. They render with the OS system font
+     at the OS default size — typically a different font and
+     size from the surrounding document text.
+
+     WHY inherit RATHER THAN SETTING A VALUE:
+     We inherit rather than specifying a font-family/font-size
+     because the document-level font decisions belong in base.css.
+     When base.css sets font-family on html or body, these
+     form elements will then correctly inherit it. This keeps
+     reset.css free of design decisions.
+
+     100% for font-size: preserves the user's browser font-size
+     preference. The browser's default is 1rem = 16px, but users
+     can change this. Inheriting rather than hardcoding 1rem
+     respects that accessibility preference.
+
+     line-height: inherit ensures form elements don't clip
+     descenders at OS default line heights which are typically
+     too tight for the framework's leading scale.
+     ========================================================== */
+
+  input,
+  button,
+  textarea,
+  select,
+  optgroup {
+    font-family: inherit;
+    font-size:   100%;
+    font-weight: inherit;
+    line-height: inherit;
+    color:       inherit;
+  }
+
+
+  /* ==========================================================
+     4. LIST STYLE REMOVAL
+     ──────────────────────────────────────────────────────────
+     Remove the default list markers (bullets and numbers) from
+     ul and ol elements.
+
+     WHY:
+     In a UI framework, ol and ul are used for navigation menus,
+     breadcrumbs, tag lists, dropdown items, and countless other
+     non-prose patterns where list markers are incorrect.
+     Components and utilities that need markers (an actual
+     content list) restore them explicitly.
+
+     list-style: none also removes the role="list" accessibility
+     behavior in Safari. Any component using list markup for a
+     semantic list must add role="list" to the element explicitly.
+     This is documented in CONTRIBUTING.md §accessibility.
+     ========================================================== */
+
+  ol,
+  ul {
+    list-style: none;
+  }
+
+
+  /* ==========================================================
+     5. MEDIA — RESPONSIVE DEFAULTS
+     ──────────────────────────────────────────────────────────
+     Make replaced content (images, video, canvas, svg, iframe)
+     behave responsively by default.
+
+     WHY max-width: 100%:
+     Without this, an image wider than its container overflows,
+     causing horizontal scroll. max-width: 100% ensures media
+     never exceeds its container's width.
+
+     WHY NOT width: 100%:
+     width: 100% forces the element to stretch to its container's
+     full width regardless of the element's intrinsic size. A
+     small icon (16px) inside a 400px card would stretch to 400px.
+     max-width: 100% allows the element to use its natural size
+     up to the container's limit.
+
+     WHY display: block:
+     Images and other replaced elements are inline by default.
+     Inline elements have descender space below them — a ~4px
+     gap appears beneath images in containers. Setting display:
+     block eliminates this gap without needing line-height: 0
+     on the parent. Block images also participate correctly in
+     vertical layout flow.
+
+     height: auto on img, video, canvas:
+     When width or max-width constrains the horizontal dimension,
+     height: auto maintains the correct aspect ratio. Without it,
+     the browser's intrinsic height doesn't scale proportionally
+     when width is constrained.
+
+     vertical-align: middle on svg:
+     SVG elements used as inline icons inside text or buttons
+     have a bottom alignment gap by default. middle alignment
+     removes the descender gap without requiring display: block
+     on every icon.
+     ========================================================== */
+
+  img,
+  picture,
+  video,
+  canvas,
+  audio {
+    display:   block;
+    max-width: 100%;
+  }
+
+  img,
+  video,
+  canvas {
+    height: auto;
+  }
+
+  svg {
+    display:        block;
+    max-width:      100%;
+    vertical-align: middle;
+  }
+
+  iframe {
+    border: 0;
+  }
+
+
+  /* ==========================================================
+     6. TABLE NORMALIZATION
+     ──────────────────────────────────────────────────────────
+     Remove the doubled borders and excess spacing that browsers
+     render on tables by default.
+
+     WHY border-collapse: collapse:
+     Without it, adjacent cell borders are rendered as two
+     separate borders with a gap between them. The result is
+     double borders at every cell edge — visually inconsistent
+     and almost never desirable in a framework table component.
+     collapse merges adjacent borders into a single border.
+
+     WHY border-spacing: 0:
+     Even with border-collapse: collapse, some browsers still
+     apply a small border-spacing. Explicitly setting 0 ensures
+     no spacing between cells.
+
+     caption-side: bottom:
+     Browser default varies — some put captions above the table,
+     some below. Standardizing to bottom matches the most common
+     accessible pattern (caption after the table it describes).
+     ========================================================== */
+
+  table {
+    border-collapse: collapse;
+    border-spacing:  0;
+    caption-side:    bottom;
+  }
+
+  th {
+    text-align: inherit;
+  }
+
+
+  /* ==========================================================
+     7. FORM ELEMENT NORMALIZATION
+     ──────────────────────────────────────────────────────────
+     Normalize appearance inconsistencies in form elements
+     across browsers. These are not style choices — they are
+     browser default rendering corrections.
+
+     button / [type="button"] / [type="reset"] / [type="submit"]:
+     - cursor: pointer — browsers render "default" cursor on
+       buttons in some contexts. pointer signals interactivity.
+     - appearance: button — Safari renders certain button types
+       with system-native rounded corners, ignoring border-radius.
+       appearance: button removes this system override.
+
+     textarea:
+     - resize: vertical — browsers allow both horizontal and
+       vertical resize by default. Horizontal resize breaks
+       layout by expanding beyond the container width. Vertical
+       only is safe.
+     - overflow: auto — IE historically clipped overflow on
+       textareas. Modern browsers handle this correctly, but
+       explicit auto ensures consistent scroll behavior when
+       content exceeds the textarea height.
+
+     input[type="search"]:
+     - appearance: textfield — WebKit browsers (Safari, older
+       Chrome) apply a special search field appearance with a
+       cancel button and custom border-radius. appearance:
+       textfield removes this, giving framework styles full
+       control.
+     - outline-offset — Safari applies a -2px outline-offset
+       on search inputs, placing the outline inside the element
+       and partially hiding it. Corrected to 0 here; focus.css
+       sets the correct offset via the focus ring token.
+
+     [type="number"]:
+     - appearance: textfield — removes the browser-rendered
+       spinner arrows (up/down buttons). If a project needs
+       spinners, they can restore them with appearance: auto.
+       Default removal matches most UI patterns where number
+       inputs use custom steppers or none at all.
+
+     select:
+     - appearance: none is NOT applied here. select elements
+       need OS-native appearance by default for accessibility
+       and mobile usability. The input.css component applies
+       custom select styling only when the ar-input class is
+       present. Bare select elements retain native appearance.
+
+     [hidden]:
+     - The HTML hidden attribute should always produce
+       display: none. Some older CSS frameworks or base styles
+       override this. Explicitly enforce it here.
+     ========================================================== */
+
+  button,
+  [type="button"],
+  [type="reset"],
+  [type="submit"] {
+    cursor:     pointer;
+    appearance: button;
+  }
+
+  button:disabled,
+  [type="button"]:disabled,
+  [type="reset"]:disabled,
+  [type="submit"]:disabled {
+    cursor: not-allowed;
+  }
+
+  textarea {
+    resize:   vertical;
+    overflow: auto;
+  }
+
+  input[type="search"] {
+    appearance:     textfield;
+    outline-offset: 0;
+  }
+
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  input[type="number"] {
+    appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    height: auto;
+  }
+
+  /* Fieldset — remove browser default border and padding.
+     fieldsets render with a border and padding in all browsers.
+     Framework form layouts use fieldset for its semantic value
+     (grouping related fields) but not its default visual output. */
+  fieldset {
+    border: 0;
+  }
+
+  /* Legend — normalize browser inconsistencies.
+     Legend inherits padding in some browsers and not others.
+     After fieldset border/padding is removed, legend needs
+     explicit zero padding to render flush with the layout. */
+  legend {
+    padding: 0;
+  }
+
+
+  /* ==========================================================
+     8. INTERACTIVE ELEMENT NORMALIZATION
+     ──────────────────────────────────────────────────────────
+     Normalize cursor and interaction behaviors for elements
+     that should feel interactive or that have browser-specific
+     rendering differences.
+
+     summary:
+     - cursor: pointer — details/summary elements render with
+       "default" cursor in some browsers. pointer signals that
+       clicking expands/collapses the details block.
+     - display: list-item in some browsers causes summary to
+       render a disclosure triangle AND a list bullet. Setting
+       display: block removes the extra bullet.
+
+     [tabindex="-1"]:focus:
+     - Elements with tabindex="-1" are programmatically
+       focusable but not keyboard-reachable. The focus ring
+       should not render on these elements as it would confuse
+       keyboard users who cannot reach them by tabbing.
+       outline: none here is the one permissible use of
+       outline: none in the framework — it applies only to
+       elements explicitly removed from the tab order.
+
+     abbr[title]:
+     - Normalize the underline decoration of abbreviations.
+       Chrome and Safari apply a different underline style
+       than Firefox. text-decoration-skip-ink ensures dots
+       and punctuation do not break the underline.
+
+     b, strong:
+     - Normalize font-weight in some older Blink contexts
+       where bolder is applied instead of bold.
+
+     small:
+     - Normalize to 80% in all browsers (already consistent
+       in modern browsers, but explicit is safer).
+
+     sub, sup:
+     - Prevent sub and sup from affecting line-height.
+       Default browser behavior raises/lowers the line
+       when sub/sup are present, causing uneven line spacing.
+     ========================================================== */
+
+  summary {
+    display: block;
+    cursor:  pointer;
+  }
+
+  /* Suppress focus ring on programmatically-focused elements
+     that are intentionally outside the keyboard tab order.    */
+  [tabindex="-1"]:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  abbr[title] {
+    text-decoration:            underline dotted;
+    text-decoration-skip-ink:   auto;
+    cursor:                     help;
+  }
+
+  b,
+  strong {
+    font-weight: bolder;
+  }
+
+  small {
+    font-size: 80%;
+  }
+
+  sub,
+  sup {
+    position:    relative;
+    font-size:   75%;
+    line-height: 0;
+    vertical-align: baseline;
+  }
+
+  sub {
+    bottom: -0.25em;
+  }
+
+  sup {
+    top: -0.5em;
+  }
+
+
+  /* ==========================================================
+     9. TEXT AND OVERFLOW NORMALIZATION
+     ──────────────────────────────────────────────────────────
+     Normalize text rendering behaviors that differ across
+     browsers and operating systems.
+
+     pre:
+     - white-space: pre-wrap — the pre element renders
+       preformatted text with white-space: pre by default.
+       pre-wrap adds line wrapping so long lines don't cause
+       horizontal scroll in narrow containers. Monospace code
+       blocks should wrap at container boundaries.
+     - overflow-x: auto — if content is intentionally long
+       (a code listing) and the developer has not applied
+       wrapping, scroll rather than overflow.
+     - tab-size: 4 — normalize tab character width. Firefox
+       defaults to 8 spaces; Chrome to 8 on some platforms.
+       4 is the most common expectation for code display.
+     - -moz-tab-size: 4 — required for Firefox to apply
+       tab-size correctly in pre elements.
+
+     WHY NOT word-break: break-all globally:
+     word-break: break-all would prevent long URLs and strings
+     from overflowing, but it also breaks words mid-syllable
+     in flowing prose, which is semantically wrong. word-break
+     is applied contextually via utility classes, not globally.
+     ========================================================== */
+
+  pre {
+    white-space:  pre-wrap;
+    overflow-x:   auto;
+    -moz-tab-size: 4;
+    tab-size:      4;
+  }
+
+
+  /* ==========================================================
+     10. THE HIDDEN ATTRIBUTE
+     ──────────────────────────────────────────────────────────
+     Enforce the HTML hidden attribute across all elements.
+     Some CSS resets or third-party stylesheets set display
+     on elements in ways that make hidden ineffective.
+     Explicitly enforcing display: none here prevents those
+     conflicts.
+
+     !important is the correct and only justified use of
+     !important in the ArianaCSS framework. The hidden
+     attribute is an HTML-level hiding mechanism — it must
+     always win over any CSS display property, including
+     utilities and component styles. This is the semantic
+     contract of the HTML attribute.
+     ========================================================== */
+
+  [hidden] {
+    display: none !important;
+  }
+
+
+  /* ==========================================================
+     11. ANCHOR NORMALIZATION
+     ──────────────────────────────────────────────────────────
+     Normalize link behavior without applying visual styles.
+     Visual styles (color, hover color, underline behavior)
+     belong in base.css and reference tokens.
+
+     background-color: transparent — removes the legacy IE
+     highlight background from active links.
+     ========================================================== */
+
+  a {
+    background-color: transparent;
+  }
+
+
+  /* ==========================================================
+     12. HR NORMALIZATION
+     ──────────────────────────────────────────────────────────
+     The hr element has inconsistent rendering across browsers:
+     some render a 3D inset border, some render a flat line,
+     and the box-sizing behavior varies. Normalize to a clean,
+     predictable baseline.
+
+     height: 0 + overflow: visible — ensures the hr is
+     rendered as a visible line without extra block height
+     from border rendering differences.
+
+     The visual appearance of hr (color, height) is applied
+     in base.css using the --ar-color-divider token.
+     ========================================================== */
+
+  hr {
+    height:   0;
+    overflow: visible;
+    border:   0;
+  }
+
+
+  /* ==========================================================
+     13. HEADING ELEMENT NORMALIZATION
+     ──────────────────────────────────────────────────────────
+     Headings inherit their font-size from their context by
+     default in some browsers (particularly inside article,
+     section, aside, nav elements where the browser adjusts
+     heading sizes based on nesting depth — the "sectioning
+     content" algorithm).
+
+     The framework's heading system (scale.css) uses explicit
+     class-based sizes (.ar-h1 through .ar-h6). The HTML
+     heading elements (h1 through h6) are given consistent
+     reset styles so they do not inherit unexpected sizes from
+     sectioning context.
+
+     This reset does NOT set specific sizes on h1–h6 element
+     selectors — that belongs in scale.css which uses tokens.
+     It only removes the variable browser adjustments.
+     ========================================================== */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size:   inherit;
+    font-weight: inherit;
+  }
+
+
+  /* ==========================================================
+     14. DIALOG ELEMENT NORMALIZATION
+     ──────────────────────────────────────────────────────────
+     The <dialog> HTML element has native browser styling that
+     includes an absolute position, border, padding, and
+     background. Since ArianaCSS modal components are class-
+     based (not native <dialog> dependent), normalize the
+     native dialog element to a baseline so it can be styled
+     consistently if used.
+
+     Note: native <dialog> requires JavaScript to open/close
+     and has complex focus management. ArianaCSS v1.0 components
+     use div-based modal patterns. This normalization exists
+     for projects that choose to use the native <dialog>.
+     ========================================================== */
+
+  dialog {
+    padding:    0;
+    border:     0;
+    background: transparent;
+    color:      inherit;
+  }
+
+
+  /* ==========================================================
+     15. PRINT NORMALIZATION
+     ──────────────────────────────────────────────────────────
+     Basic print reset to ensure the framework does not produce
+     unexpected printed output. Shadows and backgrounds are
+     expensive to print and often stripped by browser print
+     settings — normalize their behavior.
+
+     These rules only apply when the document is printed.
+     They do not affect screen rendering.
+     ========================================================== */
+
+  @media print {
+
+    *,
+    *::before,
+    *::after {
+      box-shadow:          none !important;
+      text-shadow:         none !important;
+    }
+
+    a,
+    a:visited {
+      text-decoration: underline;
+    }
+
+    img,
+    video {
+      page-break-inside: avoid;
+    }
+
+    h2,
+    h3,
+    p {
+      orphans: 3;
+      widows:  3;
+    }
+
+    h2,
+    h3 {
+      page-break-after: avoid;
+    }
+
+  } /* end @media print */
+
+
+} /* end @layer base */
+
+
+/* ============================================================
+   END OF FILE — reset.css
+   ────────────────────────────────────────────────────────────
+   Token references: none (intentional — this file is
+   browser normalization only, zero design decisions).
+
+   !important usage: one instance — [hidden] enforcement.
+   This is the only permitted !important in the framework.
+   See section 10 for the justification.
+
+   Next file in implementation order:
+   src/2-base/motion.css
+
+   TESTING CHECKLIST:
+   □ Load alone against full HTML element test file
+   □ No visible styling — page looks like unstyled HTML
+   □ box-sizing: border-box confirmed on all elements (DevTools)
+   □ Form elements inherit font (add font-family to html, verify)
+   □ Images are responsive (max-width: 100% in a narrow container)
+   □ Table borders are collapsed
+   □ List markers are removed from ul and ol
+   □ Hidden attribute hides elements
+   □ Button cursor is pointer
+   □ No horizontal scroll from pre overflow
+   □ Sub and sup do not affect line-height
+   □ Zero CSS errors in Chrome, Firefox, Safari DevTools console
+   ============================================================ */

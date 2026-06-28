@@ -1,0 +1,245 @@
+/* ============================================================
+   ArianaCSS — Flexbox Utilities
+   File:    src/5-utilities/flex.css
+   Layer:   @layer utilities
+   Version: 1.0.0
+
+   Token dependencies: none (flexbox utilities set CSS keywords)
+
+   Responsive variants: direction, wrap, alignment (items, justify)
+   Hover variants: none
+
+   RULE — flex utilities do not set display:
+   ar-flex-row, ar-items-center etc. apply flex sub-properties
+   only. The element must already have display:flex (via the
+   ar-flex display utility or a component's own CSS).
+
+   RULE — no responsive variants for grow/shrink/basis/order:
+   These properties are component-level decisions, not
+   responsive layout decisions. Custom CSS handles the rare
+   case where they need to change at a breakpoint.
+   ============================================================ */
+
+@layer utilities {
+
+  /* ==========================================================
+     FLEX DIRECTION AND WRAP
+     ========================================================== */
+
+  .ar-flex-row         { flex-direction: row; }
+  .ar-flex-col         { flex-direction: column; }
+  .ar-flex-row-reverse { flex-direction: row-reverse; }
+  .ar-flex-col-reverse { flex-direction: column-reverse; }
+  .ar-flex-wrap        { flex-wrap: wrap; }
+  .ar-flex-nowrap      { flex-wrap: nowrap; }
+  .ar-flex-wrap-reverse { flex-wrap: wrap-reverse; }
+
+
+  /* ==========================================================
+     FLEX SHORTHAND (four essential composite values)
+     These are the justified exception to the single-property
+     rule — flex: 1 is used so frequently for "fill remaining
+     space" that requiring three separate utilities is impractical.
+     ========================================================== */
+
+  .ar-flex-1       { flex: 1 1 0%; }
+  /* Fill remaining space, shrink as needed, start from 0 width.
+     The most common flex shorthand. Use in nav items, tab
+     buttons, or any element that should share available space. */
+
+  .ar-flex-auto    { flex: 1 1 auto; }
+  /* Fill remaining space from the element's natural size.
+     Use when the element has intrinsic content that should
+     influence its base size.                                 */
+
+  .ar-flex-initial { flex: 0 1 auto; }
+  /* Don't grow, shrink if needed, natural size.
+     The CSS default flex behaviour, made explicit.           */
+
+  .ar-flex-none    { flex: none; }
+  /* Don't grow, don't shrink, natural size. Use for fixed-size
+     flex children (icons, avatars, fixed-width sidebars).   */
+
+
+  /* ==========================================================
+     ALIGN ITEMS (cross-axis alignment of all children)
+     ========================================================== */
+
+  .ar-items-start    { align-items: flex-start; }
+  .ar-items-center   { align-items: center; }
+  .ar-items-end      { align-items: flex-end; }
+  .ar-items-stretch  { align-items: stretch; }
+  .ar-items-baseline { align-items: baseline; }
+
+
+  /* ==========================================================
+     JUSTIFY CONTENT (main-axis distribution of children)
+     ========================================================== */
+
+  .ar-justify-start   { justify-content: flex-start; }
+  .ar-justify-center  { justify-content: center; }
+  .ar-justify-end     { justify-content: flex-end; }
+  .ar-justify-between { justify-content: space-between; }
+  .ar-justify-around  { justify-content: space-around; }
+  .ar-justify-evenly  { justify-content: space-evenly; }
+
+
+  /* ==========================================================
+     ALIGN CONTENT (cross-axis distribution when wrapping)
+     Only meaningful on multi-line flex containers (flex-wrap).
+     ========================================================== */
+
+  .ar-content-start   { align-content: flex-start; }
+  .ar-content-center  { align-content: center; }
+  .ar-content-end     { align-content: flex-end; }
+  .ar-content-between { align-content: space-between; }
+  .ar-content-around  { align-content: space-around; }
+  .ar-content-evenly  { align-content: space-evenly; }
+
+
+  /* ==========================================================
+     ALIGN SELF (cross-axis alignment of a single child)
+     ========================================================== */
+
+  .ar-self-auto    { align-self: auto; }
+  .ar-self-start   { align-self: flex-start; }
+  .ar-self-center  { align-self: center; }
+  .ar-self-end     { align-self: flex-end; }
+  .ar-self-stretch { align-self: stretch; }
+
+
+  /* ==========================================================
+     FLEX GROW AND SHRINK
+     ========================================================== */
+
+  .ar-grow   { flex-grow: 1; }
+  .ar-grow-0 { flex-grow: 0; }
+
+  .ar-shrink   { flex-shrink: 1; }
+  .ar-shrink-0 { flex-shrink: 0; }
+  /* ar-shrink-0: prevents an element from shrinking below its
+     natural size. Essential for icons and avatars inside flex
+     containers that would otherwise compress them.          */
+
+
+  /* ==========================================================
+     FLEX BASIS (initial size before grow/shrink)
+     Only three named values — specific percentages or pixel
+     values are project-level CSS decisions.
+     ========================================================== */
+
+  .ar-basis-auto { flex-basis: auto; }
+  .ar-basis-full { flex-basis: 100%; }
+  .ar-basis-0    { flex-basis: 0; }
+
+
+  /* ==========================================================
+     ORDER
+     Only first / last / none — numbered order values are
+     project-specific and belong in custom CSS.
+     ========================================================== */
+
+  .ar-order-first { order: -9999; }
+  .ar-order-last  { order:  9999; }
+  .ar-order-none  { order:  0; }
+
+
+  /* ==========================================================
+     RESPONSIVE VARIANTS
+     Provided for: direction, wrap, items, justify
+     NOT provided for: grow, shrink, basis, order, content, self
+     ========================================================== */
+
+  @media (min-width: 480px) {
+    .ar-sm\:flex-row         { flex-direction: row; }
+    .ar-sm\:flex-col         { flex-direction: column; }
+    .ar-sm\:flex-row-reverse { flex-direction: row-reverse; }
+    .ar-sm\:flex-col-reverse { flex-direction: column-reverse; }
+    .ar-sm\:flex-wrap        { flex-wrap: wrap; }
+    .ar-sm\:flex-nowrap      { flex-wrap: nowrap; }
+    .ar-sm\:items-start      { align-items: flex-start; }
+    .ar-sm\:items-center     { align-items: center; }
+    .ar-sm\:items-end        { align-items: flex-end; }
+    .ar-sm\:items-stretch    { align-items: stretch; }
+    .ar-sm\:items-baseline   { align-items: baseline; }
+    .ar-sm\:justify-start    { justify-content: flex-start; }
+    .ar-sm\:justify-center   { justify-content: center; }
+    .ar-sm\:justify-end      { justify-content: flex-end; }
+    .ar-sm\:justify-between  { justify-content: space-between; }
+    .ar-sm\:justify-around   { justify-content: space-around; }
+    .ar-sm\:justify-evenly   { justify-content: space-evenly; }
+    .ar-sm\:flex-1           { flex: 1 1 0%; }
+    .ar-sm\:flex-auto        { flex: 1 1 auto; }
+    .ar-sm\:flex-none        { flex: none; }
+  }
+
+  @media (min-width: 768px) {
+    .ar-md\:flex-row         { flex-direction: row; }
+    .ar-md\:flex-col         { flex-direction: column; }
+    .ar-md\:flex-row-reverse { flex-direction: row-reverse; }
+    .ar-md\:flex-col-reverse { flex-direction: column-reverse; }
+    .ar-md\:flex-wrap        { flex-wrap: wrap; }
+    .ar-md\:flex-nowrap      { flex-wrap: nowrap; }
+    .ar-md\:items-start      { align-items: flex-start; }
+    .ar-md\:items-center     { align-items: center; }
+    .ar-md\:items-end        { align-items: flex-end; }
+    .ar-md\:items-stretch    { align-items: stretch; }
+    .ar-md\:items-baseline   { align-items: baseline; }
+    .ar-md\:justify-start    { justify-content: flex-start; }
+    .ar-md\:justify-center   { justify-content: center; }
+    .ar-md\:justify-end      { justify-content: flex-end; }
+    .ar-md\:justify-between  { justify-content: space-between; }
+    .ar-md\:justify-around   { justify-content: space-around; }
+    .ar-md\:justify-evenly   { justify-content: space-evenly; }
+    .ar-md\:flex-1           { flex: 1 1 0%; }
+    .ar-md\:flex-auto        { flex: 1 1 auto; }
+    .ar-md\:flex-none        { flex: none; }
+  }
+
+  @media (min-width: 1024px) {
+    .ar-lg\:flex-row         { flex-direction: row; }
+    .ar-lg\:flex-col         { flex-direction: column; }
+    .ar-lg\:flex-row-reverse { flex-direction: row-reverse; }
+    .ar-lg\:flex-col-reverse { flex-direction: column-reverse; }
+    .ar-lg\:flex-wrap        { flex-wrap: wrap; }
+    .ar-lg\:flex-nowrap      { flex-wrap: nowrap; }
+    .ar-lg\:items-start      { align-items: flex-start; }
+    .ar-lg\:items-center     { align-items: center; }
+    .ar-lg\:items-end        { align-items: flex-end; }
+    .ar-lg\:items-stretch    { align-items: stretch; }
+    .ar-lg\:items-baseline   { align-items: baseline; }
+    .ar-lg\:justify-start    { justify-content: flex-start; }
+    .ar-lg\:justify-center   { justify-content: center; }
+    .ar-lg\:justify-end      { justify-content: flex-end; }
+    .ar-lg\:justify-between  { justify-content: space-between; }
+    .ar-lg\:justify-around   { justify-content: space-around; }
+    .ar-lg\:justify-evenly   { justify-content: space-evenly; }
+    .ar-lg\:flex-1           { flex: 1 1 0%; }
+    .ar-lg\:flex-auto        { flex: 1 1 auto; }
+    .ar-lg\:flex-none        { flex: none; }
+  }
+
+  @media (min-width: 1280px) {
+    .ar-xl\:flex-row         { flex-direction: row; }
+    .ar-xl\:flex-col         { flex-direction: column; }
+    .ar-xl\:flex-row-reverse { flex-direction: row-reverse; }
+    .ar-xl\:flex-col-reverse { flex-direction: column-reverse; }
+    .ar-xl\:flex-wrap        { flex-wrap: wrap; }
+    .ar-xl\:flex-nowrap      { flex-wrap: nowrap; }
+    .ar-xl\:items-start      { align-items: flex-start; }
+    .ar-xl\:items-center     { align-items: center; }
+    .ar-xl\:items-end        { align-items: flex-end; }
+    .ar-xl\:items-stretch    { align-items: stretch; }
+    .ar-xl\:items-baseline   { align-items: baseline; }
+    .ar-xl\:justify-start    { justify-content: flex-start; }
+    .ar-xl\:justify-center   { justify-content: center; }
+    .ar-xl\:justify-end      { justify-content: flex-end; }
+    .ar-xl\:justify-between  { justify-content: space-between; }
+    .ar-xl\:justify-around   { justify-content: space-around; }
+    .ar-xl\:justify-evenly   { justify-content: space-evenly; }
+    .ar-xl\:flex-1           { flex: 1 1 0%; }
+    .ar-xl\:flex-auto        { flex: 1 1 auto; }
+    .ar-xl\:flex-none        { flex: none; }
+  }
+
+} /* end @layer utilities */

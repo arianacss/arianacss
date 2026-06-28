@@ -1,0 +1,314 @@
+/* ============================================================
+   ArianaCSS — Master Import File
+   File:    src/ariana.css
+   Version: 1.0.0
+
+   ⚠️  DEVELOPMENT FILE ONLY — NOT FOR PRODUCTION USE.
+
+   This file is the development entry point. It is never
+   shipped to end users directly. The production build
+   concatenates all source files into a single file at:
+     dist/ariana.min.css
+
+   PURPOSE:
+   1. Declares the CSS @layer cascade order (the contract)
+   2. Imports all 23 source files in the correct dependency
+      order, as specified in the Implementation Blueprint §4
+
+   HOW TO USE IN DEVELOPMENT:
+   Link this file directly in your HTML during development:
+     <link rel="stylesheet" href="./src/ariana.css">
+   Browsers that support @import will resolve all imports.
+   Note: @import chains have a performance cost — use only
+   during development. Always use the dist/ build in production.
+
+   HOW TO USE IN PRODUCTION:
+   Link the minified distribution file:
+     <link rel="stylesheet" href="./dist/ariana.min.css">
+   Or the core-only build (no utilities):
+     <link rel="stylesheet" href="./dist/ariana-core.min.css">
+   Or utilities only (for projects with an existing component system):
+     <link rel="stylesheet" href="./dist/ariana-utilities.min.css">
+
+   ──────────────────────────────────────────────────────────
+   @layer CASCADE ORDER (lowest → highest priority)
+   ──────────────────────────────────────────────────────────
+   ┌─────────────┬───────────────────────────────────────────┐
+   │ Layer       │ Contents                                  │
+   ├─────────────┼───────────────────────────────────────────┤
+   │ tokens      │ CSS custom properties (:root)             │
+   │ base        │ Reset, base elements, focus, motion       │
+   │ layout      │ Container, 12-column grid                 │
+   │ typography  │ Type scale, heading classes, prose        │
+   │ components  │ Button, card, alert, input, indicators    │
+   │ utilities   │ Single-property utility classes           │
+   └─────────────┴───────────────────────────────────────────┘
+
+   WHY UTILITIES WIN OVER COMPONENTS:
+   A developer who adds ar-mt-0 to a card expects the utility
+   to override the card's default margin. Placing utilities in
+   the highest layer ensures this always works without
+   !important, regardless of specificity.
+
+   WHY THIS ORDER IS LOCKED:
+   The layer order is declared once, here, before any @import.
+   The browser assigns layer priorities based on the ORDER
+   layers are FIRST DECLARED — not by where the rules appear
+   in the file. This declaration is the binding cascade contract
+   for every file in the framework.
+
+   DO NOT reorder the layer names below.
+   DO NOT add a new layer without updating LAYER-CONTRACT.md.
+   DO NOT move the @layer declaration below any @import.
+
+   ──────────────────────────────────────────────────────────
+   SOURCE FILE INVENTORY — ALL 23 FILES
+   ──────────────────────────────────────────────────────────
+   Phase 1 — Tokens (1 file)
+     1-tokens/tokens.css                    [layer: tokens]
+
+   Phase 2 — Base (4 files)
+     2-base/reset.css                       [layer: base]
+     2-base/motion.css                      [layer: base]
+     2-base/base.css                        [layer: base]
+     2-base/focus.css                       [layer: base]
+
+   Phase 3 — Layout (2 files)
+     3-layout/container.css                 [layer: layout]
+     3-layout/grid.css                      [layer: layout]
+
+   Phase 4 — Typography (2 files)
+     4-typography/scale.css                 [layer: typography]
+     4-typography/utils.css                 [layer: typography]
+
+   Phase 5 — Utilities (9 files)
+     5-utilities/display.css                [layer: utilities]
+     5-utilities/shadow.css                 [layer: utilities]
+     5-utilities/color.css                  [layer: utilities]
+     5-utilities/typography.css             [layer: utilities]
+     5-utilities/border.css                 [layer: utilities]
+     5-utilities/ratio.css                  [layer: utilities]
+     5-utilities/spacing.css                [layer: utilities]
+     5-utilities/flex.css                   [layer: utilities]
+     5-utilities/grid.css                   [layer: utilities]
+
+   Phase 6 — Components (5 files)
+     6-components/indicators.css            [layer: components]
+     6-components/alert.css                 [layer: components]
+     6-components/button.css                [layer: components]
+     6-components/input.css                 [layer: components]
+     6-components/card.css                  [layer: components]
+
+   ──────────────────────────────────────────────────────────
+   COMPONENT IMPORT ORDER — WHY THIS SEQUENCE:
+   ──────────────────────────────────────────────────────────
+   indicators → alert → button → input → card
+
+   indicators.css: simplest components (badge, avatar). Appear
+     inside other components. Must be complete before card.css
+     is tested with badges and avatars inside it.
+
+   alert.css: no interactive hover/active states. Validates the
+     semantic color role pattern (surface+border+text approach)
+     in a simple context before button complexity.
+
+   button.css: the most important, most states, most variants.
+     Input states (focus, error, disabled) mirror button states,
+     so button.css establishing the pattern first is correct.
+
+   input.css: builds on the state pattern from button.css.
+     Tested after button so the state approach is confirmed.
+
+   card.css: the most compositional component — tested with
+     every other component inside it. Must be last.
+
+   NO COMPONENT FILE MAY:
+   · Reference another component's class names in its CSS
+   · Depend on a utility class being present
+   · Use hard-coded color, spacing, or typography values
+   · Use :focus (only :focus-visible)
+   · Omit a @media (prefers-reduced-motion: reduce) block
+     for any transition or animation it introduces
+
+   ──────────────────────────────────────────────────────────
+   ADDING A NEW FILE:
+   ──────────────────────────────────────────────────────────
+   1. Add the token(s) to tokens.css via the formal process
+      documented in CONTRIBUTING.md
+   2. Write the file following the standards in CONTRIBUTING.md
+   3. Add its @import in the correct phase section below
+   4. Update the production build order in the build script
+   5. Update the file inventory table above
+   6. Add a documentation page in docs/
+
+   ──────────────────────────────────────────────────────────
+   MODIFYING THE LAYER ORDER:
+   ──────────────────────────────────────────────────────────
+   The layer order below is the most consequential single line
+   in the entire framework. Changing it requires:
+   1. Full regression testing of every component × utility
+      combination (utilities winning over components is the
+      core promise of the cascade architecture)
+   2. Update LAYER-CONTRACT.md with the rationale
+   3. Major version bump (this is a breaking change)
+   ============================================================ */
+
+
+/* ============================================================
+   LAYER DECLARATION
+   This must appear before every @import and every CSS rule.
+   ============================================================ */
+
+@layer tokens, base, layout, typography, components, utilities;
+
+
+/* ============================================================
+   PHASE 1 — TOKEN FOUNDATION
+   ─────────────────────────────────────────────────────────
+   The single source of truth. Every color, spacing, radius,
+   shadow, typography, and motion value in the framework is
+   a CSS custom property defined here. No other file contains
+   hard-coded design values.
+
+   Override tokens in your own stylesheet after importing
+   ariana.css to theme the framework without touching source.
+   ============================================================ */
+
+@import './1-tokens/tokens.css';
+
+
+/* ============================================================
+   PHASE 2 — BASE LAYER
+   ─────────────────────────────────────────────────────────
+   Import order within the base layer is strictly ordered:
+
+   1. reset.css    — Blank, normalized slate. No tokens used.
+                     Must run before anything else.
+
+   2. motion.css   — Reduced-motion contract. MUST run before
+                     any file that introduces a transition or
+                     animation. base.css introduces the first
+                     transitions (link hover color).
+
+   3. base.css     — Document root styles, semantic element
+                     defaults (a, p, blockquote, pre, etc.),
+                     scrollbar, selection. Uses tokens.
+
+   4. focus.css    — Focus ring system. Runs last so it can
+                     establish :focus-visible rules that
+                     override browser UA focus styles set
+                     by reset.css.
+   ============================================================ */
+
+@import './2-base/reset.css';
+@import './2-base/motion.css';
+@import './2-base/base.css';
+@import './2-base/focus.css';
+
+
+/* ============================================================
+   PHASE 3 — LAYOUT LAYER
+   ─────────────────────────────────────────────────────────
+   container.css first: the grid is always tested inside a
+   container. Container max-widths must be established before
+   grid column calculations are measured.
+   ============================================================ */
+
+@import './3-layout/container.css';
+@import './3-layout/grid.css';
+
+
+/* ============================================================
+   PHASE 4 — TYPOGRAPHY LAYER
+   ─────────────────────────────────────────────────────────
+   scale.css: h1–h6 element styles + .ar-h1–.ar-h6 classes.
+   utils.css: .ar-prose, .ar-list, .ar-text-lead, etc.
+              References type scale tokens already confirmed.
+   ============================================================ */
+
+@import './4-typography/scale.css';
+@import './4-typography/utils.css';
+
+
+/* ============================================================
+   PHASE 5 — UTILITY LAYER
+   ─────────────────────────────────────────────────────────
+   Utility import order within the layer:
+   Simple and foundational first — display and shadow are
+   needed to test every subsequent utility in context.
+   Spacing last — largest file; benefits from patterns
+   established in smaller files first.
+
+   No utility file depends on any other utility file.
+   No utility file depends on any component file.
+   All utility files depend only on tokens.css.
+   ============================================================ */
+
+@import './5-utilities/display.css';
+@import './5-utilities/shadow.css';
+@import './5-utilities/color.css';
+@import './5-utilities/typography.css';
+@import './5-utilities/border.css';
+@import './5-utilities/ratio.css';
+@import './5-utilities/spacing.css';
+@import './5-utilities/flex.css';
+@import './5-utilities/grid.css';
+
+
+/* ============================================================
+   PHASE 6 — COMPONENT LAYER
+   ─────────────────────────────────────────────────────────
+   All 5 components now complete. Import order documented
+   above and follows the structural dependency sequence:
+   simplest → most compositional.
+   ============================================================ */
+
+@import './6-components/indicators.css';
+@import './6-components/alert.css';
+@import './6-components/button.css';
+@import './6-components/input.css';
+@import './6-components/card.css';
+
+
+/* ============================================================
+   END OF FILE — src/ariana.css
+
+   STATUS: COMPLETE — All 23 source files imported.
+
+   ┌────────────────────────────────────┬──────┬────────────┐
+   │ File                               │ Done │ Layer      │
+   ├────────────────────────────────────┼──────┼────────────┤
+   │ 1-tokens/tokens.css                │  ✅  │ tokens     │
+   │ 2-base/reset.css                   │  ✅  │ base       │
+   │ 2-base/motion.css                  │  ✅  │ base       │
+   │ 2-base/base.css                    │  ✅  │ base       │
+   │ 2-base/focus.css                   │  ✅  │ base       │
+   │ 3-layout/container.css             │  ✅  │ layout     │
+   │ 3-layout/grid.css                  │  ✅  │ layout     │
+   │ 4-typography/scale.css             │  ✅  │ typography │
+   │ 4-typography/utils.css             │  ✅  │ typography │
+   │ 5-utilities/display.css            │  ✅  │ utilities  │
+   │ 5-utilities/shadow.css             │  ✅  │ utilities  │
+   │ 5-utilities/color.css              │  ✅  │ utilities  │
+   │ 5-utilities/typography.css         │  ✅  │ utilities  │
+   │ 5-utilities/border.css             │  ✅  │ utilities  │
+   │ 5-utilities/ratio.css              │  ✅  │ utilities  │
+   │ 5-utilities/spacing.css            │  ✅  │ utilities  │
+   │ 5-utilities/flex.css               │  ✅  │ utilities  │
+   │ 5-utilities/grid.css               │  ✅  │ utilities  │
+   │ 6-components/indicators.css        │  ✅  │ components │
+   │ 6-components/alert.css             │  ✅  │ components │
+   │ 6-components/button.css            │  ✅  │ components │
+   │ 6-components/input.css             │  ✅  │ components │
+   │ 6-components/card.css              │  ✅  │ components │
+   └────────────────────────────────────┴──────┴────────────┘
+
+   23 / 23 source files complete. ✅
+
+   NEXT STEPS:
+   1. Run the build script to regenerate dist/ariana.min.css
+      (now includes input.css and card.css)
+   2. Regenerate dist/ariana-core.min.css with all 5 components
+   3. Verify all dist builds pass size thresholds
+   4. Begin documentation phase (docs/ directory)
+   ============================================================ */

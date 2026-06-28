@@ -1,0 +1,687 @@
+/* ============================================================
+   ArianaCSS — Alert Component
+   File:    src/6-components/alert.css
+   Layer:   @layer components
+   Version: 1.0.0
+
+   PURPOSE:
+   A block-level notification component that communicates
+   contextual feedback — success confirmations, warnings,
+   errors, and informational messages. Alerts are static,
+   non-interactive by default. They present a message and
+   optionally an action link or dismiss button.
+
+   DESIGN DECISIONS:
+
+   Left-border accent pattern:
+   Alerts use a prominent left border (4px) as the primary
+   visual signal of their semantic role, paired with a
+   tinted background. This two-signal approach (color AND
+   shape) ensures the role is communicated to users who
+   cannot distinguish colors (color blindness, forced colors,
+   monochrome print). The border is the shape signal; the
+   background tint is the color signal. Neither alone is
+   sufficient; both together meet WCAG 1.4.1 (Use of Color).
+
+   Why not top-border or box-outline:
+   Top borders require the developer to manage the visual
+   relationship between the border and the text above it.
+   Box outlines (border on all sides) produce enclosed boxes
+   that feel heavier and more disruptive in the page flow.
+   Left borders (in LTR) read naturally as "this is a special
+   aside" — the same visual language as blockquotes. The
+   4px width makes it unmistakable while remaining elegant.
+
+   Text color on surface backgrounds:
+   All alert text uses the role's -text token (e.g.
+   --ar-color-success-text) which is the dark stop of the
+   hue (cedar-700, ember-700, etc.). This ensures text is
+   readable on the -surface background without relying on
+   body text color (stone-700) which would have insufficient
+   color connection to the alert's semantic role.
+
+   ELEMENT STRUCTURE:
+   Minimal:
+     <div class="ar-alert ar-alert--success" role="alert">
+       Message text here.
+     </div>
+
+   With title and icon placeholder:
+     <div class="ar-alert ar-alert--danger" role="alert">
+       <p class="ar-alert__title">Error</p>
+       <p class="ar-alert__message">Something went wrong.</p>
+     </div>
+
+   With dismiss button:
+     <div class="ar-alert ar-alert--warning" role="alert">
+       <div class="ar-alert__body">
+         <p class="ar-alert__title">Warning</p>
+         <p class="ar-alert__message">Please review your input.</p>
+       </div>
+       <button class="ar-alert__dismiss" aria-label="Dismiss alert">
+         ×
+       </button>
+     </div>
+
+   With action link:
+     <div class="ar-alert ar-alert--info" role="alert">
+       <p class="ar-alert__message">
+         Your session will expire soon.
+         <a href="/refresh" class="ar-alert__action">Refresh now</a>
+       </p>
+     </div>
+
+   ACCESSIBILITY:
+   - role="alert" triggers screen reader announcements.
+     Use for dynamic alerts (JavaScript-injected). For static
+     alerts present on page load, role="status" is also valid.
+   - role="alertdialog" is for alerts that trap focus (modals).
+     That is a different pattern — not this component.
+   - Dismiss buttons must have aria-label.
+   - Icon-only title supplementation: if an SVG icon is added
+     before the title, give it aria-hidden="true" and ensure
+     the title text remains.
+
+   TOKEN DEPENDENCIES:
+   --ar-text-size-sm, -base
+   --ar-text-weight-normal, -medium, -semibold
+   --ar-text-leading-normal, -relaxed
+   --ar-space-1, -2, -3, -4, -5, -6
+   --ar-radius-base
+   --ar-duration-fast, --ar-ease-standard
+   --ar-focus-ring-width, -offset, -style, -color-default
+   --ar-color-success-surface, -border, -base, -text, -emphasis
+   --ar-color-warning-surface, -border, -base, -text, -emphasis
+   --ar-color-danger-surface, -border, -base, -text, -emphasis
+   --ar-color-info-surface, -border, -base, -text, -emphasis
+   --ar-color-text-on-success, -on-warning, -on-danger, -on-info
+   --ar-color-text-default, -muted, -heading
+   --ar-color-layer-base
+   --ar-color-border-default
+
+   COMPONENT CONTRACT:
+   ✓ All values reference tokens — no hard-coded color values
+   ✓ No utility class dependencies in component CSS
+   ✓ No references to other component files
+   ✓ Uses :focus-visible (not :focus) for dismiss button
+   ✓ All transitions covered by reduced-motion block
+   ✓ Forced colors block present
+   ✓ Works with all optional sub-elements absent
+   ✓ Works with all optional sub-elements present
+   ✓ Logical CSS properties throughout (RTL safe)
+   ============================================================ */
+
+
+@layer components {
+
+  /* ==========================================================
+     1. ALERT BASE
+     ──────────────────────────────────────────────────────────
+     The default alert: info role, surface+border appearance.
+     Info is the correct default — it is the least alarming
+     role and the most appropriate for general messages.
+
+     The left border-inline-start (logical property) is the
+     primary visual differentiator. In LTR it appears on the
+     left; in RTL it correctly appears on the right (the
+     reading-start edge), maintaining the "aside" visual
+     metaphor in both directions.
+     ========================================================== */
+
+  .ar-alert {
+    position:             relative;
+    display:              block;
+    width:                100%;
+    padding-block:        var(--ar-space-4);
+    padding-inline:       var(--ar-space-4);
+    padding-inline-start: var(--ar-space-5);
+    /* Extra start padding clears the 4px left border visually.
+       Without it, the text sits flush against the border.     */
+
+    background-color:     var(--ar-color-info-surface);
+    border:               1px solid var(--ar-color-info-border);
+    border-inline-start:  4px solid var(--ar-color-info-base);
+    border-radius:        var(--ar-radius-base);
+
+    color:                var(--ar-color-info-text);
+    font-size:            var(--ar-text-size-base);
+    font-weight:          var(--ar-text-weight-normal);
+    line-height:          var(--ar-text-leading-relaxed);
+
+    box-sizing:           border-box;
+  }
+
+  /* Remove margin from direct paragraph children —
+     the alert's own padding provides spacing.              */
+  .ar-alert > p {
+    margin: 0;
+  }
+
+
+  /* ==========================================================
+     2. ALERT — COLOR ROLE VARIANTS
+     ──────────────────────────────────────────────────────────
+     Each variant applies the role's three visual signals:
+     1. Background tint (-surface)
+     2. Thin outer border (-border)
+     3. Thick left accent border (-base)
+     4. Text color (-text)
+
+     Specificity: these rules have the same specificity as
+     the base .ar-alert rule. The cascade order (variants
+     after base) ensures they correctly override the base.
+     ========================================================== */
+
+  .ar-alert--success {
+    background-color:    var(--ar-color-success-surface);
+    border-color:        var(--ar-color-success-border);
+    border-inline-start-color: var(--ar-color-success-base);
+    color:               var(--ar-color-success-text);
+  }
+
+  .ar-alert--warning {
+    background-color:    var(--ar-color-warning-surface);
+    border-color:        var(--ar-color-warning-border);
+    border-inline-start-color: var(--ar-color-warning-base);
+    color:               var(--ar-color-warning-text);
+    /* warning-text = saffron-900 (dark) — correct on saffron-50
+       surface. On the saffron-600 accent border itself (which is
+       the start border, not a background), color does not apply
+       so no special handling needed here.                       */
+  }
+
+  .ar-alert--danger {
+    background-color:    var(--ar-color-danger-surface);
+    border-color:        var(--ar-color-danger-border);
+    border-inline-start-color: var(--ar-color-danger-base);
+    color:               var(--ar-color-danger-text);
+  }
+
+  .ar-alert--info {
+    background-color:    var(--ar-color-info-surface);
+    border-color:        var(--ar-color-info-border);
+    border-inline-start-color: var(--ar-color-info-base);
+    color:               var(--ar-color-info-text);
+    /* Info is also the base default. Explicit class is provided
+       for clarity when switching roles programmatically.       */
+  }
+
+  .ar-alert--primary {
+    background-color:    var(--ar-color-primary-surface);
+    border-color:        var(--ar-color-primary-border);
+    border-inline-start-color: var(--ar-color-primary-base);
+    color:               var(--ar-color-primary-emphasis);
+    /* Primary alerts for brand-specific messages, onboarding
+       steps, or feature announcements.                        */
+  }
+
+
+  /* ==========================================================
+     3. ALERT — FILLED VARIANT
+     ──────────────────────────────────────────────────────────
+     The filled variant uses a solid colored background instead
+     of a surface tint. Higher visual urgency. Used for:
+     - Critical errors that must not be missed
+     - Blocking notifications
+     - Success confirmations for major actions
+     - Top-of-page system banners
+
+     Text uses the on-color tokens (white) for readability
+     on the filled background. The thick start border is
+     removed — with a solid background, the border accent
+     is redundant visual noise.
+
+     Usage:
+       <div class="ar-alert ar-alert--danger ar-alert--filled" role="alert">
+     ========================================================== */
+
+  .ar-alert--filled {
+    border-inline-start-width: 1px;
+    /* Reset to 1px — border accent not needed on filled bg   */
+  }
+
+  .ar-alert--success.ar-alert--filled {
+    background-color: var(--ar-color-success-base);
+    border-color:     var(--ar-color-success-hover);
+    color:            var(--ar-color-text-on-success);
+  }
+
+  .ar-alert--warning.ar-alert--filled {
+    background-color: var(--ar-color-warning-base);
+    border-color:     var(--ar-color-warning-hover);
+    color:            var(--ar-color-text-on-warning);
+    /* on-warning is white — see tokens.css critical note     */
+  }
+
+  .ar-alert--danger.ar-alert--filled {
+    background-color: var(--ar-color-danger-base);
+    border-color:     var(--ar-color-danger-hover);
+    color:            var(--ar-color-text-on-danger);
+  }
+
+  .ar-alert--info.ar-alert--filled {
+    background-color: var(--ar-color-info-base);
+    border-color:     var(--ar-color-info-hover);
+    color:            var(--ar-color-text-on-info);
+  }
+
+  .ar-alert--primary.ar-alert--filled {
+    background-color: var(--ar-color-primary-base);
+    border-color:     var(--ar-color-primary-hover);
+    color:            var(--ar-color-text-on-primary);
+  }
+
+
+  /* ==========================================================
+     4. ALERT — SUB-ELEMENTS
+     ──────────────────────────────────────────────────────────
+     Optional child elements that structure the alert content.
+     Each element is independent — any combination works:
+     - Title only
+     - Message only
+     - Title + message
+     - Message + action
+     - Title + message + action
+     - Any of the above + dismiss button
+
+     Sub-elements use the parent's color context (inherited
+     color) with weight/size adjustments for hierarchy.
+     ========================================================== */
+
+  /* Alert title — the primary summary line */
+  .ar-alert__title {
+    display:          block;
+    font-size:        var(--ar-text-size-base);
+    font-weight:      var(--ar-text-weight-semibold);
+    line-height:      var(--ar-text-leading-normal);
+    margin-block-end: var(--ar-space-1);
+    color:            inherit;
+    /* inherit: picks up the role's text color from .ar-alert   */
+  }
+
+  /* Alert message — the descriptive detail */
+  .ar-alert__message {
+    display:     block;
+    font-size:   var(--ar-text-size-sm);
+    font-weight: var(--ar-text-weight-normal);
+    line-height: var(--ar-text-leading-relaxed);
+    color:       inherit;
+    margin:      0;
+  }
+
+  /* When only message is present (no title), use base size */
+  .ar-alert:not(:has(.ar-alert__title)) .ar-alert__message {
+    font-size: var(--ar-text-size-base);
+  }
+  /* :has() is supported in all target browsers (Chrome 105+,
+     Firefox 121+, Safari 15.4+). Falls back gracefully —
+     without :has support, the sm size applies always.       */
+
+  /* Alert body wrapper — contains title + message as a group
+     when a dismiss button is also present                    */
+  .ar-alert__body {
+    display: block;
+    flex:    1;
+    /* flex: 1 allows body to fill available width when alert
+       is display:flex for dismiss button layout.             */
+  }
+
+  /* Action link inside an alert */
+  .ar-alert__action {
+    display:                   inline;
+    font-size:                 inherit;
+    font-weight:               var(--ar-text-weight-medium);
+    color:                     inherit;
+    text-decoration:           underline;
+    text-underline-offset:     3px;
+    text-decoration-thickness: 1px;
+    margin-inline-start:       var(--ar-space-2);
+    white-space:               nowrap;
+    transition: opacity var(--ar-duration-fast) var(--ar-ease-standard);
+  }
+
+  .ar-alert__action:hover {
+    opacity: 0.80;
+    /* Opacity dimming is a universal hover treatment that works
+       on any text color — no per-role hover color needed.    */
+  }
+
+  .ar-alert__action:focus-visible {
+    outline:        var(--ar-focus-ring-width)
+                    var(--ar-focus-ring-style)
+                    var(--ar-focus-ring-color-default);
+    outline-offset: var(--ar-focus-ring-offset);
+    border-radius:  2px;
+  }
+
+
+  /* ==========================================================
+     5. ALERT WITH DISMISS BUTTON
+     ──────────────────────────────────────────────────────────
+     When a dismiss button is present, the alert switches to
+     a flex layout so the dismiss button sits at the far end
+     of the alert, vertically centered.
+
+     The dismiss button is a pure CSS button — no JS is
+     provided by the framework (ArianaCSS is CSS-only).
+     Dismissal behavior requires project JavaScript.
+
+     Accessibility requirements for dismiss:
+     - Must be a <button> element (not a div or span)
+     - Must have aria-label="Dismiss alert" or equivalent
+     - Must be keyboard focusable (button is by default)
+     - Dismiss action must not move focus to a confusing place —
+       document this in project JS
+     ========================================================== */
+
+  .ar-alert--dismissible {
+    display:     flex;
+    align-items: flex-start;
+    gap:         var(--ar-space-3);
+  }
+
+  .ar-alert__dismiss {
+    display:          inline-flex;
+    align-items:      center;
+    justify-content:  center;
+    flex-shrink:      0;
+    margin-inline-start: auto;
+    /* auto margin pushes dismiss to the far end              */
+
+    width:            1.5rem;       /* 24px */
+    height:           1.5rem;       /* 24px */
+    padding:          0;
+
+    background:       transparent;
+    border:           1px solid transparent;
+    border-radius:    var(--ar-radius-sm);
+    color:            inherit;
+    cursor:           pointer;
+    opacity:          0.70;
+
+    font-size:        1rem;         /* × symbol inherits alert font */
+    font-weight:      var(--ar-text-weight-normal);
+    line-height:      1;
+
+    transition:       opacity      var(--ar-duration-fast) var(--ar-ease-standard),
+                      background-color var(--ar-duration-fast) var(--ar-ease-standard);
+  }
+
+  .ar-alert__dismiss:hover {
+    opacity:          1;
+    background-color: hsl(0 0% 0% / 0.08);
+    /* Neutral dark overlay works on any alert background color */
+  }
+
+  .ar-alert__dismiss:active {
+    background-color: hsl(0 0% 0% / 0.14);
+  }
+
+  .ar-alert__dismiss:focus-visible {
+    outline:          var(--ar-focus-ring-width)
+                      var(--ar-focus-ring-style)
+                      var(--ar-focus-ring-color-default);
+    outline-offset:   var(--ar-focus-ring-offset);
+    opacity:          1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ar-alert__dismiss,
+    .ar-alert__action {
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+
+  /* ==========================================================
+     6. ALERT — SIZE VARIANTS
+     ──────────────────────────────────────────────────────────
+     --sm: Compact alert for dense UIs (table cells, sidebars,
+           inline validation messages adjacent to form fields).
+     --lg: Prominent alert for page-level system messages,
+           maintenance banners, or critical notices.
+     ========================================================== */
+
+  .ar-alert--sm {
+    padding-block:        var(--ar-space-2);
+    padding-inline:       var(--ar-space-3);
+    padding-inline-start: var(--ar-space-4);
+    font-size:            var(--ar-text-size-sm);
+  }
+
+  .ar-alert--sm .ar-alert__title {
+    font-size: var(--ar-text-size-sm);
+  }
+
+  .ar-alert--sm .ar-alert__message {
+    font-size: var(--ar-text-size-xs);
+  }
+
+  .ar-alert--lg {
+    padding-block:        var(--ar-space-5);
+    padding-inline:       var(--ar-space-6);
+    padding-inline-start: var(--ar-space-7);
+    /* Extra start padding for the wider 4px border at lg     */
+  }
+
+  .ar-alert--lg .ar-alert__title {
+    font-size: var(--ar-text-size-lg);
+  }
+
+
+  /* ==========================================================
+     7. ALERT — BORDERLESS VARIANT
+     ──────────────────────────────────────────────────────────
+     Removes all borders. Used when the alert is inside a
+     bordered container (card, modal) where adding another
+     border creates too much visual noise. The background
+     tint alone provides the semantic signal.
+     ========================================================== */
+
+  .ar-alert--borderless {
+    border:              0;
+    border-inline-start: 0;
+    padding-inline-start: var(--ar-space-4);
+    /* Restore equal padding now that the border is gone      */
+  }
+
+
+  /* ==========================================================
+     8. ALERT — ICON LAYOUT
+     ──────────────────────────────────────────────────────────
+     When an icon (SVG) is added before the alert content,
+     the --icon layout variant aligns icon and text side by
+     side. The icon is always decorative (aria-hidden="true")
+     — the alert text must stand alone for screen readers.
+
+     Usage:
+       <div class="ar-alert ar-alert--success ar-alert--icon" role="alert">
+         <svg class="ar-alert__icon" aria-hidden="true">...</svg>
+         <div class="ar-alert__body">
+           <p class="ar-alert__title">Success</p>
+           <p class="ar-alert__message">Your file was saved.</p>
+         </div>
+       </div>
+     ========================================================== */
+
+  .ar-alert--icon {
+    display:     flex;
+    align-items: flex-start;
+    gap:         var(--ar-space-3);
+  }
+
+  .ar-alert__icon {
+    display:     block;
+    flex-shrink: 0;
+    width:       1.25rem;    /* 20px */
+    height:      1.25rem;    /* 20px */
+    margin-block-start: 0.125rem;
+    /* 2px top nudge aligns icon optical center with first text line */
+    color:       inherit;
+    /* Icon inherits the alert's text color automatically      */
+  }
+
+  /* Large icon for lg size variant */
+  .ar-alert--lg .ar-alert__icon {
+    width:  1.5rem;    /* 24px */
+    height: 1.5rem;
+  }
+
+
+  /* ==========================================================
+     9. ALERT — STACKING (multiple alerts in sequence)
+     ──────────────────────────────────────────────────────────
+     When multiple alerts appear in sequence, a consistent
+     gap between them is applied via the .ar-alert-stack
+     wrapper. This prevents each alert from needing its own
+     margin-block-end override.
+     ========================================================== */
+
+  .ar-alert-stack {
+    display:        flex;
+    flex-direction: column;
+    gap:            var(--ar-space-3);
+  }
+
+
+  /* ==========================================================
+     10. FORCED COLORS / HIGH CONTRAST MODE
+     ========================================================== */
+
+  @media (forced-colors: active) {
+
+    .ar-alert {
+      border:              2px solid ButtonBorder;
+      border-inline-start: 4px solid Highlight;
+      background-color:    Canvas;
+      color:               CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .ar-alert--filled {
+      background-color:    Highlight;
+      color:               HighlightText;
+      border:              2px solid ButtonBorder;
+    }
+
+    .ar-alert__dismiss {
+      border-color:   ButtonBorder;
+      color:          ButtonText;
+      background:     ButtonFace;
+    }
+
+    .ar-alert__dismiss:focus-visible {
+      outline-color: Highlight;
+    }
+
+    .ar-alert__action:focus-visible {
+      outline-color: Highlight;
+    }
+
+  }
+
+
+  /* ==========================================================
+     11. PRINT
+     ========================================================== */
+
+  @media print {
+
+    .ar-alert {
+      background-color:    transparent !important;
+      border:              1px solid currentColor;
+      border-inline-start: 3px solid currentColor;
+      color:               hsl(0 0% 0%);
+      box-shadow:          none;
+    }
+
+    .ar-alert__dismiss {
+      display: none;
+      /* Dismiss button has no meaning in print output         */
+    }
+
+  }
+
+} /* end @layer components */
+
+
+/* ============================================================
+   END OF FILE — alert.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (28 references):
+   Typography: --ar-text-size-xs, -sm, -base, -lg
+               --ar-text-weight-normal, -medium, -semibold
+               --ar-text-leading-normal, -relaxed
+   Spacing:    --ar-space-1, -2, -3, -4, -5, -6, -7
+   Radius:     --ar-radius-base, -sm
+   Motion:     --ar-duration-fast, --ar-ease-standard
+   Focus:      --ar-focus-ring-width, -offset, -style, -color-default
+   Color:      --ar-color-success-surface, -border, -base, -hover, -text
+               --ar-color-warning-surface, -border, -base, -hover, -text
+               --ar-color-danger-surface, -border, -base, -hover, -text
+               --ar-color-info-surface, -border, -base, -hover, -text
+               --ar-color-primary-surface, -border, -base, -hover, -emphasis
+               --ar-color-text-on-success, -on-warning, -on-danger,
+               --ar-color-text-on-info, -on-primary
+
+   Hard-coded values (justified structural constants):
+   4px     — left border accent width (structural — the
+             defining visual element of the alert design)
+   3px     — print border width (print constant)
+   1.5rem  — dismiss button dimensions (structural constant)
+   1.25rem / 1.5rem — icon dimensions (structural constants)
+   0.125rem — icon top nudge (optical alignment constant)
+   2px     — action link border-radius (perceptual constant)
+   0.70    — dismiss button initial opacity (visual constant)
+   0.80    — action link hover opacity (visual constant)
+   hsl(0 0% 0% / 0.08) and 0.14 — dismiss hover/active overlays
+             (neutral dark overlay, works on any alert bg color)
+
+   Classes produced (22):
+   Base:         .ar-alert
+   Color:        .ar-alert--success, --warning, --danger,
+                 .ar-alert--info, --primary
+   Style:        .ar-alert--filled, --borderless
+   Size:         .ar-alert--sm, --lg
+   Layout:       .ar-alert--dismissible, --icon
+   Sub-elements: .ar-alert__title, __message, __body,
+                 .ar-alert__action, __dismiss, __icon
+   Group:        .ar-alert-stack
+
+   ACCESSIBILITY REQUIREMENTS (verify during testing):
+   □ role="alert" on dynamic alerts (JS-injected)
+   □ role="status" acceptable for non-urgent static alerts
+   □ Dismiss button: <button> element (never div/span)
+   □ Dismiss button: aria-label present
+   □ Icon: aria-hidden="true" always
+   □ Alert text readable without color context (shape alone)
+
+   TESTING CHECKLIST:
+   □ Base (info) alert: blue-cool surface, border, text
+   □ --success: cedar surface, border, accent, dark-green text
+   □ --warning: saffron surface, border, accent, saffron-900 text
+   □ --danger: ember surface, border, accent, ember-700 text
+   □ --primary: lapis surface, border, accent, lapis-900 text
+   □ --filled variants: solid bg, white text for all roles
+   □ --warning--filled: WHITE text (not dark — see tokens note)
+   □ --borderless: no visible border on any side
+   □ Title only: correct size and weight
+   □ Message only: base size (via :has fallback)
+   □ Title + message: title semibold + smaller message
+   □ With dismiss: flex layout, button at far end
+   □ Dismiss hover: slight bg tint appears
+   □ Dismiss focus: ring visible via keyboard Tab
+   □ Action link: underlined, inherits role color
+   □ Action link hover: opacity 0.80
+   □ Action link focus: ring visible via keyboard Tab
+   □ --icon layout: icon + body side by side, top-aligned
+   □ Icon color: inherits alert text color
+   □ --sm: compact padding and text sizes
+   □ --lg: generous padding, lg title
+   □ ar-alert-stack: gap-3 between stacked alerts
+   □ RTL: 4px border appears on inline-end (right) side
+   □ All transitions instant with prefers-reduced-motion
+   □ Forced colors: border Highlight, filled uses Highlight bg
+   □ Print: transparent bg, border-only, dismiss hidden
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

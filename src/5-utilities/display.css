@@ -1,0 +1,134 @@
+/* ============================================================
+   ArianaCSS — Display Utilities
+   File:    src/5-utilities/display.css
+   Layer:   @layer utilities
+   Version: 1.0.0
+
+   Token dependencies: none (display utilities set CSS keywords)
+   Exception: .ar-sr-only uses fixed values from the established
+   screen-reader-only a11y pattern — not design decisions.
+
+   Responsive variants: all display values × 4 breakpoints
+   Hover variants: none
+   ============================================================ */
+
+@layer utilities {
+
+  /* --- Base display values --- */
+  .ar-block        { display: block; }
+  .ar-inline       { display: inline; }
+  .ar-inline-block { display: inline-block; }
+  .ar-flex         { display: flex; }
+  .ar-inline-flex  { display: inline-flex; }
+  .ar-grid         { display: grid; }
+  .ar-inline-grid  { display: inline-grid; }
+  .ar-contents     { display: contents; }
+  .ar-hidden       { display: none; }
+
+  /* ar-contents: element creates no box but descendants are
+     rendered normally. Used for accessible wrapper elements
+     that must not create a layout box.                      */
+
+
+  /* --- Screen reader utilities ---
+     .ar-sr-only: visually hides an element while keeping it
+     accessible to screen readers, keyboard navigation, and
+     the accessibility tree. Use for: icon button labels,
+     skip link text before focus, decorative headings that
+     provide document structure but are visually redundant.
+
+     The clip-path + position + overflow technique is the
+     current best-practice for sr-only. clip: rect() is
+     kept as fallback for older assistive technology.
+
+     .ar-not-sr-only: reverses all sr-only properties.
+     Use at responsive breakpoints to make previously hidden
+     content visible: class="ar-sr-only ar-md:not-sr-only"  */
+
+  .ar-sr-only {
+    position:   absolute;
+    width:      1px;
+    height:     1px;
+    padding:    0;
+    margin:     -1px;
+    overflow:   hidden;
+    clip:       rect(0, 0, 0, 0);
+    clip-path:  inset(50%);
+    white-space: nowrap;
+    border:     0;
+  }
+
+  .ar-not-sr-only {
+    position:   static;
+    width:      auto;
+    height:     auto;
+    padding:    0;
+    margin:     0;
+    overflow:   visible;
+    clip:       auto;
+    clip-path:  none;
+    white-space: normal;
+  }
+
+
+  /* --- Responsive variants — sm (480px+) --- */
+  @media (min-width: 480px) {
+    .ar-sm\:block        { display: block; }
+    .ar-sm\:inline       { display: inline; }
+    .ar-sm\:inline-block { display: inline-block; }
+    .ar-sm\:flex         { display: flex; }
+    .ar-sm\:inline-flex  { display: inline-flex; }
+    .ar-sm\:grid         { display: grid; }
+    .ar-sm\:inline-grid  { display: inline-grid; }
+    .ar-sm\:contents     { display: contents; }
+    .ar-sm\:hidden       { display: none; }
+    .ar-sm\:sr-only      { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+    .ar-sm\:not-sr-only  { position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; clip-path: none; white-space: normal; }
+  }
+
+  /* --- Responsive variants — md (768px+) --- */
+  @media (min-width: 768px) {
+    .ar-md\:block        { display: block; }
+    .ar-md\:inline       { display: inline; }
+    .ar-md\:inline-block { display: inline-block; }
+    .ar-md\:flex         { display: flex; }
+    .ar-md\:inline-flex  { display: inline-flex; }
+    .ar-md\:grid         { display: grid; }
+    .ar-md\:inline-grid  { display: inline-grid; }
+    .ar-md\:contents     { display: contents; }
+    .ar-md\:hidden       { display: none; }
+    .ar-md\:sr-only      { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+    .ar-md\:not-sr-only  { position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; clip-path: none; white-space: normal; }
+  }
+
+  /* --- Responsive variants — lg (1024px+) --- */
+  @media (min-width: 1024px) {
+    .ar-lg\:block        { display: block; }
+    .ar-lg\:inline       { display: inline; }
+    .ar-lg\:inline-block { display: inline-block; }
+    .ar-lg\:flex         { display: flex; }
+    .ar-lg\:inline-flex  { display: inline-flex; }
+    .ar-lg\:grid         { display: grid; }
+    .ar-lg\:inline-grid  { display: inline-grid; }
+    .ar-lg\:contents     { display: contents; }
+    .ar-lg\:hidden       { display: none; }
+    .ar-lg\:sr-only      { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+    .ar-lg\:not-sr-only  { position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; clip-path: none; white-space: normal; }
+  }
+
+  /* --- Responsive variants — xl (1280px+) --- */
+  @media (min-width: 1280px) {
+    .ar-xl\:block        { display: block; }
+    .ar-xl\:inline       { display: inline; }
+    .ar-xl\:inline-block { display: inline-block; }
+    .ar-xl\:flex         { display: flex; }
+    .ar-xl\:inline-flex  { display: inline-flex; }
+    .ar-xl\:grid         { display: grid; }
+    .ar-xl\:inline-grid  { display: inline-grid; }
+    .ar-xl\:contents     { display: contents; }
+    .ar-xl\:hidden       { display: none; }
+    .ar-xl\:sr-only      { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+    .ar-xl\:not-sr-only  { position: static; width: auto; height: auto; padding: 0; margin: 0; overflow: visible; clip: auto; clip-path: none; white-space: normal; }
+  }
+
+} /* end @layer utilities */

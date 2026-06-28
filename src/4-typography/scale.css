@@ -1,0 +1,572 @@
+/* ============================================================
+   ArianaCSS — Typography Scale
+   File:    src/4-typography/scale.css
+   Layer:   @layer typography
+   Version: 1.0.0
+
+   PURPOSE:
+   Define the framework's type scale as composable heading
+   pattern classes (.ar-h1 through .ar-h6) and establish
+   base element styles for h1–h6 HTML elements.
+
+   This file is the boundary between:
+   - Raw size utilities (5-utilities/typography.css → ar-text-*)
+     which set font-size only, and
+   - Typographic pattern classes (this file → .ar-h1 through .ar-h6)
+     which compose size + weight + leading + tracking + color
+     into a complete heading presentation.
+
+   The distinction matters:
+     .ar-text-4xl   → font-size: 2.25rem only. Nothing else.
+     .ar-h3         → font-size: 2.25rem + weight: 700 + leading:
+                      1.375 + tracking: -0.025em + color: heading.
+                      A complete heading, not a raw size.
+
+   TOKEN DEPENDENCIES:
+   --ar-text-size-xl through --ar-text-size-6xl   (sizes)
+   --ar-text-weight-semibold                       (h5, h6)
+   --ar-text-weight-bold                           (h3, h4)
+   --ar-text-weight-extrabold                      (h1, h2)
+   --ar-text-leading-tight                         (h1, h2)
+   --ar-text-leading-snug                          (h3, h4)
+   --ar-text-leading-normal                        (h5, h6)
+   --ar-text-tracking-tighter                      (h1)
+   --ar-text-tracking-tight                        (h2, h3)
+   --ar-text-tracking-normal                       (h4, h5, h6)
+   --ar-color-text-heading                         (all headings)
+   --ar-space-2 through --ar-space-8               (heading margins)
+
+   BREAKPOINT VALUES (hardcoded — see tokens.css section 15):
+   480px → --ar-bp-sm  (mobile heading size overrides)
+
+   ELEMENT vs CLASS APPROACH:
+   This file styles both the HTML heading elements (h1–h6) AND
+   provides pattern classes (.ar-h1–.ar-h6).
+
+   WHY BOTH:
+   - Element selectors (h1, h2...) provide sensible defaults for
+     any heading element without requiring a class. This covers
+     rich text content rendered from a CMS, markdown output,
+     or any context where adding classes is impractical.
+   - Pattern classes (.ar-h1–.ar-h6) allow semantic heading
+     level to be decoupled from visual heading level. An h2 that
+     visually looks like an h4 is correct semantic + visual:
+       <h2 class="ar-h4">Section subtitle</h2>
+     This is the correct accessible pattern — heading level
+     communicates document structure, visual size communicates
+     visual hierarchy.
+
+   MOBILE HEADING SIZES:
+   Per the responsive heading note in tokens.css section 9:
+   h1 and h2 are too large for mobile viewports at their
+   desktop sizes (60px and 48px respectively). This file
+   implements the recommended mobile overrides:
+     h1 / .ar-h1: 6xl (60px) → 4xl (36px) below 480px
+     h2 / .ar-h2: 5xl (48px) → 3xl (30px) below 480px
+   The token values are correct for desktop. The mobile
+   override is this file's responsibility.
+
+   HEADING MARGIN CONVENTION:
+   Headings have margin-block-end (bottom margin) only.
+   No margin-block-start on headings — the spacing between
+   a preceding paragraph and a heading is the paragraph's
+   margin-block-end, not the heading's margin-block-start.
+   This prevents double-spacing artifacts.
+
+   The :first-child rule removes top margin when a heading
+   is the first element in its container.
+
+   NEXT FILE: src/4-typography/utils.css
+   ============================================================ */
+
+
+@layer typography {
+
+  /* ==========================================================
+     1. HEADING ELEMENT BASE STYLES
+     ──────────────────────────────────────────────────────────
+     Applied to the HTML h1–h6 elements directly. These provide
+     the default visual presentation for any heading element
+     in the document without requiring a class.
+
+     reset.css already set h1–h6 to:
+       font-size: inherit
+       font-weight: inherit
+     These rules here restore intentional typographic values
+     on top of that normalized baseline.
+     ========================================================== */
+
+  h1 {
+    font-size:      var(--ar-text-size-6xl);
+    font-weight:    var(--ar-text-weight-extrabold);
+    line-height:    var(--ar-text-leading-tight);
+    letter-spacing: var(--ar-text-tracking-tighter);
+    color:          var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-6);
+  }
+
+  h2 {
+    font-size:      var(--ar-text-size-5xl);
+    font-weight:    var(--ar-text-weight-extrabold);
+    line-height:    var(--ar-text-leading-tight);
+    letter-spacing: var(--ar-text-tracking-tight);
+    color:          var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-5);
+  }
+
+  h3 {
+    font-size:      var(--ar-text-size-4xl);
+    font-weight:    var(--ar-text-weight-bold);
+    line-height:    var(--ar-text-leading-snug);
+    letter-spacing: var(--ar-text-tracking-tight);
+    color:          var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-4);
+  }
+
+  h4 {
+    font-size:      var(--ar-text-size-3xl);
+    font-weight:    var(--ar-text-weight-bold);
+    line-height:    var(--ar-text-leading-snug);
+    letter-spacing: var(--ar-text-tracking-normal);
+    color:          var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-4);
+  }
+
+  h5 {
+    font-size:      var(--ar-text-size-2xl);
+    font-weight:    var(--ar-text-weight-semibold);
+    line-height:    var(--ar-text-leading-normal);
+    letter-spacing: var(--ar-text-tracking-normal);
+    color:          var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-3);
+  }
+
+  h6 {
+    font-size:      var(--ar-text-size-xl);
+    font-weight:    var(--ar-text-weight-semibold);
+    line-height:    var(--ar-text-leading-normal);
+    letter-spacing: var(--ar-text-tracking-normal);
+    color:          var(--ar-color-text-heading);
+    margin-block-end: var(--ar-space-3);
+  }
+
+  /* Remove bottom margin when heading is the last child —
+     prevents extra space at the bottom of a container.       */
+  h1:last-child,
+  h2:last-child,
+  h3:last-child,
+  h4:last-child,
+  h5:last-child,
+  h6:last-child {
+    margin-block-end: 0;
+  }
+
+
+  /* ==========================================================
+     2. MOBILE HEADING SIZE OVERRIDES
+     ──────────────────────────────────────────────────────────
+     Per tokens.css section 9, responsive heading note:
+     h1 at 60px and h2 at 48px are desktop sizes that
+     become overwhelming on narrow mobile viewports.
+
+     At below 480px (the sm breakpoint), h1 drops to 36px
+     and h2 drops to 30px — sizes that remain impactful but
+     don't dominate the narrow viewport.
+
+     These overrides apply to both element selectors AND
+     pattern classes (.ar-h1, .ar-h2) simultaneously.
+     ========================================================== */
+
+  @media (max-width: 479px) {
+
+    h1,
+    .ar-h1 {
+      font-size:      var(--ar-text-size-4xl);   /* 36px on mobile */
+      letter-spacing: var(--ar-text-tracking-tight);
+      /* Slightly looser tracking than desktop tighter — at 36px
+         tighter (-0.05em) is too compressed for mobile legibility.
+         tight (-0.025em) remains intentional without overcrowding. */
+    }
+
+    h2,
+    .ar-h2 {
+      font-size:      var(--ar-text-size-3xl);   /* 30px on mobile */
+      letter-spacing: var(--ar-text-tracking-normal);
+    }
+
+    h3,
+    .ar-h3 {
+      font-size:      var(--ar-text-size-2xl);   /* 24px on mobile */
+    }
+
+  }
+
+
+  /* ==========================================================
+     3. HEADING PATTERN CLASSES (.ar-h1 through .ar-h6)
+     ──────────────────────────────────────────────────────────
+     Composable heading classes that decouple visual hierarchy
+     from semantic heading level.
+
+     These classes apply IDENTICAL styles to the element
+     selectors above. They exist as classes so a developer can
+     write:
+       <h2 class="ar-h4">Visually smaller than its semantic level</h2>
+       <p class="ar-h3">A paragraph styled as a heading</p>
+       <div class="ar-h1">A div styled as a display heading</div>
+
+     The classes do NOT set margin-block-end. Margin is a layout
+     concern — when a pattern class is applied to a non-heading
+     element or used in a custom composition, the margin may not
+     be appropriate. The heading element selectors above set
+     margin; the classes do not. Spacing around pattern-classed
+     elements is the developer's responsibility via spacing utilities.
+     ========================================================== */
+
+  .ar-h1 {
+    font-size:      var(--ar-text-size-6xl);
+    font-weight:    var(--ar-text-weight-extrabold);
+    line-height:    var(--ar-text-leading-tight);
+    letter-spacing: var(--ar-text-tracking-tighter);
+    color:          var(--ar-color-text-heading);
+  }
+
+  .ar-h2 {
+    font-size:      var(--ar-text-size-5xl);
+    font-weight:    var(--ar-text-weight-extrabold);
+    line-height:    var(--ar-text-leading-tight);
+    letter-spacing: var(--ar-text-tracking-tight);
+    color:          var(--ar-color-text-heading);
+  }
+
+  .ar-h3 {
+    font-size:      var(--ar-text-size-4xl);
+    font-weight:    var(--ar-text-weight-bold);
+    line-height:    var(--ar-text-leading-snug);
+    letter-spacing: var(--ar-text-tracking-tight);
+    color:          var(--ar-color-text-heading);
+  }
+
+  .ar-h4 {
+    font-size:      var(--ar-text-size-3xl);
+    font-weight:    var(--ar-text-weight-bold);
+    line-height:    var(--ar-text-leading-snug);
+    letter-spacing: var(--ar-text-tracking-normal);
+    color:          var(--ar-color-text-heading);
+  }
+
+  .ar-h5 {
+    font-size:      var(--ar-text-size-2xl);
+    font-weight:    var(--ar-text-weight-semibold);
+    line-height:    var(--ar-text-leading-normal);
+    letter-spacing: var(--ar-text-tracking-normal);
+    color:          var(--ar-color-text-heading);
+  }
+
+  .ar-h6 {
+    font-size:      var(--ar-text-size-xl);
+    font-weight:    var(--ar-text-weight-semibold);
+    line-height:    var(--ar-text-leading-normal);
+    letter-spacing: var(--ar-text-tracking-normal);
+    color:          var(--ar-color-text-heading);
+  }
+
+
+  /* ==========================================================
+     4. DISPLAY HEADING — EXTRA LARGE HERO TEXT
+     ──────────────────────────────────────────────────────────
+     .ar-display is for hero sections, landing page headlines,
+     and marketing copy that needs to be larger and more
+     impactful than h1. It is not a semantic heading level —
+     it is always paired with an h1 element for semantics.
+
+     Usage:
+       <h1 class="ar-display">We build the future</h1>
+
+     At desktop (1280px+): 4.5rem (72px)
+     At lg (1024px–1279px): 3.75rem (60px — same as h1)
+     At md (768px–1023px): 3rem (48px)
+     At mobile (<768px): 2.25rem (36px)
+
+     The display class is responsive because very large display
+     text at mobile becomes illegible and requires significant
+     horizontal space that narrow viewports cannot provide.
+     ========================================================== */
+
+  .ar-display {
+    font-size:      4.5rem;    /* 72px — desktop display size */
+    font-weight:    var(--ar-text-weight-extrabold);
+    line-height:    1.1;
+    /* Tighter than tight (1.25) for very large display text.
+       At 72px, 1.25 line height produces 90px between baselines
+       which feels overly open for a headline. 1.1 produces 79px
+       — appropriately tight for large display type.           */
+    letter-spacing: -0.04em;
+    /* Between tighter (-0.05em) and tight (-0.025em).
+       At 72px, -0.05em is overly compressed. -0.04em is
+       the optical sweet spot for this display size.           */
+    color:          var(--ar-color-text-heading);
+  }
+
+  @media (max-width: 1279px) {
+    .ar-display {
+      font-size: var(--ar-text-size-6xl); /* 60px */
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .ar-display {
+      font-size:      var(--ar-text-size-5xl); /* 48px */
+      letter-spacing: var(--ar-text-tracking-tight);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ar-display {
+      font-size:      var(--ar-text-size-4xl); /* 36px */
+      letter-spacing: var(--ar-text-tracking-tight);
+      line-height:    var(--ar-text-leading-tight);
+    }
+  }
+
+
+  /* ==========================================================
+     5. SUBHEADING / EYEBROW TEXT
+     ──────────────────────────────────────────────────────────
+     .ar-eyebrow is for small uppercase labels that appear
+     above a heading to provide category or section context.
+     Common in marketing, SaaS, and editorial layouts.
+
+     Typical usage:
+       <p class="ar-eyebrow">New Feature</p>
+       <h2>Introducing the dashboard</h2>
+
+     Characteristics:
+     - Small (xs) size — subordinate to the heading it precedes
+     - Uppercase + wide tracking — makes small text legible
+       and visually signals "label" vs "heading"
+     - Primary color — connects the eyebrow to the brand
+     - Medium weight — present but not competing with heading
+     - margin-block-end: connects visually to the heading below
+     ========================================================== */
+
+  .ar-eyebrow {
+    display:          block;
+    font-size:        var(--ar-text-size-xs);
+    font-weight:      var(--ar-text-weight-medium);
+    line-height:      var(--ar-text-leading-normal);
+    letter-spacing:   var(--ar-text-tracking-wider);
+    text-transform:   uppercase;
+    color:            var(--ar-color-primary-base);
+    margin-block-end: var(--ar-space-2);
+  }
+
+
+  /* ==========================================================
+     6. LEAD PARAGRAPH
+     ──────────────────────────────────────────────────────────
+     .ar-lead is for the introductory paragraph of a section
+     or article — the first paragraph that follows a heading
+     and introduces the content. It is slightly larger than
+     body text to establish importance and ease the reader
+     into the content.
+
+     Common in: article intros, feature descriptions,
+     landing page hero copy, about section openers.
+
+     Note: .ar-lead in scale.css vs .ar-text-lead in utils.css
+     scale.css .ar-lead    — semantic pattern (full intro style)
+     utils.css .ar-text-lg — raw size utility (18px only)
+     ========================================================== */
+
+  .ar-lead {
+    font-size:   var(--ar-text-size-lg);
+    font-weight: var(--ar-text-weight-normal);
+    line-height: var(--ar-text-leading-relaxed);
+    color:       var(--ar-color-text-default);
+  }
+
+
+  /* ==========================================================
+     7. INLINE HEADING UTILITIES
+     ──────────────────────────────────────────────────────────
+     Modifier classes used in conjunction with heading pattern
+     classes to adjust presentation in specific contexts.
+
+     .ar-heading--inverse: heading color for dark backgrounds.
+     Apply alongside .ar-h1 through .ar-h6 when on an inverse
+     (dark) surface:
+       <h2 class="ar-h2 ar-heading--inverse">Dark section title</h2>
+
+     .ar-heading--muted: reduced emphasis heading.
+     For secondary headings that should recede — sidebar
+     section labels, table group headers, auxiliary titles.
+
+     .ar-heading--center / .ar-heading--end:
+     Alignment modifiers. Prefer text-align utilities (ar-text-center)
+     for alignment, but these exist for quick heading-specific use.
+     ========================================================== */
+
+  .ar-heading--inverse { color: var(--ar-color-text-inverse); }
+  .ar-heading--muted   { color: var(--ar-color-text-muted); }
+  .ar-heading--primary { color: var(--ar-color-primary-base); }
+  .ar-heading--center  { text-align: center; }
+  .ar-heading--end     { text-align: end; }
+
+
+  /* ==========================================================
+     8. SECTIONING CONTENT — BROWSER ALGORITHM RESET
+     ──────────────────────────────────────────────────────────
+     Some browsers implement the "outline algorithm" for HTML5
+     sectioning elements (article, section, aside, nav). Inside
+     nested sectioning elements, h1 may render smaller than
+     expected because the browser recalculates heading levels
+     based on nesting depth.
+
+     This rule ensures that h1–h6 elements inside sectioning
+     content always use the sizes defined in this file, not the
+     browser's sectioning algorithm. The reset.css already set
+     font-size: inherit on headings; the element rules in
+     section 1 of this file restore the correct sizes. However,
+     some browser implementations require an explicit re-assertion
+     inside sectioning elements.
+
+     Using :is() reduces specificity — the rule has the same
+     specificity as a single element selector, preventing it
+     from creating specificity conflicts with utility overrides.
+     ========================================================== */
+
+  :is(article, section, aside, nav) h1 {
+    font-size:      var(--ar-text-size-6xl);
+    font-weight:    var(--ar-text-weight-extrabold);
+    line-height:    var(--ar-text-leading-tight);
+    letter-spacing: var(--ar-text-tracking-tighter);
+  }
+
+  :is(article, section, aside, nav) h2 {
+    font-size:      var(--ar-text-size-5xl);
+    font-weight:    var(--ar-text-weight-extrabold);
+    line-height:    var(--ar-text-leading-tight);
+    letter-spacing: var(--ar-text-tracking-tight);
+  }
+
+  :is(article, section, aside, nav) h3 {
+    font-size:      var(--ar-text-size-4xl);
+    font-weight:    var(--ar-text-weight-bold);
+    line-height:    var(--ar-text-leading-snug);
+    letter-spacing: var(--ar-text-tracking-tight);
+  }
+
+  /* h4–h6 inside sectioning elements: sizes are already small
+     enough that browser algorithm scaling rarely affects them.
+     No additional overrides needed for h4, h5, h6.           */
+
+
+  /* ==========================================================
+     9. PRINT TYPOGRAPHY
+     ──────────────────────────────────────────────────────────
+     In print, heading sizes are reduced to work within the
+     constraints of printed page width (typically ~180mm for
+     A4/Letter with standard margins). Display headings and
+     very large h1 sizes would overflow print columns.
+
+     Print heading sizes follow a compressed scale that
+     maintains visual hierarchy while fitting within print
+     dimensions.
+     ========================================================== */
+
+  @media print {
+
+    h1, .ar-h1, .ar-display {
+      font-size: 2rem;        /* 32px in print */
+      letter-spacing: -0.01em;
+    }
+
+    h2, .ar-h2 {
+      font-size: 1.5rem;      /* 24px in print */
+    }
+
+    h3, .ar-h3 {
+      font-size: 1.25rem;     /* 20px in print */
+    }
+
+    h4, .ar-h4 {
+      font-size: 1.125rem;    /* 18px in print */
+    }
+
+    h5, .ar-h5 {
+      font-size: 1rem;        /* 16px in print */
+    }
+
+    h6, .ar-h6 {
+      font-size: 0.875rem;    /* 14px in print */
+    }
+
+    /* Avoid headings split across page breaks */
+    h1, h2, h3, h4, h5, h6,
+    .ar-h1, .ar-h2, .ar-h3,
+    .ar-h4, .ar-h5, .ar-h6 {
+      page-break-after:   avoid;
+      break-after:        avoid;
+      page-break-inside:  avoid;
+      break-inside:       avoid;
+    }
+
+  }
+
+} /* end @layer typography */
+
+
+/* ============================================================
+   END OF FILE — scale.css
+   ────────────────────────────────────────────────────────────
+   Tokens consumed (18 references):
+   --ar-text-size-xl through --ar-text-size-6xl
+   --ar-text-weight-semibold, -bold, -extrabold, -medium, -normal
+   --ar-text-leading-tight, -snug, -normal, -relaxed
+   --ar-text-tracking-tighter, -tight, -normal, -wide, -wider
+   --ar-color-text-heading
+   --ar-color-text-default
+   --ar-color-text-inverse
+   --ar-color-text-muted
+   --ar-color-primary-base
+   --ar-space-2, -3, -4, -5, -6
+
+   Hard-coded values (justified):
+   4.5rem     — display size (above the token scale — intentional)
+   1.1        — display line-height (tighter than leading-tight)
+   -0.04em    — display tracking (between tighter and tight)
+   -0.01em    — print h1 tracking (minimal compression for print)
+   2rem, 1.5rem, 1.25rem, 1.125rem, 0.875rem — print heading sizes
+              (typographic constants for print, not screen tokens)
+
+   Classes produced (14):
+   Heading elements:  h1, h2, h3, h4, h5, h6 (element selectors)
+   Heading classes:   .ar-h1 through .ar-h6
+   Display:           .ar-display
+   Eyebrow:           .ar-eyebrow
+   Lead:              .ar-lead
+   Modifiers:         .ar-heading--inverse, --muted, --primary,
+                      --center, --end
+
+   TESTING CHECKLIST:
+   □ h1: 60px desktop, 36px at max-width 479px
+   □ h2: 48px desktop, 30px at max-width 479px
+   □ h3: 36px desktop, 24px at max-width 479px
+   □ h4: 30px across all breakpoints
+   □ h5: 24px across all breakpoints
+   □ h6: 20px across all breakpoints
+   □ Heading weights: h1/h2 extrabold, h3/h4 bold, h5/h6 semibold
+   □ Tracking: h1 tighter, h2/h3 tight, h4/h5/h6 normal
+   □ Heading color: --ar-color-text-heading (stone-900)
+   □ Heading margin-block-end present on elements, absent on classes
+   □ Last-child headings have no bottom margin
+   □ .ar-display: 72px at xl+, 60px at lg, 48px at md, 36px mobile
+   □ .ar-eyebrow: xs, uppercase, wide tracking, primary color
+   □ .ar-lead: lg size, relaxed leading, default text color
+   □ .ar-heading--inverse: inverse text color on dark backgrounds
+   □ h2 class="ar-h4": visually renders as h4 size/weight
+   □ h1 inside <article>: same size as root h1 (algorithm override)
+   □ Print: all headings at reduced sizes, no page break inside
+   □ Zero CSS errors in browser DevTools console
+   ============================================================ */

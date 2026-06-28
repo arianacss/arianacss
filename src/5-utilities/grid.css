@@ -1,0 +1,418 @@
+/* ============================================================
+   ArianaCSS — Grid Utilities
+   File:    src/5-utilities/grid.css
+   Layer:   @layer utilities
+   Version: 1.0.0
+
+   Token dependencies: none
+   Grid utilities set CSS keywords and integer values only.
+   Gap values come from the spacing utility (ar-gap-*) in
+   spacing.css — not duplicated here.
+
+   Responsive variants: col-span, grid-cols, grid-flow
+   No responsive variants for: col-start, col-end, row-span,
+   auto-cols, auto-rows, place — these are component-level
+   positioning decisions handled in custom CSS.
+
+   IMPORTANT DISTINCTIONS:
+   1. This file (grid.css) — UTILITY grid classes.
+      For custom grid structures inside page sections:
+        <div class="ar-grid ar-grid-cols-3 ar-gap-6">
+
+   2. src/3-layout/grid.css — the LAYOUT 12-column system.
+      For standard page layout columns:
+        <div class="ar-grid">
+          <div class="ar-col-6 ar-md:col-4">
+
+   The two systems are complementary. The layout grid provides
+   the 12-column page structure. These utilities provide
+   arbitrary grid configurations inside that structure.
+
+   RULE — ar-grid does not configure columns:
+   .ar-grid sets display: grid only. Column configuration
+   is always explicit via ar-grid-cols-* or the layout
+   system's ar-col-* classes. This maintains clarity about
+   what structure is being created.
+
+   RULE — ar-col-full uses 1 / -1:
+   Not hardcoded to span 12. 1 / -1 spans from the first
+   to the last grid line regardless of column count,
+   making it robust inside any grid parent.
+   ============================================================ */
+
+@layer utilities {
+
+  /* ==========================================================
+     GRID CONTAINER
+     ========================================================== */
+
+  .ar-grid        { display: grid; }
+  .ar-inline-grid { display: inline-grid; }
+  /* Note: ar-grid and ar-inline-grid also exist in display.css.
+     They are intentionally duplicated here for discoverability
+     — a developer building a grid layout will look in grid.css.
+     In the final concatenated output the duplicate declarations
+     are harmless; the cascade applies the last one which is
+     identical in value.                                        */
+
+
+  /* ==========================================================
+     GRID TEMPLATE COLUMNS
+     How many equal-width columns the grid creates.
+     Uses minmax(0, 1fr) — not plain 1fr — so content cannot
+     force columns wider than their share of available space.
+     ========================================================== */
+
+  .ar-grid-cols-1  { grid-template-columns: repeat(1,  minmax(0, 1fr)); }
+  .ar-grid-cols-2  { grid-template-columns: repeat(2,  minmax(0, 1fr)); }
+  .ar-grid-cols-3  { grid-template-columns: repeat(3,  minmax(0, 1fr)); }
+  .ar-grid-cols-4  { grid-template-columns: repeat(4,  minmax(0, 1fr)); }
+  .ar-grid-cols-6  { grid-template-columns: repeat(6,  minmax(0, 1fr)); }
+  .ar-grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .ar-grid-cols-auto { grid-template-columns: auto; }
+  /* Why 1, 2, 3, 4, 6, 12 only:
+     5, 7, 8, 9, 10, 11 equal-column grids are not used in
+     real product UI. Omitting them keeps the file lean.
+     Projects that need 5 columns write one custom rule.      */
+
+
+  /* ==========================================================
+     GRID TEMPLATE ROWS
+     ========================================================== */
+
+  .ar-grid-rows-1  { grid-template-rows: repeat(1, minmax(0, 1fr)); }
+  .ar-grid-rows-2  { grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .ar-grid-rows-3  { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .ar-grid-rows-4  { grid-template-rows: repeat(4, minmax(0, 1fr)); }
+  .ar-grid-rows-auto { grid-template-rows: auto; }
+
+
+  /* ==========================================================
+     COLUMN SPAN (how many columns an item occupies)
+     ========================================================== */
+
+  .ar-col-1  { grid-column: span 1  / span 1; }
+  .ar-col-2  { grid-column: span 2  / span 2; }
+  .ar-col-3  { grid-column: span 3  / span 3; }
+  .ar-col-4  { grid-column: span 4  / span 4; }
+  .ar-col-5  { grid-column: span 5  / span 5; }
+  .ar-col-6  { grid-column: span 6  / span 6; }
+  .ar-col-7  { grid-column: span 7  / span 7; }
+  .ar-col-8  { grid-column: span 8  / span 8; }
+  .ar-col-9  { grid-column: span 9  / span 9; }
+  .ar-col-10 { grid-column: span 10 / span 10; }
+  .ar-col-11 { grid-column: span 11 / span 11; }
+  .ar-col-12 { grid-column: span 12 / span 12; }
+
+  .ar-col-full { grid-column: 1 / -1; }
+  /* Spans from the first to the last grid line — full width
+     regardless of how many columns the parent grid has.
+     Use for: full-width section headers inside a grid,
+     full-width banners, breaking elements out of a column
+     grid to span the entire layout.                         */
+
+  .ar-col-auto { grid-column: auto; }
+  /* Resets to auto placement — useful at a breakpoint to
+     return an item to automatic grid positioning.           */
+
+
+  /* ==========================================================
+     COLUMN START AND END POSITIONS
+     For explicit placement within the grid.
+     Start: which grid line the item begins at (1-indexed).
+     End: which grid line the item ends at.
+     ========================================================== */
+
+  /* Column start */
+  .ar-col-start-1  { grid-column-start: 1; }
+  .ar-col-start-2  { grid-column-start: 2; }
+  .ar-col-start-3  { grid-column-start: 3; }
+  .ar-col-start-4  { grid-column-start: 4; }
+  .ar-col-start-5  { grid-column-start: 5; }
+  .ar-col-start-6  { grid-column-start: 6; }
+  .ar-col-start-7  { grid-column-start: 7; }
+  .ar-col-start-8  { grid-column-start: 8; }
+  .ar-col-start-9  { grid-column-start: 9; }
+  .ar-col-start-10 { grid-column-start: 10; }
+  .ar-col-start-11 { grid-column-start: 11; }
+  .ar-col-start-12 { grid-column-start: 12; }
+  .ar-col-start-13 { grid-column-start: 13; }
+  .ar-col-start-auto { grid-column-start: auto; }
+
+  /* Column end */
+  .ar-col-end-1  { grid-column-end: 1; }
+  .ar-col-end-2  { grid-column-end: 2; }
+  .ar-col-end-3  { grid-column-end: 3; }
+  .ar-col-end-4  { grid-column-end: 4; }
+  .ar-col-end-5  { grid-column-end: 5; }
+  .ar-col-end-6  { grid-column-end: 6; }
+  .ar-col-end-7  { grid-column-end: 7; }
+  .ar-col-end-8  { grid-column-end: 8; }
+  .ar-col-end-9  { grid-column-end: 9; }
+  .ar-col-end-10 { grid-column-end: 10; }
+  .ar-col-end-11 { grid-column-end: 11; }
+  .ar-col-end-12 { grid-column-end: 12; }
+  .ar-col-end-13 { grid-column-end: 13; }
+  /* end-13 places the item's end at the 13th line —
+     the line after the 12th column in a 12-column grid.
+     Equivalent to the right edge of the full grid.         */
+  .ar-col-end-auto { grid-column-end: auto; }
+
+
+  /* ==========================================================
+     ROW SPAN (how many rows an item occupies)
+     ========================================================== */
+
+  .ar-row-span-1 { grid-row: span 1 / span 1; }
+  .ar-row-span-2 { grid-row: span 2 / span 2; }
+  .ar-row-span-3 { grid-row: span 3 / span 3; }
+  .ar-row-span-4 { grid-row: span 4 / span 4; }
+  .ar-row-span-5 { grid-row: span 5 / span 5; }
+  .ar-row-span-6 { grid-row: span 6 / span 6; }
+  .ar-row-span-full { grid-row: 1 / -1; }
+  /* Spans all rows in an explicit grid — useful for sidebars
+     that should extend the full height of a grid area.      */
+  .ar-row-auto { grid-row: auto; }
+
+
+  /* ==========================================================
+     ROW START AND END POSITIONS
+     ========================================================== */
+
+  .ar-row-start-1  { grid-row-start: 1; }
+  .ar-row-start-2  { grid-row-start: 2; }
+  .ar-row-start-3  { grid-row-start: 3; }
+  .ar-row-start-4  { grid-row-start: 4; }
+  .ar-row-start-auto { grid-row-start: auto; }
+
+  .ar-row-end-1  { grid-row-end: 1; }
+  .ar-row-end-2  { grid-row-end: 2; }
+  .ar-row-end-3  { grid-row-end: 3; }
+  .ar-row-end-4  { grid-row-end: 4; }
+  .ar-row-end-5  { grid-row-end: 5; }
+  .ar-row-end-auto { grid-row-end: auto; }
+
+
+  /* ==========================================================
+     GRID AUTO FLOW
+     Controls how auto-placed items are inserted into the grid.
+     ========================================================== */
+
+  .ar-grid-flow-row        { grid-auto-flow: row; }
+  /* Default — items placed row by row (left to right, top to
+     bottom). Use explicitly to reset from column flow.      */
+
+  .ar-grid-flow-col        { grid-auto-flow: column; }
+  /* Items placed column by column (top to bottom, left to
+     right). Use for: vertical navigation lists that should
+     fill columns, horizontal scrolling card strips.         */
+
+  .ar-grid-flow-dense      { grid-auto-flow: dense; }
+  /* The browser backfills gaps with smaller items.
+     Use for: masonry-style layouts, image galleries where
+     item sizes vary. Note: dense can change visual order
+     from DOM order — use with caution for accessibility
+     as keyboard navigation follows DOM order, not visual. */
+
+  .ar-grid-flow-row-dense  { grid-auto-flow: row dense; }
+  .ar-grid-flow-col-dense  { grid-auto-flow: column dense; }
+
+
+  /* ==========================================================
+     GRID AUTO COLUMNS (size of implicitly-created columns)
+     Applied when grid-auto-flow: column creates extra columns
+     beyond what grid-template-columns defines.
+     ========================================================== */
+
+  .ar-auto-cols-auto { grid-auto-columns: auto; }
+  .ar-auto-cols-min  { grid-auto-columns: min-content; }
+  .ar-auto-cols-max  { grid-auto-columns: max-content; }
+  .ar-auto-cols-fr   { grid-auto-columns: minmax(0, 1fr); }
+
+
+  /* ==========================================================
+     GRID AUTO ROWS (size of implicitly-created rows)
+     Applied when the grid creates more rows than
+     grid-template-rows defines.
+     ========================================================== */
+
+  .ar-auto-rows-auto { grid-auto-rows: auto; }
+  .ar-auto-rows-min  { grid-auto-rows: min-content; }
+  .ar-auto-rows-max  { grid-auto-rows: max-content; }
+  .ar-auto-rows-fr   { grid-auto-rows: minmax(0, 1fr); }
+
+
+  /* ==========================================================
+     PLACE UTILITIES
+     Shorthand for align-items + justify-items simultaneously.
+     Applied to the grid container to align all children.
+     ========================================================== */
+
+  .ar-place-center  { place-items: center; }
+  /* Centers children both horizontally and vertically.
+     Use for: centered icon tiles, centered card grids.      */
+
+  .ar-place-start   { place-items: start; }
+  .ar-place-end     { place-items: end; }
+  .ar-place-stretch { place-items: stretch; }
+  /* stretch is the CSS grid default — items fill their
+     grid cell in both dimensions.                           */
+
+
+  /* ==========================================================
+     PLACE SELF (individual item alignment within its cell)
+     ========================================================== */
+
+  .ar-place-self-auto    { place-self: auto; }
+  .ar-place-self-center  { place-self: center; }
+  .ar-place-self-start   { place-self: start; }
+  .ar-place-self-end     { place-self: end; }
+  .ar-place-self-stretch { place-self: stretch; }
+
+
+  /* ==========================================================
+     RESPONSIVE VARIANTS
+     Provided for: col-span, grid-cols, grid-flow
+     NOT provided for: col-start, col-end, row-span, row-start,
+     row-end, auto-cols, auto-rows, place, place-self.
+     Explicit item positioning at different breakpoints is
+     complex enough to warrant dedicated custom CSS rather
+     than utility class composition.
+     ========================================================== */
+
+  /* --- sm (480px+) --- */
+  @media (min-width: 480px) {
+
+    /* grid-cols */
+    .ar-sm\:grid-cols-1  { grid-template-columns: repeat(1,  minmax(0, 1fr)); }
+    .ar-sm\:grid-cols-2  { grid-template-columns: repeat(2,  minmax(0, 1fr)); }
+    .ar-sm\:grid-cols-3  { grid-template-columns: repeat(3,  minmax(0, 1fr)); }
+    .ar-sm\:grid-cols-4  { grid-template-columns: repeat(4,  minmax(0, 1fr)); }
+    .ar-sm\:grid-cols-6  { grid-template-columns: repeat(6,  minmax(0, 1fr)); }
+    .ar-sm\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+    /* col-span */
+    .ar-sm\:col-1  { grid-column: span 1  / span 1; }
+    .ar-sm\:col-2  { grid-column: span 2  / span 2; }
+    .ar-sm\:col-3  { grid-column: span 3  / span 3; }
+    .ar-sm\:col-4  { grid-column: span 4  / span 4; }
+    .ar-sm\:col-5  { grid-column: span 5  / span 5; }
+    .ar-sm\:col-6  { grid-column: span 6  / span 6; }
+    .ar-sm\:col-7  { grid-column: span 7  / span 7; }
+    .ar-sm\:col-8  { grid-column: span 8  / span 8; }
+    .ar-sm\:col-9  { grid-column: span 9  / span 9; }
+    .ar-sm\:col-10 { grid-column: span 10 / span 10; }
+    .ar-sm\:col-11 { grid-column: span 11 / span 11; }
+    .ar-sm\:col-12 { grid-column: span 12 / span 12; }
+    .ar-sm\:col-full { grid-column: 1 / -1; }
+    .ar-sm\:col-auto { grid-column: auto; }
+
+    /* grid-flow */
+    .ar-sm\:grid-flow-row   { grid-auto-flow: row; }
+    .ar-sm\:grid-flow-col   { grid-auto-flow: column; }
+    .ar-sm\:grid-flow-dense { grid-auto-flow: dense; }
+  }
+
+
+  /* --- md (768px+) --- */
+  @media (min-width: 768px) {
+
+    /* grid-cols */
+    .ar-md\:grid-cols-1  { grid-template-columns: repeat(1,  minmax(0, 1fr)); }
+    .ar-md\:grid-cols-2  { grid-template-columns: repeat(2,  minmax(0, 1fr)); }
+    .ar-md\:grid-cols-3  { grid-template-columns: repeat(3,  minmax(0, 1fr)); }
+    .ar-md\:grid-cols-4  { grid-template-columns: repeat(4,  minmax(0, 1fr)); }
+    .ar-md\:grid-cols-6  { grid-template-columns: repeat(6,  minmax(0, 1fr)); }
+    .ar-md\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+    /* col-span */
+    .ar-md\:col-1  { grid-column: span 1  / span 1; }
+    .ar-md\:col-2  { grid-column: span 2  / span 2; }
+    .ar-md\:col-3  { grid-column: span 3  / span 3; }
+    .ar-md\:col-4  { grid-column: span 4  / span 4; }
+    .ar-md\:col-5  { grid-column: span 5  / span 5; }
+    .ar-md\:col-6  { grid-column: span 6  / span 6; }
+    .ar-md\:col-7  { grid-column: span 7  / span 7; }
+    .ar-md\:col-8  { grid-column: span 8  / span 8; }
+    .ar-md\:col-9  { grid-column: span 9  / span 9; }
+    .ar-md\:col-10 { grid-column: span 10 / span 10; }
+    .ar-md\:col-11 { grid-column: span 11 / span 11; }
+    .ar-md\:col-12 { grid-column: span 12 / span 12; }
+    .ar-md\:col-full { grid-column: 1 / -1; }
+    .ar-md\:col-auto { grid-column: auto; }
+
+    /* grid-flow */
+    .ar-md\:grid-flow-row   { grid-auto-flow: row; }
+    .ar-md\:grid-flow-col   { grid-auto-flow: column; }
+    .ar-md\:grid-flow-dense { grid-auto-flow: dense; }
+  }
+
+
+  /* --- lg (1024px+) --- */
+  @media (min-width: 1024px) {
+
+    /* grid-cols */
+    .ar-lg\:grid-cols-1  { grid-template-columns: repeat(1,  minmax(0, 1fr)); }
+    .ar-lg\:grid-cols-2  { grid-template-columns: repeat(2,  minmax(0, 1fr)); }
+    .ar-lg\:grid-cols-3  { grid-template-columns: repeat(3,  minmax(0, 1fr)); }
+    .ar-lg\:grid-cols-4  { grid-template-columns: repeat(4,  minmax(0, 1fr)); }
+    .ar-lg\:grid-cols-6  { grid-template-columns: repeat(6,  minmax(0, 1fr)); }
+    .ar-lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+    /* col-span */
+    .ar-lg\:col-1  { grid-column: span 1  / span 1; }
+    .ar-lg\:col-2  { grid-column: span 2  / span 2; }
+    .ar-lg\:col-3  { grid-column: span 3  / span 3; }
+    .ar-lg\:col-4  { grid-column: span 4  / span 4; }
+    .ar-lg\:col-5  { grid-column: span 5  / span 5; }
+    .ar-lg\:col-6  { grid-column: span 6  / span 6; }
+    .ar-lg\:col-7  { grid-column: span 7  / span 7; }
+    .ar-lg\:col-8  { grid-column: span 8  / span 8; }
+    .ar-lg\:col-9  { grid-column: span 9  / span 9; }
+    .ar-lg\:col-10 { grid-column: span 10 / span 10; }
+    .ar-lg\:col-11 { grid-column: span 11 / span 11; }
+    .ar-lg\:col-12 { grid-column: span 12 / span 12; }
+    .ar-lg\:col-full { grid-column: 1 / -1; }
+    .ar-lg\:col-auto { grid-column: auto; }
+
+    /* grid-flow */
+    .ar-lg\:grid-flow-row   { grid-auto-flow: row; }
+    .ar-lg\:grid-flow-col   { grid-auto-flow: column; }
+    .ar-lg\:grid-flow-dense { grid-auto-flow: dense; }
+  }
+
+
+  /* --- xl (1280px+) --- */
+  @media (min-width: 1280px) {
+
+    /* grid-cols */
+    .ar-xl\:grid-cols-1  { grid-template-columns: repeat(1,  minmax(0, 1fr)); }
+    .ar-xl\:grid-cols-2  { grid-template-columns: repeat(2,  minmax(0, 1fr)); }
+    .ar-xl\:grid-cols-3  { grid-template-columns: repeat(3,  minmax(0, 1fr)); }
+    .ar-xl\:grid-cols-4  { grid-template-columns: repeat(4,  minmax(0, 1fr)); }
+    .ar-xl\:grid-cols-6  { grid-template-columns: repeat(6,  minmax(0, 1fr)); }
+    .ar-xl\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+    /* col-span */
+    .ar-xl\:col-1  { grid-column: span 1  / span 1; }
+    .ar-xl\:col-2  { grid-column: span 2  / span 2; }
+    .ar-xl\:col-3  { grid-column: span 3  / span 3; }
+    .ar-xl\:col-4  { grid-column: span 4  / span 4; }
+    .ar-xl\:col-5  { grid-column: span 5  / span 5; }
+    .ar-xl\:col-6  { grid-column: span 6  / span 6; }
+    .ar-xl\:col-7  { grid-column: span 7  / span 7; }
+    .ar-xl\:col-8  { grid-column: span 8  / span 8; }
+    .ar-xl\:col-9  { grid-column: span 9  / span 9; }
+    .ar-xl\:col-10 { grid-column: span 10 / span 10; }
+    .ar-xl\:col-11 { grid-column: span 11 / span 11; }
+    .ar-xl\:col-12 { grid-column: span 12 / span 12; }
+    .ar-xl\:col-full { grid-column: 1 / -1; }
+    .ar-xl\:col-auto { grid-column: auto; }
+
+    /* grid-flow */
+    .ar-xl\:grid-flow-row   { grid-auto-flow: row; }
+    .ar-xl\:grid-flow-col   { grid-auto-flow: column; }
+    .ar-xl\:grid-flow-dense { grid-auto-flow: dense; }
+  }
+
+} /* end @layer utilities */
