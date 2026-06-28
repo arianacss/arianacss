@@ -337,7 +337,7 @@ MIT License. See LICENSE for details.
 
 ---
 
-Built With ❤️ in Afghanistan
+Build by Mohammad Hadi Mohammadi in Afghanistan
 
 ArianaCSS is a university design systems project. Open source. Free to use. Free to modify.
 
