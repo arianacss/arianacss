@@ -1,0 +1,244 @@
+/* ============================================================
+   ArianaCSS — Master Import File
+   File:    src/ariana.css
+   Version: 1.0.0
+
+   PURPOSE:
+   Development entry point. This file:
+   1. Declares the CSS @layer cascade order (non-negotiable)
+   2. Imports all source files in the correct dependency order
+
+   ⚠️  THIS FILE IS FOR DEVELOPMENT ONLY.
+   It is never shipped to end users directly. The production
+   build concatenates all source files into a single file
+   (dist/ariana.css) without @import chains. See the
+   Implementation Blueprint §5 (Production Build Order)
+   for the concatenation specification.
+
+   WHY @import ORDER MATTERS:
+   CSS @layer priority is determined by the ORDER layers are
+   first declared, not by the order rules appear in the file.
+   The @layer declaration on line 43 is the cascade contract.
+   Files imported later in the same layer do NOT override
+   files imported earlier — they add to the same layer pool
+   and specificity / source order within the layer determines
+   the winner.
+
+   The import order within each layer group matters for
+   source-order tie-breaking within that layer. The order
+   between layers does not matter (layers handle that).
+
+   @layer CASCADE ORDER (lowest → highest priority):
+   ┌─────────────┬───────────────────────────────────────────┐
+   │ Layer       │ What it contains                          │
+   ├─────────────┼───────────────────────────────────────────┤
+   │ tokens      │ CSS custom properties (:root only)        │
+   │ base        │ Reset, base element styles, focus, motion │
+   │ layout      │ Container, 12-column grid                 │
+   │ typography  │ Type scale, heading classes, prose utils  │
+   │ components  │ Button, card, alert, input, indicators    │
+   │ utilities   │ Single-property utility classes           │
+   └─────────────┴───────────────────────────────────────────┘
+
+   UTILITIES WIN OVER COMPONENTS (by design):
+   A developer who adds ar-mt-0 to a card expects the utility
+   to override the card's default margin. Utilities in the
+   highest layer ensure this always works without !important.
+
+   STATUS OF SOURCE FILES:
+   ✅ Complete and included
+   ⏳ Not yet generated — @import commented out with notice
+
+   COMPONENT COMPLETION STATUS:
+   ✅ indicators.css  (badge + avatar)
+   ✅ alert.css
+   ✅ button.css
+   ⏳ input.css       — pending generation
+   ⏳ card.css        — pending generation
+
+   Once input.css and card.css are generated, uncomment
+   their @import lines in the Components section below.
+
+   ADDING A NEW SOURCE FILE:
+   1. Add the token to TOKEN-STANDARD.md
+   2. Add the @import in the correct layer section below
+   3. Update the production build order in the build script
+   4. Update the file inventory in CONTRIBUTING.md
+   ============================================================ */
+
+
+/* ============================================================
+   LAYER DECLARATION
+   ─────────────────────────────────────────────────────────────
+   This declaration MUST appear before any @import and before
+   any CSS rules. It is the cascade contract for the entire
+   framework. The order here is absolute and locked.
+
+   DO NOT reorder these layer names.
+   DO NOT add new layers without updating LAYER-CONTRACT.md.
+   DO NOT move this declaration below any @import statement.
+   ============================================================ */
+
+@layer tokens, base, layout, typography, components, utilities;
+
+
+/* ============================================================
+   PHASE 1 — TOKEN FOUNDATION
+   ─────────────────────────────────────────────────────────────
+   Single source of truth for all visual decisions.
+   No other file may contain hard-coded color, spacing,
+   typography, shadow, or motion values.
+   Must be the first @import after the layer declaration.
+   ============================================================ */
+
+@import './1-tokens/tokens.css';
+
+
+/* ============================================================
+   PHASE 2 — BASE LAYER
+   ─────────────────────────────────────────────────────────────
+   Import order within the base layer is critical:
+   1. reset.css    — blank normalized slate (no tokens)
+   2. motion.css   — reduced-motion contract BEFORE any
+                     transitions are introduced
+   3. base.css     — first transitions appear (link hover)
+   4. focus.css    — focus ring system (uses duration token)
+
+   motion.css must run before base.css because base.css
+   introduces the first CSS transitions (link hover color).
+   The prefers-reduced-motion block in motion.css must be
+   established before any transition is declared.
+   ============================================================ */
+
+@import './2-base/reset.css';
+@import './2-base/motion.css';
+@import './2-base/base.css';
+@import './2-base/focus.css';
+
+
+/* ============================================================
+   PHASE 3 — LAYOUT LAYER
+   ─────────────────────────────────────────────────────────────
+   container.css first — the grid is always tested inside
+   a container and container max-widths must be established
+   before grid column spans are measured.
+   ============================================================ */
+
+@import './3-layout/container.css';
+@import './3-layout/grid.css';
+
+
+/* ============================================================
+   PHASE 4 — TYPOGRAPHY LAYER
+   ─────────────────────────────────────────────────────────────
+   scale.css first — defines h1–h6 element styles and
+   .ar-h1–.ar-h6 pattern classes.
+   utils.css second — prose utilities and .ar-prose block
+   reference the type scale tokens already confirmed
+   correct at this point.
+   ============================================================ */
+
+@import './4-typography/scale.css';
+@import './4-typography/utils.css';
+
+
+/* ============================================================
+   PHASE 5 — UTILITY LAYER
+   ─────────────────────────────────────────────────────────────
+   Utility import order within the layer follows the
+   implementation roadmap (simplest and most foundational first,
+   spacing last because it is the largest and benefits from
+   the contributor having established patterns in smaller files).
+
+   No utility file depends on any other utility file.
+   No utility file depends on any component file.
+   All utility files depend only on tokens.css.
+   ============================================================ */
+
+@import './5-utilities/display.css';
+@import './5-utilities/shadow.css';
+@import './5-utilities/color.css';
+@import './5-utilities/typography.css';
+@import './5-utilities/border.css';
+@import './5-utilities/ratio.css';
+@import './5-utilities/spacing.css';
+@import './5-utilities/flex.css';
+@import './5-utilities/grid.css';
+
+
+/* ============================================================
+   PHASE 6 — COMPONENT LAYER
+   ─────────────────────────────────────────────────────────────
+   Component import order follows structural dependency:
+   simpler components first (they appear inside complex ones).
+
+   indicators.css — badge + avatar (simplest, appear inside cards)
+   alert.css      — no interactive states (validates color roles
+                    in a simple context before button complexity)
+   button.css     — most states and variants (most tested)
+   input.css      — form inputs (builds on button state patterns)
+   card.css       — most compositional (tested with all others inside)
+
+   NO COMPONENT FILE MAY:
+   - Reference another component's class names in its CSS
+   - Depend on a utility class being present
+   - Use hard-coded color, spacing, or typography values
+   - Use :focus (only :focus-visible)
+   - Omit a prefers-reduced-motion block for its transitions
+   ============================================================ */
+
+@import './6-components/indicators.css';
+@import './6-components/alert.css';
+@import './6-components/button.css';
+
+/* ─── PENDING GENERATION ────────────────────────────────────
+   The following components are not yet generated.
+   Uncomment each @import when the corresponding file exists.
+
+   @import './6-components/input.css';
+   @import './6-components/card.css';
+   ─────────────────────────────────────────────────────────── */
+
+
+/* ============================================================
+   END OF FILE — src/ariana.css
+
+   TOTAL SOURCE FILES (when complete): 23
+   ┌────────────────────────────────────┬──────┬────────────┐
+   │ File                               │ Done │ Layer      │
+   ├────────────────────────────────────┼──────┼────────────┤
+   │ 1-tokens/tokens.css                │  ✅  │ tokens     │
+   │ 2-base/reset.css                   │  ✅  │ base       │
+   │ 2-base/motion.css                  │  ✅  │ base       │
+   │ 2-base/base.css                    │  ✅  │ base       │
+   │ 2-base/focus.css                   │  ✅  │ base       │
+   │ 3-layout/container.css             │  ✅  │ layout     │
+   │ 3-layout/grid.css                  │  ✅  │ layout     │
+   │ 4-typography/scale.css             │  ✅  │ typography │
+   │ 4-typography/utils.css             │  ✅  │ typography │
+   │ 5-utilities/display.css            │  ✅  │ utilities  │
+   │ 5-utilities/shadow.css             │  ✅  │ utilities  │
+   │ 5-utilities/color.css              │  ✅  │ utilities  │
+   │ 5-utilities/typography.css         │  ✅  │ utilities  │
+   │ 5-utilities/border.css             │  ✅  │ utilities  │
+   │ 5-utilities/ratio.css              │  ✅  │ utilities  │
+   │ 5-utilities/spacing.css            │  ✅  │ utilities  │
+   │ 5-utilities/flex.css               │  ✅  │ utilities  │
+   │ 5-utilities/grid.css               │  ✅  │ utilities  │
+   │ 6-components/indicators.css        │  ✅  │ components │
+   │ 6-components/alert.css             │  ✅  │ components │
+   │ 6-components/button.css            │  ✅  │ components │
+   │ 6-components/input.css             │  ⏳  │ components │
+   │ 6-components/card.css              │  ⏳  │ components │
+   └────────────────────────────────────┴──────┴────────────┘
+
+   21 of 23 source files complete.
+   2 remaining: input.css, card.css
+
+   When all 23 files are complete:
+   1. Uncomment the two pending @import lines above
+   2. Run the build script to generate dist/ariana.css
+   3. Verify the @layer declaration appears first in the output
+   4. Verify no @import statements remain in dist output
+   5. Measure minified size against the 56KB threshold
+   ============================================================ */
