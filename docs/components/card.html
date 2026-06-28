@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--ar-space-4);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-card-grid .ar-card {
+      height: 100%;
+    }
+
+    .doc-card-demo {
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+
+      .doc-card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="button.html" class="doc-nav-link doc-nav-link--active">Components</a>
+          <a href="../utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Components</span></li>
+              <li><a href="button.html">Button</a></li>
+              <li><a href="card.html" class="doc-sidebar-active">Card</a></li>
+              <li><a href="alert.html">Alert</a></li>
+              <li><a href="indicators.html">Indicators</a></li>
+              <li><a href="input.html">Input</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Card</h1>
+          <p class="ar-lead">
+            A flexible, compositional container for grouping related content and actions.
+            The most versatile component in ArianaCSS.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Designed for Composition</div>
+            <div class="ar-alert__message">
+              Cards are <strong>fully compositional</strong>. All sub-elements (header, body, footer, media)
+              are optional. Cards work with every other component — badges, avatars, buttons, inputs, and alerts
+              can all appear inside a card.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              The card component is a contained surface that groups related content and actions.
+              It's perfect for dashboards, product listings, article previews, and feature grids.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🧩</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  4 optional sub-elements (media, header, body, footer)
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🎨</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  6 style variants · 3 sizes · 5 color variants
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🔄</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Interactive cards with hover lift effect
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Basic Usage -->
+          <section id="basic-usage">
+            <h2>Basic Usage</h2>
+            <p>
+              The simplest card uses only the <code>.ar-card</code> class with a body.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-card"&gt;
+  &lt;div class="ar-card__body"&gt;
+    &lt;p&gt;Card content goes here.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-card-demo">
+                <div class="ar-card">
+                  <div class="ar-card__body">
+                    <p class="ar-m-0">Card content goes here.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Sub-elements -->
+          <section id="sub-elements">
+            <h2>Sub-elements</h2>
+            <p>
+              Cards have <strong>4 optional sub-elements</strong> that can be combined in any way:
+              <code>ar-card__media</code>, <code>ar-card__header</code>, <code>ar-card__body</code>,
+              and <code>ar-card__footer</code>.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-card"&gt;
+  &lt;div class="ar-card__media"&gt;
+    &lt;img src="image.jpg" alt="..." style="object-fit:cover;width:100%;height:100%;"&gt;
+  &lt;/div&gt;
+  &lt;div class="ar-card__header"&gt;
+    &lt;h3 class="ar-card__title"&gt;Card Title&lt;/h3&gt;
+    &lt;p class="ar-card__subtitle"&gt;Optional subtitle&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="ar-card__body"&gt;
+    &lt;p&gt;Card content paragraph.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="ar-card__footer"&gt;
+    &lt;button class="ar-btn ar-btn--primary"&gt;Action&lt;/button&gt;
+    &lt;button class="ar-btn ar-btn--ghost"&gt;Cancel&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-card-demo">
+                <div class="ar-card">
+                  <div class="ar-card__media" style="background: var(--ar-color-primary-surface); min-height: 120px; display: flex; align-items: center; justify-content: center; color: var(--ar-color-primary-emphasis);">
+                    📸 Media
+                  </div>
+                  <div class="ar-card__header">
+                    <h3 class="ar-card__title">Card Title</h3>
+                    <p class="ar-card__subtitle">Optional subtitle</p>
+                  </div>
+                  <div class="ar-card__body">
+                    <p class="ar-m-0">Card content paragraph. This is the main content area of the card.</p>
+                  </div>
+                  <div class="ar-card__footer">
+                    <button class="ar-btn ar-btn--primary ar-btn--sm">Action</button>
+                    <button class="ar-btn ar-btn--ghost ar-btn--sm">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h3>All Sub-elements Are Optional</h3>
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-3 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Body Only</h4>
+                <div class="ar-card">
+                  <div class="ar-card__body">
+                    <p class="ar-text-sm ar-m-0">Only body content.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="ar-card ar-p-3 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Header + Body</h4>
+                <div class="ar-card">
+                  <div class="ar-card__header">
+                    <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Title</h4>
+                  </div>
+                  <div class="ar-card__body">
+                    <p class="ar-text-sm ar-m-0">Header + body content.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="ar-card ar-p-3 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Header + Body + Footer</h4>
+                <div class="ar-card">
+                  <div class="ar-card__header">
+                    <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Title</h4>
+                  </div>
+                  <div class="ar-card__body">
+                    <p class="ar-text-sm ar-m-0">All three sections.</p>
+                  </div>
+                  <div class="ar-card__footer">
+                    <span class="ar-text-xs ar-text-muted">Footer</span>
+                  </div>
+                </div>
+              </div>
+              <div class="ar-card ar-p-3 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Media + Header + Body</h4>
+                <div class="ar-card">
+                  <div class="ar-card__media" style="background: var(--ar-color-primary-surface); height: 60px; display: flex; align-items: center; justify-content: center; color: var(--ar-color-primary-emphasis); font-size: var(--ar-text-size-xs);">
+                    Media
+                  </div>
+                  <div class="ar-card__header">
+                    <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Title</h4>
+                  </div>
+                  <div class="ar-card__body">
+                    <p class="ar-text-sm ar-m-0">Media + header + body.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Style Variants -->
+          <section id="style-variants">
+            <h2>Style Variants</h2>
+            <p>
+              Cards come in <strong>6 style variants</strong>:
+              flat, bordered, raised, sunken, inverse, and the default (shadow).
+            </p>
+
+            <div class="doc-card-grid">
+              <div class="ar-card">
+                <div class="ar-card__header">
+                  <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Default</h4>
+                </div>
+                <div class="ar-card__body">
+                  <p class="ar-text-sm ar-m-0">Shadow-1 at rest.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--flat">
+                <div class="ar-card__header">
+                  <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Flat</h4>
+                </div>
+                <div class="ar-card__body">
+                  <p class="ar-text-sm ar-m-0">No shadow, no border.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--bordered">
+                <div class="ar-card__header">
+                  <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Bordered</h4>
+                </div>
+                <div class="ar-card__body">
+                  <p class="ar-text-sm ar-m-0">Border instead of shadow.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--raised">
+                <div class="ar-card__header">
+                  <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Raised</h4>
+                </div>
+                <div class="ar-card__body">
+                  <p class="ar-text-sm ar-m-0">Shadow-2 at rest.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--sunken">
+                <div class="ar-card__header">
+                  <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Sunken</h4>
+                </div>
+                <div class="ar-card__body">
+                  <p class="ar-text-sm ar-m-0">Recessed surface.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--inverse">
+                <div class="ar-card__header">
+                  <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base); color: var(--ar-color-text-inverse);">Inverse</h4>
+                </div>
+                <div class="ar-card__body">
+                  <p class="ar-text-sm ar-m-0" style="color: var(--ar-color-text-inverse);">Dark surface for dark contexts.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-code-block ar-mt-4">
+              <code>&lt;!-- Default (shadow) --&gt;
+&lt;div class="ar-card"&gt;...&lt;/div&gt;
+
+&lt;!-- Flat (no shadow, no border) --&gt;
+&lt;div class="ar-card ar-card--flat"&gt;...&lt;/div&gt;
+
+&lt;!-- Bordered (no shadow, border visible) --&gt;
+&lt;div class="ar-card ar-card--bordered"&gt;...&lt;/div&gt;
+
+&lt;!-- Raised (shadow-2) --&gt;
+&lt;div class="ar-card ar-card--raised"&gt;...&lt;/div&gt;
+
+&lt;!-- Sunken (recessed surface) --&gt;
+&lt;div class="ar-card ar-card--sunken"&gt;...&lt;/div&gt;
+
+&lt;!-- Inverse (dark surface) --&gt;
+&lt;div class="ar-card ar-card--inverse"&gt;...&lt;/div&gt;</code>
+            </div>
+          </section>
+
+          <!-- Color Variants -->
+          <section id="color-variants">
+            <h2>Color Variants</h2>
+            <p>
+              Use <strong>5 semantic color variants</strong> for status-driven cards:
+              primary, success, warning, danger, and info.
+            </p>
+
+            <div class="doc-card-grid">
+              <div class="ar-card ar-card--primary">
+                <div class="ar-card__body">
+                  <h4 class="ar-h6 ar-mb-1 ar-color-primary-emphasis">Primary</h4>
+                  <p class="ar-text-sm ar-m-0">Featured or selected card.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--success">
+                <div class="ar-card__body">
+                  <h4 class="ar-h6 ar-mb-1 ar-text-success">Success</h4>
+                  <p class="ar-text-sm ar-m-0">Completed or approved.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--warning">
+                <div class="ar-card__body">
+                  <h4 class="ar-h6 ar-mb-1 ar-text-warning">Warning</h4>
+                  <p class="ar-text-sm ar-m-0">Attention needed.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--danger">
+                <div class="ar-card__body">
+                  <h4 class="ar-h6 ar-mb-1 ar-text-danger">Danger</h4>
+                  <p class="ar-text-sm ar-m-0">Error or critical issue.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--info">
+                <div class="ar-card__body">
+                  <h4 class="ar-h6 ar-mb-1 ar-text-info">Info</h4>
+                  <p class="ar-text-sm ar-m-0">Informational content.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-code-block ar-mt-4">
+              <code>&lt;div class="ar-card ar-card--success"&gt;...&lt;/div&gt;
+&lt;div class="ar-card ar-card--danger"&gt;...&lt;/div&gt;
+&lt;div class="ar-card ar-card--warning"&gt;...&lt;/div&gt;</code>
+            </div>
+          </section>
+
+          <!-- Size Variants -->
+          <section id="size-variants">
+            <h2>Size Variants</h2>
+            <p>
+              Cards come in <strong>3 sizes</strong>: sm (12px padding), base (20px padding), and lg (28px padding).
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-card--sm">
+                <div class="ar-card__header">
+                  <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Small</h4>
+                </div>
+                <div class="ar-card__body">
+                  <p class="ar-text-sm ar-m-0">Compact padding (12px). Perfect for dense dashboards.</p>
+                </div>
+              </div>
+              <div class="ar-card">
+                <div class="ar-card__header">
+                  <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Default</h4>
+                </div>
+                <div class="ar-card__body">
+                  <p class="ar-text-sm ar-m-0">Standard padding (20px). Most common.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--lg">
+                <div class="ar-card__header">
+                  <h4 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Large</h4>
+                </div>
+                <div class="ar-card__body">
+                  <p class="ar-text-sm ar-m-0">Generous padding (28px). For featured content.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-code-block ar-mt-4">
+              <code>&lt;div class="ar-card ar-card--sm"&gt;...&lt;/div&gt;
+&lt;div class="ar-card"&gt;...&lt;/div&gt;
+&lt;div class="ar-card ar-card--lg"&gt;...&lt;/div&gt;</code>
+            </div>
+          </section>
+
+          <!-- Radius Variants -->
+          <section id="radius-variants">
+            <h2>Radius Variants</h2>
+            <p>
+              Use <code>ar-card--rounded-lg</code>, <code>ar-card--rounded-xl</code>,
+              or <code>ar-card--rounded-none</code> to override the default border radius.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-card--rounded-none">
+                <div class="ar-card__body">
+                  <h4 class="ar-h6 ar-mb-1">None</h4>
+                  <p class="ar-text-sm ar-m-0">0px radius — sharp corners.</p>
+                </div>
+              </div>
+              <div class="ar-card">
+                <div class="ar-card__body">
+                  <h4 class="ar-h6 ar-mb-1">Base</h4>
+                  <p class="ar-text-sm ar-m-0">6px radius — default.</p>
+                </div>
+              </div>
+              <div class="ar-card ar-card--rounded-lg">
+                <div class="ar-card__body">
+                  <h4 class="ar-h6 ar-mb-1">Large</h4>
+                  <p class="ar-text-sm ar-m-0">12px radius — friendly.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-code-block ar-mt-4">
+              <code>&lt;div class="ar-card ar-card--rounded-lg"&gt;...&lt;/div&gt;
+&lt;div class="ar-card ar-card--rounded-xl"&gt;...&lt;/div&gt;
+&lt;div class="ar-card ar-card--rounded-none"&gt;...&lt;/div&gt;</code>
+            </div>
+          </section>
+
+          <!-- Interactive Cards -->
+          <section id="interactive">
+            <h2>Interactive Cards</h2>
+            <p>
+              Use <code>.ar-card--interactive</code> to make the entire card clickable with a hover lift effect.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;article class="ar-card ar-card--interactive"&gt;
+  &lt;a class="ar-card__link" href="/article/slug" aria-label="Read: Article Title"&gt;
+    &lt;div class="ar-card__media"&gt;
+      &lt;img src="article.jpg" alt="..." style="object-fit:cover;width:100%;height:100%;"&gt;
+    &lt;/div&gt;
+    &lt;div class="ar-card__header"&gt;
+      &lt;h3 class="ar-card__title"&gt;Article Title&lt;/h3&gt;
+    &lt;/div&gt;
+    &lt;div class="ar-card__body"&gt;
+      &lt;p&gt;Article preview text...&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/a&gt;
+&lt;/article&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-card-grid" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">
+                <article class="ar-card ar-card--interactive" style="cursor: pointer;">
+                  <a class="ar-card__link" href="#" aria-label="Read: Article Title">
+                    <div class="ar-card__media" style="background: var(--ar-color-primary-surface); height: 120px; display: flex; align-items: center; justify-content: center; color: var(--ar-color-primary-emphasis); font-size: var(--ar-text-size-sm);">
+                      📸 Featured Image
+                    </div>
+                    <div class="ar-card__header">
+                      <h3 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Article Title</h3>
+                      <p class="ar-card__subtitle">Published 2 days ago</p>
+                    </div>
+                    <div class="ar-card__body">
+                      <p class="ar-text-sm ar-m-0">This is a preview of the article content. Hover to see the lift effect.</p>
+                    </div>
+                  </a>
+                </article>
+                <article class="ar-card ar-card--interactive" style="cursor: pointer;">
+                  <a class="ar-card__link" href="#" aria-label="Read: Another Article">
+                    <div class="ar-card__media" style="background: var(--ar-color-success-surface); height: 120px; display: flex; align-items: center; justify-content: center; color: var(--ar-color-success-text); font-size: var(--ar-text-size-sm);">
+                      📊 Data Insights
+                    </div>
+                    <div class="ar-card__header">
+                      <h3 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Another Article</h3>
+                      <p class="ar-card__subtitle">Published 5 days ago</p>
+                    </div>
+                    <div class="ar-card__body">
+                      <p class="ar-text-sm ar-m-0">Hover over this card to see the interactive lift effect in action.</p>
+                    </div>
+                  </a>
+                </article>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">Hover over a card to see the lift effect</p>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 How it works:</strong>
+                <ul class="ar-list ar-mt-2">
+                  <li><code>ar-card--interactive</code> adds the hover lift effect</li>
+                  <li><code>ar-card__link</code> creates a stretched overlay so the entire card is clickable</li>
+                  <li>The lift effect is disabled on touch devices to prevent accidental hover states</li>
+                  <li>Interactive elements inside the card (buttons, badges) remain clickable</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Horizontal Cards -->
+          <section id="horizontal">
+            <h2>Horizontal Cards</h2>
+            <p>
+              Use <code>.ar-card--horizontal</code> for side-by-side media and content layouts.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-card ar-card--horizontal"&gt;
+  &lt;div class="ar-card__media" style="width: 160px; flex-shrink: 0;"&gt;
+    &lt;img src="image.jpg" alt="..." style="object-fit:cover;width:100%;height:100%;"&gt;
+  &lt;/div&gt;
+  &lt;div class="ar-card__body"&gt;
+    &lt;h3 class="ar-card__title"&gt;Horizontal Card&lt;/h3&gt;
+    &lt;p&gt;Content sits beside the media.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-card ar-card--horizontal" style="max-width: 500px;">
+                <div class="ar-card__media" style="width: 140px; flex-shrink: 0; background: var(--ar-color-primary-surface); display: flex; align-items: center; justify-content: center; color: var(--ar-color-primary-emphasis); font-size: var(--ar-text-size-sm); min-height: 120px;">
+                  📸 Media
+                </div>
+                <div class="ar-card__body">
+                  <h3 class="ar-card__title" style="font-size: var(--ar-text-size-base);">Horizontal Card</h3>
+                  <p class="ar-text-sm ar-m-0">Content sits beside the media. Stacks vertically on mobile.</p>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">Stacks to single column on mobile (< 768px)</p>
+            </div>
+          </section>
+
+          <!-- Card Grids -->
+          <section id="card-grids">
+            <h2>Card Grids</h2>
+            <p>
+              Use <code>.ar-card-grid</code> to arrange cards in a responsive grid with automatic reflow.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-card-grid"&gt;
+  &lt;div class="ar-card"&gt;Card 1&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 2&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 3&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 4&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-card-grid" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));">
+                <div class="ar-card ar-card--flat">
+                  <div class="ar-card__body">
+                    <h4 class="ar-h6 ar-mb-1">Card 1</h4>
+                    <p class="ar-text-sm ar-m-0">Auto-reflow grid.</p>
+                  </div>
+                </div>
+                <div class="ar-card ar-card--flat ar-card--success">
+                  <div class="ar-card__body">
+                    <h4 class="ar-h6 ar-mb-1 ar-text-success">Card 2</h4>
+                    <p class="ar-text-sm ar-m-0">Success variant.</p>
+                  </div>
+                </div>
+                <div class="ar-card ar-card--flat ar-card--warning">
+                  <div class="ar-card__body">
+                    <h4 class="ar-h6 ar-mb-1 ar-text-warning">Card 3</h4>
+                    <p class="ar-text-sm ar-m-0">Warning variant.</p>
+                  </div>
+                </div>
+                <div class="ar-card ar-card--flat ar-card--danger">
+                  <div class="ar-card__body">
+                    <h4 class="ar-h6 ar-mb-1 ar-text-danger">Card 4</h4>
+                    <p class="ar-text-sm ar-m-0">Danger variant.</p>
+                  </div>
+                </div>
+                <div class="ar-card ar-card--flat ar-card--info">
+                  <div class="ar-card__body">
+                    <h4 class="ar-h6 ar-mb-1 ar-text-info">Card 5</h4>
+                    <p class="ar-text-sm ar-m-0">Info variant.</p>
+                  </div>
+                </div>
+                <div class="ar-card ar-card--flat">
+                  <div class="ar-card__body">
+                    <h4 class="ar-h6 ar-mb-1">Card 6</h4>
+                    <p class="ar-text-sm ar-m-0">Equal height cards.</p>
+                  </div>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">Responsive auto-fill grid with equal-height cards</p>
+            </div>
+
+            <h3>Card Grid Variants</h3>
+            <div class="doc-code-block">
+              <code>&lt;!-- Compact grid (200px min width) --&gt;
+&lt;div class="ar-card-grid ar-card-grid--sm"&gt;...&lt;/div&gt;
+
+&lt;!-- Wide grid (360px min width) --&gt;
+&lt;div class="ar-card-grid ar-card-grid--lg"&gt;...&lt;/div&gt;</code>
+            </div>
+          </section>
+
+          <!-- Skeleton / Loading State -->
+          <section id="skeleton">
+            <h2>Skeleton Loading State</h2>
+            <p>
+              Use <code>.ar-card--skeleton</code> with skeleton line elements for loading placeholders.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-card ar-card--skeleton" aria-busy="true" aria-label="Loading content..."&gt;
+  &lt;div class="ar-card__body"&gt;
+    &lt;div class="ar-card-skeleton__media"&gt;&lt;/div&gt;
+    &lt;div class="ar-card-skeleton__line ar-card-skeleton__line--title"&gt;&lt;/div&gt;
+    &lt;div class="ar-card-skeleton__line"&gt;&lt;/div&gt;
+    &lt;div class="ar-card-skeleton__line ar-card-skeleton__line--short"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4">
+                <div class="ar-card ar-card--skeleton" aria-busy="true" aria-label="Loading content...">
+                  <div class="ar-card__body">
+                    <div class="ar-card-skeleton__media" style="height: 120px;"></div>
+                    <div class="ar-card-skeleton__line ar-card-skeleton__line--title"></div>
+                    <div class="ar-card-skeleton__line"></div>
+                    <div class="ar-card-skeleton__line ar-card-skeleton__line--short"></div>
+                  </div>
+                </div>
+                <div class="ar-card ar-card--skeleton" aria-busy="true" aria-label="Loading content...">
+                  <div class="ar-card__body">
+                    <div class="ar-card-skeleton__media" style="height: 120px;"></div>
+                    <div class="ar-card-skeleton__line ar-card-skeleton__line--title" style="width: 60%;"></div>
+                    <div class="ar-card-skeleton__line"></div>
+                    <div class="ar-card-skeleton__line"></div>
+                    <div class="ar-card-skeleton__line ar-card-skeleton__line--short"></div>
+                  </div>
+                </div>
+                <div class="ar-card ar-card--skeleton" aria-busy="true" aria-label="Loading content...">
+                  <div class="ar-card__body">
+                    <div class="ar-card-skeleton__media" style="height: 120px;"></div>
+                    <div class="ar-card-skeleton__line ar-card-skeleton__line--title"></div>
+                    <div class="ar-card-skeleton__line" style="width: 90%;"></div>
+                    <div class="ar-card-skeleton__line" style="width: 70%;"></div>
+                  </div>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">Skeleton placeholders with shimmer animation</p>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>♿ Accessibility:</strong>
+                <ul class="ar-list ar-mt-2">
+                  <li><code>aria-busy="true"</code> — Tells screen readers content is loading</li>
+                  <li><code>aria-label="Loading content..."</code> — Describes the loading state</li>
+                  <li>Skeleton animation stops with <code>prefers-reduced-motion</code></li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Accessibility -->
+          <section id="accessibility">
+            <h2>Accessibility</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">✅ Best Practices</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Use semantic HTML (<code>article</code>, <code>section</code>) for card containers</li>
+                  <li>Interactive cards should use <code>&lt;a&gt;</code> or <code>&lt;button&gt;</code> inside</li>
+                  <li>Provide <code>aria-label</code> on interactive card links</li>
+                  <li>Use <code>aria-busy="true"</code> for skeleton loading states</li>
+                  <li>Ensure heading hierarchy is maintained inside cards</li>
+                  <li>Cards should have sufficient color contrast</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">❌ Common Mistakes</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Making the entire card clickable without a proper <code>&lt;a&gt;</code> or <code>&lt;button&gt;</code></li>
+                  <li>Using <code>div</code> for interactive cards without proper ARIA roles</li>
+                  <li>Nesting interactive cards inside interactive cards</li>
+                  <li>Missing <code>alt</code> text on card media images</li>
+                  <li>Inconsistent heading hierarchy inside cards</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- HTML Reference -->
+          <section id="html-reference">
+            <h2>HTML Reference</h2>
+
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Purpose</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>.ar-card</code></td>
+                  <td>Base card styles</td>
+                  <td>✅ Required</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--flat</code></td>
+                  <td>No shadow, no border</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--bordered</code></td>
+                  <td>Border instead of shadow</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--raised</code></td>
+                  <td>Elevated shadow</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--sunken</code></td>
+                  <td>Recessed surface</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--inverse</code></td>
+                  <td>Dark surface</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--primary/success/warning/danger/info</code></td>
+                  <td>Semantic color variants</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--sm/lg</code></td>
+                  <td>Size variants</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--rounded-lg/xl/none</code></td>
+                  <td>Radius variants</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--interactive</code></td>
+                  <td>Clickable card with hover lift</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--horizontal</code></td>
+                  <td>Horizontal layout</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card--skeleton</code></td>
+                  <td>Loading placeholder</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card__media</code></td>
+                  <td>Image/video container</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card__header</code></td>
+                  <td>Title + subtitle container</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card__title</code></td>
+                  <td>Card title heading</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card__subtitle</code></td>
+                  <td>Card subtitle</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card__body</code></td>
+                  <td>Main content area</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card__footer</code></td>
+                  <td>Actions or metadata</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card__link</code></td>
+                  <td>Stretched link for interactive cards</td>
+                  <td>With --interactive</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card-skeleton__line</code></td>
+                  <td>Text placeholder line</td>
+                  <td>With --skeleton</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card-skeleton__media</code></td>
+                  <td>Media placeholder</td>
+                  <td>With --skeleton</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-card-grid</code></td>
+                  <td>Responsive card grid container</td>
+                  <td>Optional</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Do / Don't -->
+          <section id="do-dont">
+            <h2>Do / Don't</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use semantic HTML</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;article class="ar-card"&gt;
+  &lt;div class="ar-card__header"&gt;
+    &lt;h2 class="ar-card__title"&gt;Title&lt;/h2&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Use <code>article</code>, <code>section</code>, or <code>div</code> appropriately.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Skip heading hierarchy</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-card"&gt;
+  &lt;div class="ar-card__header"&gt;
+    &lt;div class="ar-card__title"&gt;Title&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Use proper heading elements (<code>h1</code>–<code>h6</code>) for titles.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use interactive cards with links</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;article class="ar-card ar-card--interactive"&gt;
+  &lt;a class="ar-card__link" href="/post"&gt;
+    &lt;h3&gt;Title&lt;/h3&gt;
+  &lt;/a&gt;
+&lt;/article&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Proper link elements provide keyboard accessibility.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Use divs as click targets</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-card ar-card--interactive" onclick="goTo()"&gt;
+  &lt;h3&gt;Title&lt;/h3&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Divs with onclick are not keyboard accessible without additional work.</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="alert.html" class="ar-text-link">Alert Component</a>
+              or learn about <a href="../utilities/spacing.html" class="ar-text-link">Spacing Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

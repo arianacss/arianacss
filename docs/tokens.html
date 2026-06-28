@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tokens — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    /* Token display styles */
+    .token-section {
+      margin-bottom: var(--ar-space-8);
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--ar-space-2);
+      margin: var(--ar-space-4) 0;
+    }
+
+    @media (min-width: 768px) {
+      .token-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .token-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .token-item {
+      display: flex;
+      align-items: center;
+      gap: var(--ar-space-3);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      background: var(--ar-color-layer-base);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      font-size: var(--ar-text-size-sm);
+      font-family: var(--ar-text-font-mono);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .token-item:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .token-swatch {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      border-radius: var(--ar-radius-sm);
+      border: 1px solid var(--ar-color-divider);
+    }
+
+    .token-name {
+      flex: 1;
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .token-value {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-micro) var(--ar-space-1);
+      border-radius: var(--ar-radius-sm);
+      font-family: var(--ar-text-font-mono);
+    }
+
+    .token-color-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--ar-space-1);
+      margin: var(--ar-space-2) 0;
+    }
+
+    .token-color-swatch {
+      padding: var(--ar-space-2);
+      text-align: center;
+      border-radius: var(--ar-radius-sm);
+      font-size: var(--ar-text-size-xs);
+      font-family: var(--ar-text-font-mono);
+      border: 1px solid var(--ar-color-divider);
+    }
+
+    .token-color-swatch .swatch-name {
+      display: block;
+      font-size: var(--ar-text-size-xs);
+      margin-top: var(--ar-space-1);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .token-color-swatch .swatch-value {
+      display: block;
+      font-size: var(--ar-text-size-xs);
+      opacity: 0.7;
+      font-weight: var(--ar-text-weight-normal);
+    }
+
+    .token-spacing-demo {
+      display: flex;
+      align-items: center;
+      gap: var(--ar-space-2);
+      padding: var(--ar-space-2);
+      background: var(--ar-color-layer-raised);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+    }
+
+    .token-spacing-demo .space-block {
+      background: var(--ar-color-primary-base);
+      border-radius: var(--ar-radius-sm);
+      height: 2rem;
+      width: 2rem;
+      flex-shrink: 0;
+    }
+
+    .token-spacing-demo .space-label {
+      font-size: var(--ar-text-size-xs);
+      font-family: var(--ar-text-font-mono);
+      color: var(--ar-color-text-muted);
+    }
+
+    .token-shadow-demo {
+      display: inline-block;
+      width: 4rem;
+      height: 4rem;
+      background: var(--ar-color-layer-base);
+      border-radius: var(--ar-radius-base);
+      margin: var(--ar-space-2);
+    }
+
+    .token-radius-demo {
+      display: inline-block;
+      width: 4rem;
+      height: 4rem;
+      background: var(--ar-color-primary-surface);
+      border: 2px solid var(--ar-color-primary-base);
+      margin: var(--ar-space-2);
+    }
+
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .token-table th,
+    .token-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+    }
+
+    .token-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .token-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+
+      .token-color-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="tokens.html" class="doc-nav-link doc-nav-link--active">Tokens</a>
+          <a href="grid.html" class="doc-nav-link">Grid</a>
+          <a href="typography.html" class="doc-nav-link">Typography</a>
+          <a href="components/button.html" class="doc-nav-link">Components</a>
+          <a href="utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Tokens</span></li>
+              <li><a href="#introduction" class="doc-sidebar-active">Introduction</a></li>
+              <li><a href="#color-primitives">Color Primitives</a></li>
+              <li><a href="#semantic-colors">Semantic Colors</a></li>
+              <li><a href="#typography">Typography</a></li>
+              <li><a href="#spacing">Spacing</a></li>
+              <li><a href="#border-radius">Border Radius</a></li>
+              <li><a href="#shadows">Shadows</a></li>
+              <li><a href="#motion">Motion</a></li>
+              <li><a href="#focus-ring">Focus Ring</a></li>
+              <li><a href="#z-index">Z-Index</a></li>
+              <li><a href="#layout">Layout</a></li>
+              <li><a href="#theming">Theming</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Tokens</h1>
+          <p class="ar-lead">
+            The complete design system. Every visual decision in ArianaCSS is defined as a CSS custom property.
+            Learn the tokens, master the framework.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Token Naming Convention</div>
+            <div class="ar-alert__message">
+              Tokens follow the pattern: <code>--ar-[category]-[subcategory]-[variant]</code>.
+              See <a href="TOKEN-STANDARD.md" class="ar-text-link">TOKEN-STANDARD.md</a> for the complete grammar.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              ArianaCSS uses a token system with <strong>147 tokens</strong> organized into <strong>17 sections</strong>.
+              The token system is the single source of truth for every visual decision in the framework.
+            </p>
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">25</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">Color Primitives</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">27</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">Typography Tokens</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">17</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">Spacing Steps</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Color Primitives -->
+          <section id="color-primitives">
+            <h2>Color Primitives</h2>
+            <p>
+              The raw palette. Five hues with five perceptually-calibrated stops each.
+              These are the foundation of the color system.
+            </p>
+
+            <h3>Lapis (Primary / Interactive)</h3>
+            <p>Hue: 226° — between indigo and royal blue. Distinct from Bootstrap and Tailwind.</p>
+            <div class="token-color-grid">
+              <div class="token-color-swatch" style="background: var(--ar-lapis-50); color: var(--ar-stone-900);">
+                <span class="swatch-name">50</span>
+                <span class="swatch-value">hsl(226 80% 96%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-lapis-300); color: var(--ar-stone-900);">
+                <span class="swatch-name">300</span>
+                <span class="swatch-value">hsl(226 65% 70%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-lapis-600); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">600</span>
+                <span class="swatch-value">hsl(226 72% 46%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-lapis-700); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">700</span>
+                <span class="swatch-value">hsl(226 75% 38%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-lapis-900); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">900</span>
+                <span class="swatch-value">hsl(226 70% 22%)</span>
+              </div>
+            </div>
+
+            <h3>Stone (Neutral / Warm Gray)</h3>
+            <p>Hue: 35° — imperceptible warmth that accumulates across interfaces.</p>
+            <div class="token-color-grid">
+              <div class="token-color-swatch" style="background: var(--ar-stone-50); color: var(--ar-stone-900);">
+                <span class="swatch-name">50</span>
+                <span class="swatch-value">hsl(35 14% 97%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-stone-300); color: var(--ar-stone-900);">
+                <span class="swatch-name">300</span>
+                <span class="swatch-value">hsl(35 10% 78%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-stone-600); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">600</span>
+                <span class="swatch-value">hsl(35 8% 40%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-stone-700); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">700</span>
+                <span class="swatch-value">hsl(35 9% 30%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-stone-900); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">900</span>
+                <span class="swatch-value">hsl(35 12% 12%)</span>
+              </div>
+            </div>
+
+            <h3>Saffron (Warning)</h3>
+            <p>Hue: 42° — golden, not orange, not yellow.</p>
+            <div class="token-color-grid">
+              <div class="token-color-swatch" style="background: var(--ar-saffron-50); color: var(--ar-saffron-900);">
+                <span class="swatch-name">50</span>
+                <span class="swatch-value">hsl(42 95% 95%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-saffron-300); color: var(--ar-stone-900);">
+                <span class="swatch-name">300</span>
+                <span class="swatch-value">hsl(42 90% 68%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-saffron-600); color: var(--ar-color-text-on-warning);">
+                <span class="swatch-name">600</span>
+                <span class="swatch-value">hsl(42 85% 38%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-saffron-700); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">700</span>
+                <span class="swatch-value">hsl(42 88% 28%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-saffron-900); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">900</span>
+                <span class="swatch-value">hsl(42 85% 14%)</span>
+              </div>
+            </div>
+
+            <h3>Cedar (Success)</h3>
+            <p>Hue: 158° — forest green with blue undertone.</p>
+            <div class="token-color-grid">
+              <div class="token-color-swatch" style="background: var(--ar-cedar-50); color: var(--ar-stone-900);">
+                <span class="swatch-name">50</span>
+                <span class="swatch-value">hsl(158 60% 94%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-cedar-300); color: var(--ar-stone-900);">
+                <span class="swatch-name">300</span>
+                <span class="swatch-value">hsl(158 45% 58%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-cedar-600); color: var(--ar-color-text-on-success);">
+                <span class="swatch-name">600</span>
+                <span class="swatch-value">hsl(158 55% 30%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-cedar-700); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">700</span>
+                <span class="swatch-value">hsl(158 58% 22%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-cedar-900); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">900</span>
+                <span class="swatch-value">hsl(158 60% 11%)</span>
+              </div>
+            </div>
+
+            <h3>Ember (Danger)</h3>
+            <p>Hue: 4° — red with slight orange undertone.</p>
+            <div class="token-color-grid">
+              <div class="token-color-swatch" style="background: var(--ar-ember-50); color: var(--ar-stone-900);">
+                <span class="swatch-name">50</span>
+                <span class="swatch-value">hsl(4 88% 96%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-ember-300); color: var(--ar-stone-900);">
+                <span class="swatch-name">300</span>
+                <span class="swatch-value">hsl(4 75% 68%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-ember-600); color: var(--ar-color-text-on-danger);">
+                <span class="swatch-name">600</span>
+                <span class="swatch-value">hsl(4 72% 44%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-ember-700); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">700</span>
+                <span class="swatch-value">hsl(4 75% 35%)</span>
+              </div>
+              <div class="token-color-swatch" style="background: var(--ar-ember-900); color: var(--ar-color-text-on-primary);">
+                <span class="swatch-name">900</span>
+                <span class="swatch-value">hsl(4 70% 18%)</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Semantic Colors -->
+          <section id="semantic-colors">
+            <h2>Semantic Colors</h2>
+            <p>
+              Semantic tokens define what colors mean. Components and utilities reference these,
+              not the primitive tokens directly.
+            </p>
+
+            <h3>Primary (Interactive)</h3>
+            <div class="token-grid">
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-primary-surface);"></div>
+                <span class="token-name">--ar-color-primary-surface</span>
+                <span class="token-value">var(--ar-lapis-50)</span>
+              </div>
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-primary-border);"></div>
+                <span class="token-name">--ar-color-primary-border</span>
+                <span class="token-value">var(--ar-lapis-300)</span>
+              </div>
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-primary-base);"></div>
+                <span class="token-name">--ar-color-primary-base</span>
+                <span class="token-value">var(--ar-lapis-600)</span>
+              </div>
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-primary-hover);"></div>
+                <span class="token-name">--ar-color-primary-hover</span>
+                <span class="token-value">var(--ar-lapis-700)</span>
+              </div>
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-primary-active);"></div>
+                <span class="token-name">--ar-color-primary-active</span>
+                <span class="token-value">hsl(226 76% 32%)</span>
+              </div>
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-primary-emphasis);"></div>
+                <span class="token-name">--ar-color-primary-emphasis</span>
+                <span class="token-value">var(--ar-lapis-900)</span>
+              </div>
+            </div>
+
+            <h3>Status Roles</h3>
+            <div class="token-grid">
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-success-base);"></div>
+                <span class="token-name">--ar-color-success-base</span>
+                <span class="token-value">var(--ar-cedar-600)</span>
+              </div>
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-warning-base);"></div>
+                <span class="token-name">--ar-color-warning-base</span>
+                <span class="token-value">var(--ar-saffron-600)</span>
+              </div>
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-danger-base);"></div>
+                <span class="token-name">--ar-color-danger-base</span>
+                <span class="token-value">var(--ar-ember-600)</span>
+              </div>
+              <div class="token-item">
+                <div class="token-swatch" style="background: var(--ar-color-info-base);"></div>
+                <span class="token-name">--ar-color-info-base</span>
+                <span class="token-value">hsl(220 8% 44%)</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Typography -->
+          <section id="typography">
+            <h2>Typography</h2>
+            <p>
+              All typography decisions—font size, weight, line height, and letter spacing—
+              are defined as tokens.
+            </p>
+
+            <h3>Type Scale</h3>
+            <table class="token-table">
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Value</th>
+                  <th>Size</th>
+                  <th>Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>--ar-text-size-xs</code></td>
+                  <td>0.75rem</td>
+                  <td>12px</td>
+                  <td>Captions, badges</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-size-sm</code></td>
+                  <td>0.875rem</td>
+                  <td>14px</td>
+                  <td>Form labels, secondary text</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-size-base</code></td>
+                  <td>1rem</td>
+                  <td>16px</td>
+                  <td>Body text (browser default)</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-size-lg</code></td>
+                  <td>1.125rem</td>
+                  <td>18px</td>
+                  <td>Lead text, intro paragraphs</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-size-xl</code></td>
+                  <td>1.25rem</td>
+                  <td>20px</td>
+                  <td>Card titles, h6</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-size-2xl</code></td>
+                  <td>1.5rem</td>
+                  <td>24px</td>
+                  <td>Section headings, h5</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-size-3xl</code></td>
+                  <td>1.875rem</td>
+                  <td>30px</td>
+                  <td>Prominent headers, h4</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-size-4xl</code></td>
+                  <td>2.25rem</td>
+                  <td>36px</td>
+                  <td>Page section titles, h3</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-size-5xl</code></td>
+                  <td>3rem</td>
+                  <td>48px</td>
+                  <td>Major headings, h2</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-size-6xl</code></td>
+                  <td>3.75rem</td>
+                  <td>60px</td>
+                  <td>Hero headings, h1 (desktop)</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3>Font Weights</h3>
+            <table class="token-table">
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Value</th>
+                  <th>Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>--ar-text-weight-normal</code></td>
+                  <td>400</td>
+                  <td>Body text, secondary content</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-weight-medium</code></td>
+                  <td>500</td>
+                  <td>UI labels, nav items, button text</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-weight-semibold</code></td>
+                  <td>600</td>
+                  <td>h5, h6, card titles</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-weight-bold</code></td>
+                  <td>700</td>
+                  <td>h3, h4</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-weight-extrabold</code></td>
+                  <td>800</td>
+                  <td>h1, h2, hero text</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3>Line Height</h3>
+            <table class="token-table">
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Value</th>
+                  <th>Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>--ar-text-leading-none</code></td>
+                  <td>1</td>
+                  <td>Badges, buttons</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-leading-tight</code></td>
+                  <td>1.25</td>
+                  <td>h1, h2</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-leading-snug</code></td>
+                  <td>1.375</td>
+                  <td>h3, h4</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-leading-normal</code></td>
+                  <td>1.5</td>
+                  <td>Body text</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-leading-relaxed</code></td>
+                  <td>1.625</td>
+                  <td>Long-form prose</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-text-leading-code</code></td>
+                  <td>1.625</td>
+                  <td>Code blocks</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Spacing -->
+          <section id="spacing">
+            <h2>Spacing Scale</h2>
+            <p>
+              The spacing scale is based on a 4px base unit with an 8px primary rhythm.
+              <strong>17 steps</strong> from 0 to 96px.
+            </p>
+
+            <table class="token-table">
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Value</th>
+                  <th>Step</th>
+                  <th>Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>--ar-space-0</code></td>
+                  <td>0</td>
+                  <td>—</td>
+                  <td>Explicit zero</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-hairline</code></td>
+                  <td>1px</td>
+                  <td>—</td>
+                  <td>Border offsets, thin separators</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-micro</code></td>
+                  <td>2px</td>
+                  <td>0.5</td>
+                  <td>Ultra-fine: icon gaps, checkbox labels</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-1</code></td>
+                  <td>4px</td>
+                  <td>1</td>
+                  <td>Tight internal component gaps</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-1h</code></td>
+                  <td>6px</td>
+                  <td>1.5</td>
+                  <td>Badge padding, chip internal</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-2</code></td>
+                  <td>8px</td>
+                  <td>2</td>
+                  <td>Button padding-y, input padding-y</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-3</code></td>
+                  <td>12px</td>
+                  <td>3</td>
+                  <td>Form label gap, card header y</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-4</code></td>
+                  <td>16px</td>
+                  <td>4</td>
+                  <td>Standard component padding</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-5</code></td>
+                  <td>20px</td>
+                  <td>5</td>
+                  <td>Section-internal spacing</td>
+                </tr>
+                <tr>
+                  <td><code>

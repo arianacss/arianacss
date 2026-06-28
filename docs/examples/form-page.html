@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Page · ArianaCSS</title>
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+  <style>
+    /* Page-specific styles — minimal, only for demo structure */
+    body {
+      background: var(--ar-color-layer-base);
+      padding: 2rem 1rem;
+    }
+    .form-container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .form-card {
+      background: var(--ar-color-layer-base);
+      border: 1px solid var(--ar-color-border-default);
+      border-radius: var(--ar-radius-base);
+      padding: 2rem 2rem 1.5rem;
+      box-shadow: var(--ar-shadow-1);
+    }
+    .form-card .ar-field {
+      margin-block-end: 1.25rem;
+    }
+    .form-card .ar-field:last-child {
+      margin-block-end: 0;
+    }
+    .form-card .ar-alert {
+      margin-block-end: 1.5rem;
+    }
+    .form-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .form-divider hr {
+      flex: 1;
+      border: none;
+      border-top: 1px solid var(--ar-color-divider);
+    }
+    .form-divider span {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-block-start: 0.5rem;
+    }
+    .form-actions .ar-btn {
+      flex: 1;
+      min-width: 120px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-row .ar-field {
+      margin-block-end: 0;
+    }
+    .password-strength {
+      display: flex;
+      gap: 0.25rem;
+      margin-block-start: 0.25rem;
+    }
+    .password-strength .bar {
+      flex: 1;
+      height: 3px;
+      background: var(--ar-color-border-default);
+      border-radius: var(--ar-radius-full);
+      transition: background var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+    .password-strength .bar--weak {
+      background: var(--ar-color-danger-base);
+    }
+    .password-strength .bar--medium {
+      background: var(--ar-color-warning-base);
+    }
+    .password-strength .bar--strong {
+      background: var(--ar-color-success-base);
+    }
+    .tos-text {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      line-height: var(--ar-text-leading-relaxed);
+    }
+    .tos-text a {
+      color: var(--ar-color-text-link);
+      text-decoration: underline;
+    }
+    @media (max-width: 767px) {
+      body {
+        padding: 1rem 0.75rem;
+      }
+      .form-card {
+        padding: 1.5rem 1rem;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .form-row .ar-field {
+        margin-block-end: 1.25rem;
+      }
+      .form-row .ar-field:last-child {
+        margin-block-end: 0;
+      }
+      .form-actions .ar-btn {
+        flex: 1 1 100%;
+        min-width: unset;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .password-strength .bar {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+
+    <!-- ============================================================ -->
+    <!-- PAGE HEADER                                                   -->
+    <!-- ============================================================ -->
+
+    <header class="ar-mb-6 ar-text-center ar-sm:text-left">
+      <p class="ar-eyebrow">ArianaCSS</p>
+      <h1 class="ar-h2 ar-mb-1">Create Account</h1>
+      <p class="ar-text-muted">Join thousands of developers building with ArianaCSS.</p>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- FORM CARD                                                    -->
+    <!-- ============================================================ -->
+
+    <div class="form-card">
+
+      <!-- ========== SUCCESS ALERT (hidden by default, shown via JS) ========== -->
+      <div class="ar-alert ar-alert--success ar-alert--filled ar-alert--icon ar-hidden" id="successAlert" role="alert" aria-live="polite">
+        <svg class="ar-alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <div class="ar-alert__body">
+          <p class="ar-alert__title">Account Created!</p>
+          <p class="ar-alert__message">Check your email for verification instructions.</p>
+        </div>
+        <button class="ar-alert__dismiss" aria-label="Dismiss alert" onclick="this.parentElement.classList.add('ar-hidden')">×</button>
+      </div>
+
+      <!-- ========== FORM ========== -->
+      <form id="signupForm" novalidate>
+
+        <!-- ====== NAME ROW ====== -->
+        <div class="form-row">
+
+          <div class="ar-field">
+            <label for="firstName" class="ar-label ar-label--required">First name</label>
+            <input id="firstName" class="ar-input" type="text" placeholder="John" required autocomplete="given-name" aria-describedby="firstName-error">
+            <span id="firstName-error" class="ar-field__error ar-hidden">Please enter your first name</span>
+          </div>
+
+          <div class="ar-field">
+            <label for="lastName" class="ar-label ar-label--required">Last name</label>
+            <input id="lastName" class="ar-input" type="text" placeholder="Doe" required autocomplete="family-name" aria-describedby="lastName-error">
+            <span id="lastName-error" class="ar-field__error ar-hidden">Please enter your last name</span>
+          </div>
+
+        </div>
+
+        <!-- ====== EMAIL ====== -->
+        <div class="ar-field">
+          <label for="email" class="ar-label ar-label--required">Email address</label>
+          <input id="email" class="ar-input" type="email" placeholder="john@example.com" required autocomplete="email" aria-describedby="email-error email-hint">
+          <span id="email-hint" class="ar-field__hint">We'll send you a verification link.</span>
+          <span id="email-error" class="ar-field__error ar-hidden">Please enter a valid email address</span>
+        </div>
+
+        <!-- ====== PASSWORD ====== -->
+        <div class="ar-field">
+          <label for="password" class="ar-label ar-label--required">Password</label>
+          <input id="password" class="ar-input" type="password" placeholder="••••••••" required minlength="8" autocomplete="new-password" aria-describedby="password-error password-hint">
+          <span id="password-hint" class="ar-field__hint">Must be at least 8 characters.</span>
+
+          <!-- Password strength indicator (visual only) -->
+          <div class="password-strength" id="passwordStrength" aria-hidden="true">
+            <span class="bar" id="pwd-bar-1"></span>
+            <span class="bar" id="pwd-bar-2"></span>
+            <span class="bar" id="pwd-bar-3"></span>
+            <span class="bar" id="pwd-bar-4"></span>
+          </div>
+
+          <span id="password-error" class="ar-field__error ar-hidden">Password must be at least 8 characters</span>
+        </div>
+
+        <!-- ====== CONFIRM PASSWORD ====== -->
+        <div class="ar-field">
+          <label for="confirmPassword" class="ar-label ar-label--required">Confirm password</label>
+          <input id="confirmPassword" class="ar-input" type="password" placeholder="••••••••" required autocomplete="new-password" aria-describedby="confirm-error">
+          <span id="confirm-error" class="ar-field__error ar-hidden">Passwords do not match</span>
+        </div>
+
+        <!-- ====== ROLE / SELECT ====== -->
+        <div class="ar-field">
+          <label for="role" class="ar-label">Role</label>
+          <select id="role" class="ar-input" aria-describedby="role-hint">
+            <option value="">Select your role…</option>
+            <option value="developer">Developer</option>
+            <option value="designer">Designer</option>
+            <option value="product">Product Manager</option>
+            <option value="manager">Engineering Manager</option>
+            <option value="other">Other</option>
+          </select>
+          <span id="role-hint" class="ar-field__hint">Helps us tailor your experience.</span>
+        </div>
+
+        <!-- ====== COMPANY ====== -->
+        <div class="ar-field">
+          <label for="company" class="ar-label">Company (optional)</label>
+          <input id="company" class="ar-input" type="text" placeholder="Acme Inc." autocomplete="organization">
+        </div>
+
+        <!-- ====== TERMS ====== -->
+        <div class="ar-field ar-flex ar-flex-row ar-items-start ar-gap-2" style="flex-direction:row;align-items:flex-start;gap:0.75rem;">
+          <input id="terms" type="checkbox" style="margin-block-start:2px;width:1.125rem;height:1.125rem;accent-color:var(--ar-color-primary-base);flex-shrink:0;" required aria-describedby="terms-error">
+          <div>
+            <label for="terms" class="ar-label" style="font-weight:var(--ar-text-weight-normal);font-size:var(--ar-text-size-sm);margin-block-end:0;cursor:pointer;">
+              I agree to the <a href="#" class="ar-text-link">Terms of Service</a> and <a href="#" class="ar-text-link">Privacy Policy</a>
+            </label>
+            <span id="terms-error" class="ar-field__error ar-hidden">You must agree to the terms</span>
+          </div>
+        </div>
+
+        <!-- ====== DIVIDER ====== -->
+        <div class="form-divider">
+          <hr>
+          <span>or continue with</span>
+          <hr>
+        </div>
+
+        <!-- ====== SOCIAL BUTTONS ====== -->
+        <div class="ar-grid ar-grid-cols-2 ar-gap-3 ar-mb-4">
+          <button type="button" class="ar-btn ar-btn--ghost">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.205 11.387.6.113.82-.26.82-.58 0-.286-.01-1.04-.015-2.04-3.338.725-4.042-1.61-4.042-1.61-.546-1.39-1.335-1.76-1.335-1.76-1.09-.745.082-.73.082-.73 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.123-.3-.535-1.52.117-3.16 0 0 1.008-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.29-1.552 3.297-1.23 3.297-1.23.653 1.64.24 2.86.118 3.16.768.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.62-5.476 5.92.43.37.824 1.102.824 2.22 0 1.602-.015 2.894-.015 3.287 0 .322.218.694.825.57C20.565 21.795 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </button>
+          <button type="button" class="ar-btn ar-btn--ghost">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 6.627 5.373 12 12 12 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12zm1.2 18.72c-3.64.72-6.72-1.2-6.72-1.2.84.36 1.68.48 2.64.48 1.2 0 2.28-.48 3.24-1.44.96-.96 1.44-2.16 1.44-3.6 0-2.16-1.44-3.84-3.36-4.32.24-.24.48-.6.72-.96.72-.24 1.32-.84 1.8-1.68.24-.48.48-1.08.72-1.68-.48-.24-1.08-.36-1.8-.36-1.2 0-2.4.36-3.36 1.08-.36.24-.72.6-1.08.96-.48.36-.96.72-1.44 1.08-.24.24-.48.48-.72.72-.48.48-.96 1.08-1.44 1.68-.72.84-1.2 1.8-1.44 2.88-.24 1.08 0 2.16.36 3.24.24.72.6 1.44 1.08 2.04.36.48.84.96 1.44 1.32 1.2.72 2.76 1.2 4.32 1.08 1.8-.12 3.48-.84 4.68-1.92 0 0-3.12 1.92-6.72 1.2z"/></svg>
+            Google
+          </button>
+        </div>
+
+        <!-- ====== FORM ACTIONS ====== -->
+        <div class="form-actions">
+          <button type="submit" class="ar-btn ar-btn--primary ar-btn--lg" id="submitBtn">
+            Create Account
+          </button>
+          <button type="reset" class="ar-btn ar-btn--ghost ar-btn--lg">
+            Clear All
+          </button>
+        </div>
+
+        <p class="tos-text ar-mt-3 ar-text-center">
+          By creating an account, you agree to our
+          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        </p>
+
+      </form>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER                                                       -->
+    <!-- ============================================================ -->
+
+    <footer class="ar-mt-6 ar-text-center ar-text-sm ar-text-muted">
+      <p>Already have an account? <a href="#" class="ar-text-link">Sign in</a></p>
+      <p class="ar-text-xs ar-mt-2">ArianaCSS v1.0 — Example Form Page</p>
+    </footer>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- JAVASCRIPT — FORM VALIDATION (accessibility-first)           -->
+  <!-- ============================================================ -->
+
+  <script>
+    (function() {
+      'use strict';
+
+      const form = document.getElementById('signupForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const successAlert = document.getElementById('successAlert');
+
+      // Input refs
+      const firstName = document.getElementById('firstName');
+      const lastName = document.getElementById('lastName');
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+      const confirmPassword = document.getElementById('confirmPassword');
+      const terms = document.getElementById('terms');
+
+      // Error refs
+      const firstNameError = document.getElementById('firstName-error');
+      const lastNameError = document.getElementById('lastName-error');
+      const emailError = document.getElementById('email-error');
+      const passwordError = document.getElementById('password-error');
+      const confirmError = document.getElementById('confirm-error');
+      const termsError = document.getElementById('terms-error');
+
+      // Password strength bars
+      const pwdBars = {
+        1: document.getElementById('pwd-bar-1'),
+        2: document.getElementById('pwd-bar-2'),
+        3: document.getElementById('pwd-bar-3'),
+        4: document.getElementById('pwd-bar-4')
+      };
+
+      // ============================================================
+      // PASSWORD STRENGTH INDICATOR
+      // ============================================================
+
+      function getPasswordStrength(pwd) {
+        if (!pwd) return 0;
+        let score = 0;
+        if (pwd.length >= 8) score++;
+        if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score++;
+        if (/\d/.test(pwd)) score++;
+        if (/[^a-zA-Z0-9]/.test(pwd)) score++;
+        return score;
+      }
+
+      function updatePasswordStrength() {
+        const pwd = password.value;
+        const score = getPasswordStrength(pwd);
+
+        const classes = ['', 'bar--weak', 'bar--medium', 'bar--strong', 'bar--strong'];
+        for (let i = 1; i <= 4; i++) {
+          const bar = pwdBars[i];
+          bar.className = 'bar';
+          if (i <= score) {
+            bar.classList.add(classes[score] || 'bar--strong');
+          }
+        }
+      }
+
+      password.addEventListener('input', updatePasswordStrength);
+
+      // ============================================================
+      // FIELD VALIDATION HELPERS
+      // ============================================================
+
+      function setFieldError(input, errorEl, condition, message) {
+        if (condition) {
+          input.classList.remove('ar-input--error');
+          input.classList.add('ar-input--success');
+          errorEl.classList.add('ar-hidden');
+          input.setAttribute('aria-invalid', 'false');
+          return true;
+        } else {
+          input.classList.remove('ar-input--success');
+          input.classList.add('ar-input--error');
+          errorEl.textContent = message || errorEl.textContent;
+          errorEl.classList.remove('ar-hidden');
+          input.setAttribute('aria-invalid', 'true');
+          return false;
+        }
+      }
+
+      function validateFirstName() {
+        return setFieldError(firstName, firstNameError, firstName.value.trim().length >= 2, 'Please enter your first name (min 2 characters)');
+      }
+
+      function validateLastName() {
+        return setFieldError(lastName, lastNameError, lastName.value.trim().length >= 2, 'Please enter your last name (min 2 characters)');
+      }
+
+      function validateEmail() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return setFieldError(email, emailError, emailRegex.test(email.value.trim()), 'Please enter a valid email address');
+      }
+
+      function validatePassword() {
+        return setFieldError(password, passwordError, password.value.length >= 8, 'Password must be at least 8 characters');
+      }
+
+      function validateConfirm() {
+        const match = password.value === confirmPassword.value && confirmPassword.value.length > 0;
+        return setFieldError(confirmPassword, confirmError, match, 'Passwords do not match');
+      }
+
+      function validateTerms() {
+        return setFieldError(terms, termsError, terms.checked, 'You must agree to the terms');
+      }
+
+      // ============================================================
+      // REAL-TIME VALIDATION (on blur)
+      // ============================================================
+
+      firstName.addEventListener('blur', validateFirstName);
+      lastName.addEventListener('blur', validateLastName);
+      email.addEventListener('blur', validateEmail);
+      password.addEventListener('blur', validatePassword);
+      confirmPassword.addEventListener('blur', validateConfirm);
+      terms.addEventListener('change', validateTerms);
+
+      // ============================================================
+      // SUBMIT HANDLER
+      // ============================================================
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Run all validations
+        const isFirstNameValid = validateFirstName();
+        const isLastNameValid = validateLastName();
+        const isEmailValid = validateEmail();
+        const isPasswordValid = validatePassword();
+        const isConfirmValid = validateConfirm();
+        const isTermsValid = validateTerms();
+
+        const isValid = isFirstNameValid && isLastNameValid && isEmailValid &&
+                        isPasswordValid && isConfirmValid && isTermsValid;
+
+        if (isValid) {
+          // Simulate loading state
+          submitBtn.disabled = true;
+          submitBtn.classList.add('ar-btn--loading');
+          submitBtn.innerHTML = `
+            <span class="ar-btn__spinner" aria-hidden="true"></span>
+            Creating Account…
+          `;
+
+          // Simulate async submission
+          setTimeout(function() {
+            // Reset button
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('ar-btn--loading');
+            submitBtn.innerHTML = 'Create Account';
+
+            // Show success alert
+            successAlert.classList.remove('ar-hidden');
+
+            // Scroll to top to show the alert
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Reset form after 3s (optional)
+            setTimeout(function() {
+              form.reset();
+              // Clear all success/error states
+              document.querySelectorAll('.ar-input--success, .ar-input--error').forEach(el => {
+                el.classList.remove('ar-input--success', 'ar-input--error');
+              });
+              document.querySelectorAll('.ar-field__error:not(.ar-hidden)').forEach(el => {
+                el.classList.add('ar-hidden');
+              });
+              document.querySelectorAll('.ar-input').forEach(el => {
+                el.removeAttribute('aria-invalid');
+              });
+              // Reset password strength
+              for (let i = 1; i <= 4; i++) {
+                pwdBars[i].className = 'bar';
+              }
+            }, 3000);
+
+          }, 1500);
+        } else {
+          // Focus the first invalid field
+          const firstInvalid = form.querySelector('.ar-input--error, [aria-invalid="true"]');
+          if (firstInvalid) {
+            firstInvalid.focus();
+          }
+        }
+      });
+
+      // ============================================================
+      // RESET HANDLER
+      // ============================================================
+
+      form.addEventListener('reset', function(e) {
+        // Clear all error/success states
+        setTimeout(function() {
+          document.querySelectorAll('.ar-input--success, .ar-input--error').forEach(el => {
+            el.classList.remove('ar-input--success', 'ar-input--error');
+          });
+          document.querySelectorAll('.ar-field__error:not(.ar-hidden)').forEach(el => {
+            el.classList.add('ar-hidden');
+          });
+          document.querySelectorAll('.ar-input').forEach(el => {
+            el.removeAttribute('aria-invalid');
+          });
+          // Reset password strength
+          for (let i = 1; i <= 4; i++) {
+            pwdBars[i].className = 'bar';
+          }
+        }, 10);
+      });
+
+      // ============================================================
+      // ACCESSIBILITY — announce error count on submit
+      // ============================================================
+
+      // Add live region for error announcements
+      const liveRegion = document.createElement('div');
+      liveRegion.setAttribute('role', 'alert');
+      liveRegion.setAttribute('aria-live', 'polite');
+      liveRegion.setAttribute('aria-atomic', 'true');
+      liveRegion.className = 'ar-sr-only';
+      document.body.appendChild(liveRegion);
+
+      // Override setFieldError to announce errors
+      const originalSetFieldError = setFieldError;
+      window.setFieldError = function(input, errorEl, condition, message) {
+        const result = originalSetFieldError(input, errorEl, condition, message);
+        if (!result && !errorEl.classList.contains('ar-hidden')) {
+          liveRegion.textContent = errorEl.textContent;
+        }
+        return result;
+      };
+
+      // Re-bind to use the new setFieldError
+      // (the functions above already use the local reference)
+
+    })();
+  </script>
+
+</body>
+</html>

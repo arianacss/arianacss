@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-grid-demo {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-2);
+      border-radius: var(--ar-radius-sm);
+      text-align: center;
+      font-size: var(--ar-text-size-sm);
+      font-weight: var(--ar-text-weight-medium);
+      color: var(--ar-color-text-muted);
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .doc-grid-demo--primary {
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-emphasis);
+      border: 1px solid var(--ar-color-primary-border);
+    }
+
+    .doc-grid-demo--success {
+      background: var(--ar-color-success-surface);
+      color: var(--ar-color-success-text);
+      border: 1px solid var(--ar-color-success-border);
+    }
+
+    .doc-grid-demo--warning {
+      background: var(--ar-color-warning-surface);
+      color: var(--ar-color-warning-text);
+      border: 1px solid var(--ar-color-warning-border);
+    }
+
+    .doc-grid-demo--danger {
+      background: var(--ar-color-danger-surface);
+      color: var(--ar-color-danger-text);
+      border: 1px solid var(--ar-color-danger-border);
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-breakout-demo {
+      background: var(--ar-color-primary-surface);
+      border: 2px dashed var(--ar-color-primary-border);
+      padding: var(--ar-space-4);
+      text-align: center;
+      color: var(--ar-color-primary-emphasis);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="grid.html" class="doc-nav-link doc-nav-link--active">Grid</a>
+          <a href="typography.html" class="doc-nav-link">Typography</a>
+          <a href="components/button.html" class="doc-nav-link">Components</a>
+          <a href="utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Grid System</span></li>
+              <li><a href="#introduction" class="doc-sidebar-active">Introduction</a></li>
+              <li><a href="#container">The Container</a></li>
+              <li><a href="#grid-basics">Grid Basics</a></li>
+              <li><a href="#column-spans">Column Spans</a></li>
+              <li><a href="#responsive">Responsive Grid</a></li>
+              <li><a href="#gap-variants">Gap Variants</a></li>
+              <li><a href="#layout-patterns">Layout Patterns</a></li>
+              <li><a href="#row-utilities">Row Utilities</a></li>
+              <li><a href="#breakout">Breakout Elements</a></li>
+              <li><a href="#narrow">Narrow Container</a></li>
+              <li><a href="#utility-grid">Utility Grid</a></li>
+              <li><a href="#examples">Examples</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Grid System</h1>
+          <p class="ar-lead">
+            A powerful 12-column CSS Grid layout system for building responsive, structured pages.
+            Mobile-first, semantic, and easy to learn.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Two Grids, One System</div>
+            <div class="ar-alert__message">
+              ArianaCSS has <strong>two</strong> grid systems that work together:
+              <ul class="ar-list ar-mt-2">
+                <li><strong>Layout Grid</strong> — The 12-column page layout system (<code>ar-grid</code>, <code>ar-col-*</code>)</li>
+                <li><strong>Utility Grid</strong> — Arbitrary grid configurations (<code>ar-grid-cols-*</code>, <code>ar-col-start-*</code>)</li>
+              </ul>
+              Use the layout grid for page structure. Use the utility grid for custom grids inside sections.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              ArianaCSS uses a <strong>12-column CSS Grid</strong> layout system. It's mobile-first,
+              uses <code>minmax(0, 1fr)</code> for intelligent column sizing, and provides responsive
+              variants at all four breakpoints.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📱</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Mobile-first — columns stack vertically by default
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📐</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  12-column grid with spans from 1 to 12
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🔄</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Responsive at 4 breakpoints (480, 768, 1024, 1280px)
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- The Container -->
+          <section id="container">
+            <h2>The Container</h2>
+            <p>
+              Before using the grid, wrap your content in a <code>.ar-container</code>.
+              The container provides centered, max-width-constrained content with responsive padding.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-container"&gt;
+  &lt;!-- Your content here --&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-container ar-bg-raised ar-p-4 ar-rounded ar-border ar-border-dashed" style="border-color: var(--ar-color-primary-border);">
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  <strong>.ar-container</strong> — centered, max-width, with responsive padding
+                </p>
+              </div>
+            </div>
+
+            <h3>Fluid Container</h3>
+            <p>
+              Use <code>.ar-container--fluid</code> for full-width sections that still need consistent padding.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-container--fluid ar-bg-primary-surface ar-py-6"&gt;
+  &lt;div class="ar-container"&gt;
+    &lt;!-- Inner content still constrained --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-container--fluid ar-bg-primary-surface ar-py-4 ar-px-0 ar-rounded ar-border ar-border-primary" style="border-color: var(--ar-color-primary-border);">
+                <div class="ar-container">
+                  <p class="ar-text-sm ar-text-muted ar-m-0">
+                    <strong>.ar-container--fluid</strong> — full width, padded inner content
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Grid Basics -->
+          <section id="grid-basics">
+            <h2>Grid Basics</h2>
+            <p>
+              The grid is created with <code>.ar-grid</code>. By default, it creates 12 equal-width columns.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-grid"&gt;
+  &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-4"&gt;Column 1&lt;/div&gt;
+  &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-4"&gt;Column 2&lt;/div&gt;
+  &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-4"&gt;Column 3&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-grid ar-gap-4">
+                <div class="ar-col-12 ar-md:col-6 ar-lg:col-4">
+                  <div class="doc-grid-demo doc-grid-demo--primary">Column 1</div>
+                </div>
+                <div class="ar-col-12 ar-md:col-6 ar-lg:col-4">
+                  <div class="doc-grid-demo doc-grid-demo--success">Column 2</div>
+                </div>
+                <div class="ar-col-12 ar-md:col-6 ar-lg:col-4">
+                  <div class="doc-grid-demo doc-grid-demo--warning">Column 3</div>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Mobile: 1 column · Tablet: 2 columns · Desktop: 3 columns
+              </p>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📌 Note:</strong> All columns are full-width on mobile by default.
+                Use responsive classes to control layout at larger breakpoints.
+              </div>
+            </div>
+          </section>
+
+          <!-- Column Spans -->
+          <section id="column-spans">
+            <h2>Column Spans</h2>
+            <p>
+              Use <code>.ar-col-{n}</code> to control how many columns an element spans.
+              Available: <code>ar-col-1</code> through <code>ar-col-12</code>.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-grid"&gt;
+  &lt;div class="ar-col-8"&gt;Main content (8 columns)&lt;/div&gt;
+  &lt;div class="ar-col-4"&gt;Sidebar (4 columns)&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-grid ar-gap-4">
+                <div class="ar-col-8">
+                  <div class="doc-grid-demo doc-grid-demo--primary">Main content (8 columns)</div>
+                </div>
+                <div class="ar-col-4">
+                  <div class="doc-grid-demo doc-grid-demo--success">Sidebar (4 columns)</div>
+                </div>
+              </div>
+            </div>
+
+            <h3>Common Column Combinations</h3>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-3">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h5 ar-mb-2">6 + 6</h4>
+                <div class="ar-grid ar-gap-2">
+                  <div class="ar-col-6"><div class="doc-grid-demo doc-grid-demo--primary">6</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo doc-grid-demo--success">6</div></div>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h5 ar-mb-2">4 + 4 + 4</h4>
+                <div class="ar-grid ar-gap-2">
+                  <div class="ar-col-4"><div class="doc-grid-demo doc-grid-demo--primary">4</div></div>
+                  <div class="ar-col-4"><div class="doc-grid-demo doc-grid-demo--success">4</div></div>
+                  <div class="ar-col-4"><div class="doc-grid-demo doc-grid-demo--warning">4</div></div>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h5 ar-mb-2">3 + 3 + 3 + 3</h4>
+                <div class="ar-grid ar-gap-2">
+                  <div class="ar-col-3"><div class="doc-grid-demo doc-grid-demo--primary">3</div></div>
+                  <div class="ar-col-3"><div class="doc-grid-demo doc-grid-demo--success">3</div></div>
+                  <div class="ar-col-3"><div class="doc-grid-demo doc-grid-demo--warning">3</div></div>
+                  <div class="ar-col-3"><div class="doc-grid-demo doc-grid-demo--danger">3</div></div>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h5 ar-mb-2">9 + 3</h4>
+                <div class="ar-grid ar-gap-2">
+                  <div class="ar-col-9"><div class="doc-grid-demo doc-grid-demo--primary">9</div></div>
+                  <div class="ar-col-3"><div class="doc-grid-demo doc-grid-demo--success">3</div></div>
+                </div>
+              </div>
+            </div>
+
+            <h3>Full-Width Columns</h3>
+            <p>
+              Use <code>.ar-col-full</code> or <code>.ar-col-12</code> for full-width elements.
+              In a standard 12-column grid, both produce the same result.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-grid"&gt;
+  &lt;header class="ar-col-full"&gt;Full-width header&lt;/header&gt;
+  &lt;main class="ar-col-8"&gt;Main content&lt;/main&gt;
+  &lt;aside class="ar-col-4"&gt;Sidebar&lt;/aside&gt;
+  &lt;footer class="ar-col-full"&gt;Full-width footer&lt;/footer&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-grid ar-gap-4">
+                <header class="ar-col-full">
+                  <div class="doc-grid-demo doc-grid-demo--primary">Header (full-width)</div>
+                </header>
+                <main class="ar-col-8">
+                  <div class="doc-grid-demo doc-grid-demo--success">Main content (8 columns)</div>
+                </main>
+                <aside class="ar-col-4">
+                  <div class="doc-grid-demo doc-grid-demo--warning">Sidebar (4 columns)</div>
+                </aside>
+                <footer class="ar-col-full">
+                  <div class="doc-grid-demo doc-grid-demo--danger">Footer (full-width)</div>
+                </footer>
+              </div>
+            </div>
+          </section>
+
+          <!-- Responsive Grid -->
+          <section id="responsive">
+            <h2>Responsive Grid</h2>
+            <p>
+              ArianaCSS is mobile-first. Use breakpoint prefixes to control column spans at different screen sizes.
+            </p>
+
+            <table class="doc-table ar-mt-4">
+              <thead>
+                <tr>
+                  <th>Prefix</th>
+                  <th>Min-Width</th>
+                  <th>Device Class</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ar-sm:col-*</code></td>
+                  <td>480px</td>
+                  <td>Narrow → standard phone</td>
+                </tr>
+                <tr>
+                  <td><code>ar-md:col-*</code></td>
+                  <td>768px</td>
+                  <td>Phone → tablet</td>
+                </tr>
+                <tr>
+                  <td><code>ar-lg:col-*</code></td>
+                  <td>1024px</td>
+                  <td>Tablet → laptop</td>
+                </tr>
+                <tr>
+                  <td><code>ar-xl:col-*</code></td>
+                  <td>1280px</td>
+                  <td>Laptop → wide desktop</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3>Responsive Column Example</h3>
+            <div class="doc-code-block">
+              <code>&lt;!-- Mobile: 1 column · Tablet: 2 columns · Desktop: 3 columns --&gt;
+&lt;div class="ar-grid"&gt;
+  &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-4"&gt;1&lt;/div&gt;
+  &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-4"&gt;2&lt;/div&gt;
+  &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-4"&gt;3&lt;/div&gt;
+  &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-4"&gt;4&lt;/div&gt;
+  &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-4"&gt;5&lt;/div&gt;
+  &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-4"&gt;6&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-grid ar-gap-4">
+                <div class="ar-col-12 ar-md:col-6 ar-lg:col-4">
+                  <div class="doc-grid-demo doc-grid-demo--primary">1</div>
+                </div>
+                <div class="ar-col-12 ar-md:col-6 ar-lg:col-4">
+                  <div class="doc-grid-demo doc-grid-demo--success">2</div>
+                </div>
+                <div class="ar-col-12 ar-md:col-6 ar-lg:col-4">
+                  <div class="doc-grid-demo doc-grid-demo--warning">3</div>
+                </div>
+                <div class="ar-col-12 ar-md:col-6 ar-lg:col-4">
+                  <div class="doc-grid-demo doc-grid-demo--danger">4</div>
+                </div>
+                <div class="ar-col-12 ar-md:col-6 ar-lg:col-4">
+                  <div class="doc-grid-demo doc-grid-demo--primary">5</div>
+                </div>
+                <div class="ar-col-12 ar-md:col-6 ar-lg:col-4">
+                  <div class="doc-grid-demo doc-grid-demo--success">6</div>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Mobile: 1 column · Tablet: 2 columns · Desktop: 3 columns
+              </p>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pro Tip:</strong> You don't need <code>ar-col-12</code> on mobile — it's the default!
+                <code>ar-col-6 ar-md:col-4</code> works the same way.
+              </div>
+            </div>
+          </section>
+
+          <!-- Gap Variants -->
+          <section id="gap-variants">
+            <h2>Gap Variants</h2>
+            <p>
+              Control the spacing between grid columns with gap variants.
+            </p>
+
+            <table class="doc-table ar-mt-4">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Gap Size</th>
+                  <th>Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>.ar-grid--gap-sm</code></td>
+                  <td>16px (1rem)</td>
+                  <td>Dense dashboards, compact layouts</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-grid</code> (default)</td>
+                  <td>24px (1.5rem)</td>
+                  <td>Standard page layouts</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-grid--gap-lg</code></td>
+                  <td>32px (2rem)</td>
+                  <td>Editorial, generous layouts</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-grid--no-gap</code></td>
+                  <td>0</td>
+                  <td>Flush columns, image grids</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Standard gap (24px) --&gt;
+&lt;div class="ar-grid"&gt;...&lt;/div&gt;
+
+&lt;!-- Tight gap (16px) --&gt;
+&lt;div class="ar-grid ar-grid--gap-sm"&gt;...&lt;/div&gt;
+
+&lt;!-- Wide gap (32px) --&gt;
+&lt;div class="ar-grid ar-grid--gap-lg"&gt;...&lt;/div&gt;</code>
+            </div>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-grid--gap-sm</h4>
+                <div class="ar-grid ar-grid--gap-sm">
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">1</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">2</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">3</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">4</div></div>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">16px gap</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-grid (default)</h4>
+                <div class="ar-grid">
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">1</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">2</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">3</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">4</div></div>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">24px gap</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-grid--gap-lg</h4>
+                <div class="ar-grid ar-grid--gap-lg">
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">1</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">2</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">3</div></div>
+                  <div class="ar-col-6"><div class="doc-grid-demo" style="background:var(--ar-color-layer-sunken);">4</div></div>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">32px gap</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Layout Patterns -->
+          <section id="layout-patterns">
+            <h2>Layout Patterns</h2>
+            <p>
+              ArianaCSS provides pre-composed layout helpers for the most common page structures.
+            </p>
+
+            <h3>Sidebar Left</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-layout-sidebar-left"&gt;
+  &lt;nav&gt;Sidebar (280px fixed)&lt;/nav&gt;
+  &lt;main&gt;Content (fills remaining space)&lt;/main&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-layout-sidebar-left ar-gap-4">
+                <div class="doc-grid-demo doc-grid-demo--primary" style="min-height:6rem;">Sidebar (280px)</div>
+                <div class="doc-grid-demo doc-grid-demo--success" style="min-height:6rem;">Content (fills rest)</div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">Sidebar fixed at 280px · Content fills remaining space</p>
+            </div>
+
+            <h3>Sidebar Right</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-layout-sidebar-right"&gt;
+  &lt;main&gt;Content&lt;/main&gt;
+  &lt;aside&gt;Sidebar (280px fixed)&lt;/aside&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-layout-sidebar-right ar-gap-4">
+                <div class="doc-grid-demo doc-grid-demo--success" style="min-height:6rem;">Content (fills rest)</div>
+                <div class="doc-grid-demo doc-grid-demo--primary" style="min-height:6rem;">Sidebar (280px)</div>
+              </div>
+            </div>
+
+            <h3>Holy Grail (Left + Content + Right)</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-layout-holy-grail"&gt;
+  &lt;nav&gt;Left sidebar (240px)&lt;/nav&gt;
+  &lt;main&gt;Content&lt;/main&gt;
+  &lt;aside&gt;Right sidebar (240px)&lt;/aside&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-layout-holy-grail ar-gap-4">
+                <div class="doc-grid-demo doc-grid-demo--primary" style="min-height:6rem;">Left (240px)</div>
+                <div class="doc-grid-demo doc-grid-demo--success" style="min-height:6rem;">Content</div>
+                <div class="doc-grid-demo doc-grid-demo--warning" style="min-height:6rem;">Right (240px)</div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">Stacks to 2 columns on tablet, 1 column on mobile</p>
+            </div>
+
+            <h3>Equal Split Layouts</h3>
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-3">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-layout-halves</h4>
+                <div class="ar-layout-halves ar-gap-2">
+                  <div class="doc-grid-demo doc-grid-demo--primary">1/2</div>
+                  <div class="doc-grid-demo doc-grid-demo--success">1/2</div>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-layout-thirds</h4>
+                <div class="ar-layout-thirds ar-gap-2">
+                  <div class="doc-grid-demo doc-grid-demo--primary">1/3</div>
+                  <div class="doc-grid-demo doc-grid-demo--success">1/3</div>
+                  <div class="doc-grid-demo doc-grid-demo--warning">1/3</div>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-col-full">
+                <h4 class="ar-h6 ar-mb-2">ar-layout-quarters</h4>
+                <div class="ar-layout-quarters ar-gap-2">
+                  <div class="doc-grid-demo doc-grid-demo--primary">1/4</div>
+                  <div class="doc-grid-demo doc-grid-demo--success">1/4</div>
+                  <div class="doc-grid-demo doc-grid-demo--warning">1/4</div>
+                  <div class="doc-grid-demo doc-grid-demo--danger">1/4</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📱 Responsive:</strong> All layout patterns stack to single column on mobile
+                and adjust automatically at tablet and desktop breakpoints.
+              </div>
+            </div>
+          </section>
+
+          <!-- Row Utilities -->
+          <section id="row-utilities">
+            <h2>Row Utilities</h2>
+            <p>
+              Use <code>.ar-row</code> for flex-based horizontal arrangements within grid cells.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-row ar-row--center ar-gap-4"&gt;
+  &lt;div&gt;Item 1&lt;/div&gt;
+  &lt;div&gt;Item 2&lt;/div&gt;
+  &lt;div&gt;Item 3&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-row ar-row--center ar-gap-4 ar-p-2 ar-bg-sunken ar-rounded">
+                <div class="doc-grid-demo" style="background:var(--ar-color-primary-surface);color:var(--ar-color-primary-emphasis);padding:var(--ar-space-2) var(--ar-space-4);">Item 1</div>
+                <div class="doc-grid-demo" style="background:var(--ar-color-success-surface);color:var(--ar-color-success-text);padding:var(--ar-space-2) var(--ar-space-4);">Item 2</div>
+                <div class="doc-grid-demo" style="background:var(--ar-color-warning-surface);color:var(--ar-color-warning-text);padding:var(--ar-space-2) var(--ar-space-4);">Item 3</div>
+              </div>
+            </div>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Alignment</h4>
+                <p><code>.ar-row--center</code> — vertically center items</p>
+                <p><code>.ar-row--start</code> — align to top</p>
+                <p><code>.ar-row--end</code> — align to bottom</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Justification</h4>
+                <p><code>.ar-row--justify-center</code> — center horizontally</p>
+                <p><code>.ar-row--between</code> — space between items</p>
+                <p><code>.ar-row--evenly</code> — equal spacing around</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Breakout Elements -->
+          <section id="breakout">
+            <h2>Breakout Elements</h2>
+            <p>
+              Use <code>.ar-breakout</code> to make an element extend to the full viewport width
+              while staying inside a container. Perfect for full-width images, banners, and sections.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-container"&gt;
+  &lt;p&gt;Content inside the container.&lt;/p&gt;
+  &lt;div class="ar-breakout"&gt;
+    &lt;div class="doc-breakout-demo"&gt;
+      This element spans the full viewport width!
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;p&gt;Back to normal container content.&lt;/p&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box ar-overflow-hidden">
+              <div class="ar-container">
+                <p class="ar-text-sm ar-text-muted">Content inside the container.</p>
+                <div class="ar-breakout">
+                  <div class="doc-breakout-demo">
+                    This element spans the full viewport width!
+                  </div>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Back to normal container content.</p>
+              </div>
+            </div>
+            <p class="ar-text-xs ar-text-muted ar-mt-2">
+              The blue banner extends to the full viewport width, breaking out of the container.
+            </p>
+
+            <div class="ar-alert ar-alert--warning ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>⚠️ Note:</strong> <code>.ar-breakout</code> requires
+                <code>overflow-x: hidden</code> on the <code>html</code> or <code>body</code>
+                element (set in <code>base.css</code>) to prevent horizontal scroll.
+              </div>
+            </div>
+          </section>
+
+          <!-- Narrow Container -->
+          <section id="narrow">
+            <h2>Narrow Container</h2>
+            <p>
+              Use <code>.ar-container--narrow</code> for content that needs a tighter reading width.
+              Perfect for blog posts, articles, and documentation.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-container ar-container--narrow"&gt;
+  &lt;h2&gt;The Art of Typography&lt;/h2&gt;
+  &lt;p&gt;Long-form content with a comfortable line length.&lt;/p&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-container ar-container--narrow ar-px-0">
+                <h2>The Art of Typography</h2>
+                <p>
+                  Typography is the visual component of the written word. A well-crafted
+                  typographic system creates rhythm, hierarchy, and harmony in any design.
+                </p>
+                <p class="ar-text-muted">
+                  The narrow container keeps lines to approximately 65 characters — the
+                  optimal reading width for long-form content.
+                </p>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                <code>.ar-container--narrow</code> uses <code>max-width: 65ch</code>
+              </p>
+            </div>
+          </section>
+
+          <!-- Utility Grid -->
+          <section id="utility-grid">
+            <h2>Utility Grid</h2>
+            <p>
+              For custom grid structures <em>inside</em> page sections, use the utility grid system
+              from <code>5-utilities/grid.css</code>. This provides arbitrary column configurations.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Custom 3-column grid inside a section --&gt;
+&lt;div class="ar-grid-cols-3 ar-gap-6" style="display:grid;"&gt;
+  &lt;div class="ar-card"&gt;Card 1&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 2&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 3&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 1-col mobile, 2-col tablet, 3-col desktop --&gt;
+&lt;div style="display:grid;"
+     class="ar-grid-cols-1 ar-md:grid-cols-2 ar-lg:grid-cols-3 ar-gap-6"&gt;
+  &lt;div class="ar-card"&gt;Card 1&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 2&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 3&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 4&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div style="display:grid;" class="ar-grid-cols-1 ar-md:grid-cols-2 ar-lg:grid-cols-3 ar-gap-4">
+                <div class="ar-card ar-p-4 ar-shadow-1">
+                  <h4 class="ar-h6 ar-mb-1">Feature 1</h4>
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Responsive grid utility</p>
+                </div>
+                <div class="ar-card ar-p-4 ar-shadow-1">
+                  <h4 class="ar-h6 ar-mb-1">Feature 2</h4>
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Arbitrary column count</p>
+                </div>
+                <div class="ar-card ar-p-4 ar-shadow-1">
+                  <h4 class="ar-h6 ar-mb-1">Feature 3</h4>
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Combines with gap utilities</p>
+                </div>
+                <div class="ar-card ar-p-4 ar-shadow-1">
+                  <h4 class="ar-h6 ar-mb-1">Feature 4</h4>
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Works with display:grid</p>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Mobile: 1 column · Tablet: 2 columns · Desktop: 3 columns
+              </p>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Tip:</strong> The utility grid <em>does not</em> set <code>display: grid</code>.
+                You must apply <code>display: grid</code> separately via the <code>ar-grid</code> utility
+                or inline styles. This allows you to use grid utilities on any element.
+              </div>
+            </div>
+          </section>
+
+          <!-- Examples -->
+          <section id="examples">
+            <h2>Real-World Examples</h2>
+
+            <h3>Dashboard Layout</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-container"&gt;
+  &lt;div class="ar-grid ar-gap-6"&gt;
+    &lt;!-- Header: full-width --&gt;
+    &lt;header class="ar-col-full"&gt;
+      &lt;div class="ar-flex ar-justify-between ar-items-center"&gt;
+        &lt;h1&gt;Dashboard&lt;/h1&gt;
+        &lt;div class="ar-flex ar-gap-4"&gt;
+          &lt;button class="ar-btn ar-btn--primary"&gt;New&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;!-- Stats: 4 columns on desktop, 2 on tablet, 1 on mobile --&gt;
+    &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-3"&gt;...&lt;/div&gt;
+    &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-3"&gt;...&lt;/div&gt;
+    &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-3"&gt;...&lt;/div&gt;
+    &lt;div class="ar-col-12 ar-md:col-6 ar-lg:col-3"&gt;...&lt;/div&gt;
+
+    &lt;!-- Main content: 8 columns --&gt;
+    &lt;div class="ar-col-8"&gt;
+      &lt;div class="ar-card"&gt;...&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Sidebar: 4 columns --&gt;
+    &lt;div class="ar-col-4"&gt;
+      &lt;div class="ar-card"&gt;...&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <h3>Blog Layout</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-container ar-container--narrow"&gt;
+  &lt;article class="ar-prose"&gt;
+    &lt;h1&gt;Blog Post Title&lt;/h1&gt;
+    &lt;p class="ar-text-meta"&gt;Published on June 28, 2026&lt;/p&gt;
+    &lt;p class="ar-lead"&gt;Introduction paragraph...&lt;/p&gt;
+    &lt;!-- Blog content --&gt;
+  &lt;/article&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <h3>Marketing Page</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-container"&gt;
+  &lt;!-- Hero --&gt;
+  &lt;section class="ar-py-16 ar-text-center"&gt;
+    &lt;h1 class="ar-display"&gt;Build the Future&lt;/h1&gt;
+    &lt;p class="ar-lead"&gt;A modern CSS framework for the real world.&lt;/p&gt;
+    &lt;button class="ar-btn ar-btn--primary ar-btn--lg"&gt;Get Started&lt;/button&gt;
+  &lt;/section&gt;
+
+  &lt;!-- Feature grid --&gt;
+  &lt;section class="ar-py-12"&gt;
+    &lt;div style="display:grid;" class="ar-grid-cols-1 ar-md:grid-cols-2 ar-lg:grid-cols-3 ar-gap-6"&gt;
+      &lt;div class="ar-card"&gt;...&lt;/div&gt;
+      &lt;div class="ar-card"&gt;...&lt;/div&gt;
+      &lt;div class="ar-card"&gt;...&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/div&gt;</code>
+            </div>
+
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="typography.html" class="ar-text-link">Typography</a>
+              or learn about <a href="components/button.html" class="ar-text-link">Components</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

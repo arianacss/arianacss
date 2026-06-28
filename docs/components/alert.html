@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alert — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-alert-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--ar-space-3);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="button.html" class="doc-nav-link doc-nav-link--active">Components</a>
+          <a href="../utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Components</span></li>
+              <li><a href="button.html">Button</a></li>
+              <li><a href="card.html">Card</a></li>
+              <li><a href="alert.html" class="doc-sidebar-active">Alert</a></li>
+              <li><a href="indicators.html">Indicators</a></li>
+              <li><a href="input.html">Input</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Alert</h1>
+          <p class="ar-lead">
+            Block-level notifications that communicate contextual feedback — 
+            success confirmations, warnings, errors, and informational messages.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Two-Signal Design</div>
+            <div class="ar-alert__message">
+              Alerts use <strong>two signals</strong> to communicate their role:
+              <ul class="ar-list ar-mt-2">
+                <li><strong>Color:</strong> Background tint indicates the semantic role</li>
+                <li><strong>Shape:</strong> Left border accent provides a non-color signal</li>
+              </ul>
+              This ensures alerts are accessible to users who cannot distinguish colors.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              Alerts are non-interactive by default. They present a message and optionally
+              an action link or dismiss button. Use them for form validation, system messages,
+              and status notifications.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🎨</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  5 color variants + filled variant
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🧩</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Optional title, message, dismiss, and icon
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📏</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  3 sizes: sm, base, lg
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Basic Usage -->
+          <section id="basic-usage">
+            <h2>Basic Usage</h2>
+            <p>
+              The simplest alert uses the base <code>.ar-alert</code> class with a color variant.
+              The default variant is <code>info</code>.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert ar-alert--success" role="alert"&gt;
+  Your changes have been saved successfully.
+&lt;/div&gt;
+
+&lt;div class="ar-alert ar-alert--warning" role="alert"&gt;
+  Please review your input before submitting.
+&lt;/div&gt;
+
+&lt;div class="ar-alert ar-alert--danger" role="alert"&gt;
+  An error occurred while processing your request.
+&lt;/div&gt;
+
+&lt;div class="ar-alert ar-alert--info" role="alert"&gt;
+  Your session will expire in 5 minutes.
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-alert-stack">
+                <div class="ar-alert ar-alert--success" role="alert">
+                  Your changes have been saved successfully.
+                </div>
+                <div class="ar-alert ar-alert--warning" role="alert">
+                  Please review your input before submitting.
+                </div>
+                <div class="ar-alert ar-alert--danger" role="alert">
+                  An error occurred while processing your request.
+                </div>
+                <div class="ar-alert ar-alert--info" role="alert">
+                  Your session will expire in 5 minutes.
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>♿ Accessibility:</strong> Use <code>role="alert"</code> for dynamic alerts
+                (JS-injected). For static alerts present on page load, <code>role="status"</code>
+                is also appropriate.
+              </div>
+            </div>
+          </section>
+
+          <!-- Variants -->
+          <section id="variants">
+            <h2>Color Variants</h2>
+            <p>
+              Alerts come in <strong>5 semantic color variants</strong>:
+              success, warning, danger, info, and primary.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert ar-alert--success" role="alert"&gt;...&lt;/div&gt;
+&lt;div class="ar-alert ar-alert--warning" role="alert"&gt;...&lt;/div&gt;
+&lt;div class="ar-alert ar-alert--danger" role="alert"&gt;...&lt;/div&gt;
+&lt;div class="ar-alert ar-alert--info" role="alert"&gt;...&lt;/div&gt;
+&lt;div class="ar-alert ar-alert--primary" role="alert"&gt;...&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-alert-stack">
+                <div class="ar-alert ar-alert--success" role="alert">
+                  <strong>Success:</strong> Your changes have been saved.
+                </div>
+                <div class="ar-alert ar-alert--warning" role="alert">
+                  <strong>Warning:</strong> Please review your input.
+                </div>
+                <div class="ar-alert ar-alert--danger" role="alert">
+                  <strong>Error:</strong> An error occurred.
+                </div>
+                <div class="ar-alert ar-alert--info" role="alert">
+                  <strong>Info:</strong> Your session will expire soon.
+                </div>
+                <div class="ar-alert ar-alert--primary" role="alert">
+                  <strong>Primary:</strong> Feature announcement.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Filled Variant -->
+          <section id="filled">
+            <h2>Filled Variant</h2>
+            <p>
+              Use <code>.ar-alert--filled</code> for high-visibility alerts with a solid background.
+              Perfect for critical errors and top-of-page system banners.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert ar-alert--danger ar-alert--filled" role="alert"&gt;
+  &lt;div class="ar-alert__title"&gt;System Error&lt;/div&gt;
+  &lt;div class="ar-alert__message"&gt;Please contact support immediately.&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-alert-stack">
+                <div class="ar-alert ar-alert--danger ar-alert--filled" role="alert">
+                  <div class="ar-alert__title">System Error</div>
+                  <div class="ar-alert__message">Please contact support immediately.</div>
+                </div>
+                <div class="ar-alert ar-alert--success ar-alert--filled" role="alert">
+                  <div class="ar-alert__title">Success!</div>
+                  <div class="ar-alert__message">Your account has been created.</div>
+                </div>
+                <div class="ar-alert ar-alert--warning ar-alert--filled" role="alert">
+                  <div class="ar-alert__title">Warning</div>
+                  <div class="ar-alert__message">Your trial expires in 3 days.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--warning ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>⚠️ Warning:</strong> <code>ar-alert--filled</code> uses <strong>white text</strong>
+                on the warning variant. This is verified to pass contrast requirements and is the
+                correct choice — dark text on saffron-600 fails WCAG thresholds.
+              </div>
+            </div>
+          </section>
+
+          <!-- Title and Message -->
+          <section id="title-message">
+            <h2>Title and Message</h2>
+            <p>
+              Use <code>ar-alert__title</code> and <code>ar-alert__message</code> for structured alerts.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert ar-alert--danger" role="alert"&gt;
+  &lt;div class="ar-alert__title"&gt;Error 500&lt;/div&gt;
+  &lt;div class="ar-alert__message"&gt;The server encountered an internal error. Please try again later.&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-alert-stack" style="max-width: 600px;">
+                <div class="ar-alert ar-alert--danger" role="alert">
+                  <div class="ar-alert__title">Error 500</div>
+                  <div class="ar-alert__message">The server encountered an internal error. Please try again later.</div>
+                </div>
+                <div class="ar-alert ar-alert--success" role="alert">
+                  <div class="ar-alert__title">Account Created</div>
+                  <div class="ar-alert__message">Your account has been successfully created. Welcome to the platform!</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Dismissible Alerts -->
+          <section id="dismissible">
+            <h2>Dismissible Alerts</h2>
+            <p>
+              Add a dismiss button with <code>.ar-alert--dismissible</code> and the <code>ar-alert__dismiss</code> element.
+              Note: Dismissal behavior requires <strong>JavaScript</strong> — ArianaCSS is pure CSS.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert ar-alert--info ar-alert--dismissible" role="alert"&gt;
+  &lt;div class="ar-alert__body"&gt;
+    &lt;div class="ar-alert__title"&gt;Notification&lt;/div&gt;
+    &lt;div class="ar-alert__message"&gt;You have 3 unread messages.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button class="ar-alert__dismiss" aria-label="Dismiss alert"&gt;
+    &amp;times;
+  &lt;/button&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-alert-stack" style="max-width: 600px;">
+                <div class="ar-alert ar-alert--info ar-alert--dismissible" role="alert">
+                  <div class="ar-alert__body">
+                    <div class="ar-alert__title">Notification</div>
+                    <div class="ar-alert__message">You have 3 unread messages.</div>
+                  </div>
+                  <button class="ar-alert__dismiss" aria-label="Dismiss alert">×</button>
+                </div>
+                <div class="ar-alert ar-alert--success ar-alert--dismissible" role="alert">
+                  <div class="ar-alert__body">
+                    <div class="ar-alert__title">Success!</div>
+                    <div class="ar-alert__message">Your changes have been saved.</div>
+                  </div>
+                  <button class="ar-alert__dismiss" aria-label="Dismiss alert">×</button>
+                </div>
+                <div class="ar-alert ar-alert--warning ar-alert--dismissible" role="alert">
+                  <div class="ar-alert__body">
+                    <div class="ar-alert__title">Warning</div>
+                    <div class="ar-alert__message">Your session will expire in 5 minutes.</div>
+                  </div>
+                  <button class="ar-alert__dismiss" aria-label="Dismiss alert">×</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--danger ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>♿ Accessibility:</strong> Dismiss buttons must:
+                <ul class="ar-list ar-mt-2">
+                  <li>Be a <code>&lt;button&gt;</code> element (not a <code>div</code> or <code>span</code>)</li>
+                  <li>Have <code>aria-label="Dismiss alert"</code> (or similar descriptive text)</li>
+                  <li>Be keyboard-focusable (button is by default)</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Action Links -->
+          <section id="action-links">
+            <h2>Action Links</h2>
+            <p>
+              Add action links inside alerts using <code>.ar-alert__action</code>.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert ar-alert--warning" role="alert"&gt;
+  &lt;div class="ar-alert__message"&gt;
+    Your subscription expires in 3 days.
+    &lt;a href="/renew" class="ar-alert__action"&gt;Renew now&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-alert-stack" style="max-width: 600px;">
+                <div class="ar-alert ar-alert--warning" role="alert">
+                  <div class="ar-alert__message">
+                    Your subscription expires in 3 days.
+                    <a href="#" class="ar-alert__action">Renew now</a>
+                  </div>
+                </div>
+                <div class="ar-alert ar-alert--info" role="alert">
+                  <div class="ar-alert__message">
+                    New features available.
+                    <a href="#" class="ar-alert__action">Learn more →</a>
+                  </div>
+                </div>
+                <div class="ar-alert ar-alert--success" role="alert">
+                  <div class="ar-alert__message">
+                    File uploaded successfully.
+                    <a href="#" class="ar-alert__action">View file</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Icon Alerts -->
+          <section id="icon-alerts">
+            <h2>Icon Alerts</h2>
+            <p>
+              Add icons to alerts with <code>.ar-alert--icon</code> and <code>.ar-alert__icon</code>.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert ar-alert--success ar-alert--icon" role="alert"&gt;
+  &lt;svg class="ar-alert__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24"&gt;
+    &lt;path d="..." /&gt;
+  &lt;/svg&gt;
+  &lt;div class="ar-alert__body"&gt;
+    &lt;div class="ar-alert__title"&gt;Success!&lt;/div&gt;
+    &lt;div class="ar-alert__message"&gt;Your file was saved.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-alert-stack" style="max-width: 600px;">
+                <div class="ar-alert ar-alert--success ar-alert--icon" role="alert">
+                  <svg class="ar-alert__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                  <div class="ar-alert__body">
+                    <div class="ar-alert__title">Success!</div>
+                    <div class="ar-alert__message">Your file was saved successfully.</div>
+                  </div>
+                </div>
+                <div class="ar-alert ar-alert--danger ar-alert--icon" role="alert">
+                  <svg class="ar-alert__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <div class="ar-alert__body">
+                    <div class="ar-alert__title">Error</div>
+                    <div class="ar-alert__message">Something went wrong. Please try again.</div>
+                  </div>
+                </div>
+                <div class="ar-alert ar-alert--warning ar-alert--icon" role="alert">
+                  <svg class="ar-alert__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M12 8v4"/>
+                    <path d="M12 16h.01"/>
+                  </svg>
+                  <div class="ar-alert__body">
+                    <div class="ar-alert__title">Warning</div>
+                    <div class="ar-alert__message">Your session will expire soon.</div>
+                  </div>
+                </div>
+                <div class="ar-alert ar-alert--info ar-alert--icon" role="alert">
+                  <svg class="ar-alert__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="12" x2="16" y2="16"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                  <div class="ar-alert__body">
+                    <div class="ar-alert__title">Information</div>
+                    <div class="ar-alert__message">New features are available in this update.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>♿ Accessibility:</strong> Icons in alerts should have
+                <code>aria-hidden="true"</code>. The alert text must stand alone for screen readers.
+              </div>
+            </div>
+          </section>
+
+          <!-- Size Variants -->
+          <section id="sizes">
+            <h2>Size Variants</h2>
+            <p>
+              Alerts come in <strong>3 sizes</strong>: sm (compact), base (default), and lg (prominent).
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert ar-alert--info ar-alert--sm" role="alert"&gt;Small alert&lt;/div&gt;
+&lt;div class="ar-alert ar-alert--info" role="alert"&gt;Default alert&lt;/div&gt;
+&lt;div class="ar-alert ar-alert--info ar-alert--lg" role="alert"&gt;Large alert&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-alert-stack" style="max-width: 600px;">
+                <div class="ar-alert ar-alert--success ar-alert--sm" role="alert">
+                  <div class="ar-alert__title">Small Alert</div>
+                  <div class="ar-alert__message">Compact alert for dense UIs.</div>
+                </div>
+                <div class="ar-alert ar-alert--info" role="alert">
+                  <div class="ar-alert__title">Default Alert</div>
+                  <div class="ar-alert__message">Standard alert for most contexts.</div>
+                </div>
+                <div class="ar-alert ar-alert--warning ar-alert--lg" role="alert">
+                  <div class="ar-alert__title">Large Alert</div>
+                  <div class="ar-alert__message">Prominent alert for critical system messages.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📏 Sizing Guide:</strong>
+                <ul class="ar-list ar-mt-2">
+                  <li><strong>Sm:</strong> Table cells, sidebars, inline validation</li>
+                  <li><strong>Base:</strong> Default for most contexts</li>
+                  <li><strong>Lg:</strong> Page-level system messages, maintenance banners</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Borderless Variant -->
+          <section id="borderless">
+            <h2>Borderless Variant</h2>
+            <p>
+              Use <code>.ar-alert--borderless</code> to remove borders when the alert is inside
+              a bordered container (like a card).
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert ar-alert--success ar-alert--borderless" role="alert"&gt;
+  Borderless alert inside a card.
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-card ar-p-3" style="max-width: 600px; margin: 0 auto;">
+                <div class="ar-card__body">
+                  <h4 class="ar-h6 ar-mb-2">Inside a Card</h4>
+                  <div class="ar-alert ar-alert--success ar-alert--borderless" role="alert">
+                    Borderless alert — no visible border, just the tint.
+                  </div>
+                  <div class="ar-alert ar-alert--warning ar-alert--borderless" role="alert">
+                    Borderless warning alert.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Alert Stack -->
+          <section id="alert-stack">
+            <h2>Alert Stack</h2>
+            <p>
+              Use <code>.ar-alert-stack</code> to group multiple alerts with consistent spacing.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-alert-stack"&gt;
+  &lt;div class="ar-alert ar-alert--danger" role="alert"&gt;Error 1&lt;/div&gt;
+  &lt;div class="ar-alert ar-alert--danger" role="alert"&gt;Error 2&lt;/div&gt;
+  &lt;div class="ar-alert ar-alert--warning" role="alert"&gt;Warning&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-alert-stack" style="max-width: 600px; margin: 0 auto;">
+                <div class="ar-alert ar-alert--danger" role="alert">
+                  <div class="ar-alert__title">Error: Missing Required Fields</div>
+                  <div class="ar-alert__message">Please fill in all required fields before submitting.</div>
+                </div>
+                <div class="ar-alert ar-alert--danger" role="alert">
+                  <div class="ar-alert__title">Error: Invalid Email</div>
+                  <div class="ar-alert__message">The email address you entered is not valid.</div>
+                </div>
+                <div class="ar-alert ar-alert--warning" role="alert">
+                  <div class="ar-alert__title">Warning</div>
+                  <div class="ar-alert__message">Your session expires in 5 minutes.</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Accessibility -->
+          <section id="accessibility">
+            <h2>Accessibility</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">✅ Best Practices</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Use <code>role="alert"</code> for dynamic alerts (JS-injected)</li>
+                  <li>Use <code>role="status"</code> for static alerts on page load</li>
+                  <li>Dismiss buttons must be <code>&lt;button&gt;</code> elements</li>
+                  <li>Provide <code>aria-label</code> on dismiss buttons</li>
+                  <li>Icons should have <code>aria-hidden="true"</code></li>
+                  <li>Left border provides a non-color signal (WCAG 1.4.1)</li>
+                  <li>Text contrast meets WCAG AA requirements</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">❌ Common Mistakes</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Using <code>div</code> for dismiss buttons</li>
+                  <li>Missing <code>role="alert"</code> on dynamic alerts</li>
+                  <li>Icons without <code>aria-hidden="true"</code></li>
+                  <li>Using color alone to communicate role</li>
+                  <li>Nesting interactive elements inside alerts incorrectly</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Accessible Alert Example</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;!-- Dynamic alert (JS-injected) --&gt;
+&lt;div class="ar-alert ar-alert--danger ar-alert--dismissible" role="alert" aria-live="polite"&gt;
+  &lt;div class="ar-alert__body"&gt;
+    &lt;div class="ar-alert__title"&gt;Error&lt;/div&gt;
+    &lt;div class="ar-alert__message"&gt;Something went wrong.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button class="ar-alert__dismiss" aria-label="Dismiss error message"&gt;×&lt;/button&gt;
+&lt;/div&gt;</code>
+              </div>
+              <div class="ar-alert ar-alert--danger ar-alert--dismissible" role="alert" aria-live="polite">
+                <div class="ar-alert__body">
+                  <div class="ar-alert__title">Error</div>
+                  <div class="ar-alert__message">Something went wrong. Please try again.</div>
+                </div>
+                <button class="ar-alert__dismiss" aria-label="Dismiss error message">×</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- HTML Reference -->
+          <section id="html-reference">
+            <h2>HTML Reference</h2>
+
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Purpose</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>.ar-alert</code></td>
+                  <td>Base alert styles</td>
+                  <td>✅ Required</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert--success/warning/danger/info/primary</code></td>
+                  <td>Color variants</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert--filled</code></td>
+                  <td>Solid background variant</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert--borderless</code></td>
+                  <td>Remove borders</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert--sm/lg</code></td>
+                  <td>Size variants</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert--dismissible</code></td>
+                  <td>Enable dismiss button layout</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert--icon</code></td>
+                  <td>Enable icon layout</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert__title</code></td>
+                  <td>Alert title</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert__message</code></td>
+                  <td>Alert message</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert__body</code></td>
+                  <td>Wrapper for title + message (with dismiss button)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert__action</code></td>
+                  <td>Action link</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert__dismiss</code></td>
+                  <td>Dismiss button</td>
+                  <td>With --dismissible</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert__icon</code></td>
+                  <td>Icon element</td>
+                  <td>With --icon</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-alert-stack</code></td>
+                  <td>Stack multiple alerts</td>
+                  <td>Optional</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Do / Don't -->
+          <section id="do-dont">
+            <h2>Do / Don't</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use appropriate variants</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-alert ar-alert--success" role="alert"&gt;
+  ✓ Your changes were saved.
+&lt;/div&gt;
+
+&lt;div class="ar-alert ar-alert--danger" role="alert"&gt;
+  ✗ An error occurred.
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Success for confirmations, danger for errors.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Use danger for non-errors</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-alert ar-alert--danger" role="alert"&gt;
+  Your account has been created.
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Danger is for errors and destructive actions only.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use titles for structure</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-alert ar-alert--warning" role="alert"&gt;
+  &lt;div class="ar-alert__title"&gt;Warning&lt;/div&gt;
+  &lt;div class="ar-alert__message"&gt;Please review your input.&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Title + message creates clear hierarchy.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Omit role attributes</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-alert ar-alert--danger"&gt;
+  An error occurred.
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Screen readers need <code>role="alert"</code> or <code>role="status"</code>.</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="indicators.html" class="ar-text-link">Indicators Component</a>
+              or learn about <a href="../utilities/color.html" class="ar-text-link">Color Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

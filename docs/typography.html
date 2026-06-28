@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typography — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-type-demo {
+      padding: var(--ar-space-2) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-type-demo:last-child {
+      border-bottom: none;
+    }
+
+    .doc-type-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      margin-right: var(--ar-space-3);
+      display: inline-block;
+      min-width: 8rem;
+    }
+
+    .doc-type-value {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      margin-right: var(--ar-space-3);
+      display: inline-block;
+      min-width: 4rem;
+    }
+
+    .doc-prose-example {
+      max-width: 65ch;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+
+      .doc-type-label,
+      .doc-type-value {
+        display: block;
+        min-width: auto;
+        margin-bottom: var(--ar-space-1);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="grid.html" class="doc-nav-link">Grid</a>
+          <a href="typography.html" class="doc-nav-link doc-nav-link--active">Typography</a>
+          <a href="components/button.html" class="doc-nav-link">Components</a>
+          <a href="utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Typography</span></li>
+              <li><a href="#introduction" class="doc-sidebar-active">Introduction</a></li>
+              <li><a href="#type-scale">Type Scale</a></li>
+              <li><a href="#headings">Headings</a></li>
+              <li><a href="#heading-patterns">Heading Patterns</a></li>
+              <li><a href="#display">Display Heading</a></li>
+              <li><a href="#eyebrow-lead">Eyebrow & Lead</a></li>
+              <li><a href="#prose">Prose Content</a></li>
+              <li><a href="#lists">Lists</a></li>
+              <li><a href="#inline-elements">Inline Elements</a></li>
+              <li><a href="#typography-utilities">Typography Utilities</a></li>
+              <li><a href="#accessibility">Accessibility</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Typography</h1>
+          <p class="ar-lead">
+            A flexible, accessible typography system with a consistent type scale,
+            semantic heading patterns, and rich prose styling.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Base Size: 1rem (16px)</div>
+            <div class="ar-alert__message">
+              ArianaCSS respects browser font-size preferences. The base size is 1rem (16px),
+              which can be adjusted by the user via browser settings. This is an accessibility
+              requirement (WCAG 1.4.4 — Resize Text).
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              ArianaCSS uses a <strong>Major Third (×1.25)</strong> type scale with 10 sizes,
+              from <code>xs</code> (12px) to <code>6xl</code> (60px). The system provides
+              both semantic heading elements and composable pattern classes.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📏</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Major Third ratio (×1.25) for clear hierarchy
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🎯</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  10 sizes from 12px to 60px
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">♿</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Accessible: 1rem base, responsive heading overrides
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Type Scale -->
+          <section id="type-scale">
+            <h2>Type Scale</h2>
+            <p>
+              The type scale is defined by CSS custom properties and can be customized via theming.
+            </p>
+
+            <div class="doc-example-box">
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-xs</span>
+                <span class="doc-type-value">0.75rem (12px)</span>
+                <span class="ar-text-xs">The quick brown fox jumps over the lazy dog.</span>
+              </div>
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-sm</span>
+                <span class="doc-type-value">0.875rem (14px)</span>
+                <span class="ar-text-sm">The quick brown fox jumps over the lazy dog.</span>
+              </div>
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-base</span>
+                <span class="doc-type-value">1rem (16px)</span>
+                <span class="ar-text-base">The quick brown fox jumps over the lazy dog.</span>
+              </div>
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-lg</span>
+                <span class="doc-type-value">1.125rem (18px)</span>
+                <span class="ar-text-lg">The quick brown fox jumps over the lazy dog.</span>
+              </div>
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-xl</span>
+                <span class="doc-type-value">1.25rem (20px)</span>
+                <span class="ar-text-xl">The quick brown fox jumps over the lazy dog.</span>
+              </div>
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-2xl</span>
+                <span class="doc-type-value">1.5rem (24px)</span>
+                <span class="ar-text-2xl">The quick brown fox jumps over the lazy dog.</span>
+              </div>
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-3xl</span>
+                <span class="doc-type-value">1.875rem (30px)</span>
+                <span class="ar-text-3xl">The quick brown fox jumps over the lazy dog.</span>
+              </div>
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-4xl</span>
+                <span class="doc-type-value">2.25rem (36px)</span>
+                <span class="ar-text-4xl">The quick brown fox jumps over the lazy dog.</span>
+              </div>
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-5xl</span>
+                <span class="doc-type-value">3rem (48px)</span>
+                <span class="ar-text-5xl">The quick brown fox jumps</span>
+              </div>
+              <div class="doc-type-demo">
+                <span class="doc-type-label">--ar-text-size-6xl</span>
+                <span class="doc-type-value">3.75rem (60px)</span>
+                <span class="ar-text-6xl">The quick brown fox</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Headings -->
+          <section id="headings">
+            <h2>Headings</h2>
+            <p>
+              HTML heading elements (<code>h1</code> through <code>h6</code>) are styled
+              automatically. No classes needed.
+            </p>
+
+            <div class="doc-example-box">
+              <h1>h1 — The quick brown fox</h1>
+              <h2>h2 — The quick brown fox</h2>
+              <h3>h3 — The quick brown fox</h3>
+              <h4>h4 — The quick brown fox</h4>
+              <h5>h5 — The quick brown fox</h5>
+              <h6>h6 — The quick brown fox</h6>
+            </div>
+
+            <div class="doc-code-block">
+              <code>&lt;h1&gt;This is an h1 heading&lt;/h1&gt;
+&lt;h2&gt;This is an h2 heading&lt;/h2&gt;
+&lt;h3&gt;This is an h3 heading&lt;/h3&gt;
+&lt;h4&gt;This is an h4 heading&lt;/h4&gt;
+&lt;h5&gt;This is an h5 heading&lt;/h5&gt;
+&lt;h6&gt;This is an h6 heading&lt;/h6&gt;</code>
+            </div>
+
+            <div class="ar-alert ar-alert--warning ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📱 Responsive:</strong> On mobile (< 480px), <code>h1</code> drops to 36px
+                and <code>h2</code> drops to 30px for better readability on small screens.
+              </div>
+            </div>
+          </section>
+
+          <!-- Heading Patterns -->
+          <section id="heading-patterns">
+            <h2>Heading Patterns</h2>
+            <p>
+              Use <code>.ar-h1</code> through <code>.ar-h6</code> to apply heading styles
+              to any element, or to decouple semantic heading level from visual heading level.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Decouple semantics from appearance --&gt;
+&lt;h2 class="ar-h4"&gt;This h2 looks like an h4&lt;/h2&gt;
+
+&lt;!-- Apply heading styles to any element --&gt;
+&lt;p class="ar-h3"&gt;A paragraph that looks like an h3&lt;/p&gt;
+
+&lt;div class="ar-h1"&gt;A div that looks like an h1&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <p><strong>Element h2, visually h4:</strong></p>
+              <h2 class="ar-h4" style="margin-block-end:0;">This is an h2 with ar-h4 class</h2>
+              <hr class="ar-mt-4 ar-mb-4">
+              <p><strong>Paragraph styled as h3:</strong></p>
+              <p class="ar-h3" style="margin-block-end:0;">This paragraph has the ar-h3 class</p>
+              <hr class="ar-mt-4 ar-mb-4">
+              <p><strong>Div styled as h1:</strong></p>
+              <div class="ar-h1" style="margin-block-end:0;">A div with ar-h1 class</div>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>♿ Accessibility:</strong> Always use appropriate semantic heading levels
+                for document structure. Use <code>.ar-h*</code> classes to adjust the visual
+                appearance without changing the semantic structure.
+              </div>
+            </div>
+          </section>
+
+          <!-- Display Heading -->
+          <section id="display">
+            <h2>Display Heading</h2>
+            <p>
+              Use <code>.ar-display</code> for hero sections and large marketing headlines.
+              It scales responsively from 72px on desktop to 36px on mobile.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;h1 class="ar-display"&gt;Building the Future&lt;/h1&gt;</code>
+            </div>
+
+            <div class="doc-example-box ar-text-center ar-py-4 ar-bg-primary-surface">
+              <h1 class="ar-display ar-mb-0" style="color: var(--ar-color-text-heading);">Building the Future</h1>
+              <p class="ar-lead ar-text-muted ar-mt-2">A modern CSS framework for the real world</p>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📐 Responsive:</strong> <code>.ar-display</code> scales from 72px (desktop)
+                → 60px (laptop) → 48px (tablet) → 36px (mobile).
+              </div>
+            </div>
+          </section>
+
+          <!-- Eyebrow & Lead -->
+          <section id="eyebrow-lead">
+            <h2>Eyebrow & Lead</h2>
+
+            <h3>Eyebrow</h3>
+            <p>
+              Use <code>.ar-eyebrow</code> for small uppercase labels that appear above headings.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;p class="ar-eyebrow"&gt;New Feature&lt;/p&gt;
+&lt;h2&gt;Introducing the Dashboard&lt;/h2&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <p class="ar-eyebrow">New Feature</p>
+              <h2 style="margin-block-start:0;">Introducing the Dashboard</h2>
+              <p class="ar-text-muted">A complete view of your business metrics.</p>
+            </div>
+
+            <h3>Lead Paragraph</h3>
+            <p>
+              Use <code>.ar-lead</code> for introductory paragraphs that follow a heading.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;h2&gt;About Our Company&lt;/h2&gt;
+&lt;p class="ar-lead"&gt;We build software that helps teams collaborate better.&lt;/p&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <h2 style="margin-block-end:0;">About Our Company</h2>
+              <p class="ar-lead">We build software that helps teams collaborate better and achieve their goals faster.</p>
+              <p>Founded in 2026, our mission is to make powerful tools accessible to everyone. We believe that great design and thoughtful engineering can transform how people work together.</p>
+            </div>
+          </section>
+
+          <!-- Prose Content -->
+          <section id="prose">
+            <h2>Prose Content</h2>
+            <p>
+              Use <code>.ar-prose</code> to style rich text content from CMS, markdown, or user-generated content.
+              It applies typographic styles to all child elements — no classes needed inside.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;article class="ar-prose"&gt;
+  &lt;h2&gt;Section Title&lt;/h2&gt;
+  &lt;p&gt;Paragraph text with &lt;a href="#"&gt;a link&lt;/a&gt;.&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li&gt;List item 1&lt;/li&gt;
+    &lt;li&gt;List item 2&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;blockquote&gt;A quote goes here.&lt;/blockquote&gt;
+  &lt;pre&gt;&lt;code&gt;code block&lt;/code&gt;&lt;/pre&gt;
+&lt;/article&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-prose">
+                <h2>What is ArianaCSS?</h2>
+                <p>
+                  ArianaCSS is a modern, lightweight, pure CSS framework built for a university project
+                  in Afghanistan. It combines the strongest ideas from Bootstrap and Tailwind CSS into a
+                  single, cohesive system.
+                </p>
+                <p>
+                  The framework is designed to be <strong>accessible</strong>, <em>lightweight</em>,
+                  and <a href="#">easy to learn</a>. It uses a token system for theming and includes
+                  both components and utilities.
+                </p>
+                <h3>Key Features</h3>
+                <ul>
+                  <li>Pure CSS — no JavaScript dependencies</li>
+                  <li>Mobile-first and accessible by default</li>
+                  <li>RTL ready with CSS logical properties</li>
+                  <li>Components and utilities in one framework</li>
+                </ul>
+                <h3>Getting Started</h3>
+                <ol>
+                  <li>Include the CSS file in your HTML</li>
+                  <li>Start building with the container and grid</li>
+                  <li>Add components and utilities as needed</li>
+                </ol>
+                <blockquote>
+                  "A CSS framework should teach you CSS, not hide it."
+                  <cite>ArianaCSS Design Philosophy</cite>
+                </blockquote>
+                <p>
+                  For code examples, see the <code>ar-prose</code> class in action
+                  with inline <code>code</code> and <kbd>kbd</kbd> elements.
+                </p>
+                <pre><code>&lt;div class="ar-prose"&gt;
+  &lt;h2&gt;Getting Started&lt;/h2&gt;
+  &lt;p&gt;Include the CSS file and start building.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <h3>Prose Width Variants</h3>
+            <div class="doc-code-block">
+              <code>&lt;!-- Standard prose (65ch max-width) --&gt;
+&lt;div class="ar-prose"&gt;...&lt;/div&gt;
+
+&lt;!-- Narrow prose (55ch) --&gt;
+&lt;div class="ar-prose ar-prose--narrow"&gt;...&lt;/div&gt;
+
+&lt;!-- Wide prose (80ch) --&gt;
+&lt;div class="ar-prose ar-prose--wide"&gt;...&lt;/div&gt;
+
+&lt;!-- Full width (no constraint) --&gt;
+&lt;div class="ar-prose ar-prose--full"&gt;...&lt;/div&gt;</code>
+            </div>
+          </section>
+
+          <!-- Lists -->
+          <section id="lists">
+            <h2>Lists</h2>
+            <p>
+              Restore list styles with <code>.ar-list</code> and <code>.ar-list-ordered</code>.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="doc-example-box">
+                <h4 class="ar-h6">Unordered List</h4>
+                <ul class="ar-list">
+                  <li>Responsive grid system</li>
+                  <li>Semantic components</li>
+                  <li>Utility classes</li>
+                  <li>Accessible by default</li>
+                </ul>
+                <div class="doc-code-block ar-mt-2">
+                  <code>&lt;ul class="ar-list"&gt;
+  &lt;li&gt;Item 1&lt;/li&gt;
+  &lt;li&gt;Item 2&lt;/li&gt;
+&lt;/ul&gt;</code>
+                </div>
+              </div>
+              <div class="doc-example-box">
+                <h4 class="ar-h6">Ordered List</h4>
+                <ol class="ar-list-ordered">
+                  <li>Install ArianaCSS</li>
+                  <li>Include in your project</li>
+                  <li>Build your interface</li>
+                  <li>Deploy your site</li>
+                </ol>
+                <div class="doc-code-block ar-mt-2">
+                  <code>&lt;ol class="ar-list-ordered"&gt;
+  &lt;li&gt;Step 1&lt;/li&gt;
+  &lt;li&gt;Step 2&lt;/li&gt;
+&lt;/ol&gt;</code>
+                </div>
+              </div>
+            </div>
+
+            <h3>Inline List</h3>
+            <p>
+              Use <code>.ar-list-inline</code> for horizontal lists with gap between items.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;ul class="ar-list-inline"&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;About&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <ul class="ar-list-inline">
+                <li><a href="#" class="ar-text-link">Home</a></li>
+                <li><a href="#" class="ar-text-link">About</a></li>
+                <li><a href="#" class="ar-text-link">Contact</a></li>
+                <li><a href="#" class="ar-text-link">Blog</a></li>
+              </ul>
+            </div>
+
+            <h3>Divided Inline List</h3>
+            <p>
+              Use <code>.ar-list-inline--divided</code> for lists with dot separators between items.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;ul class="ar-list-inline ar-list-inline--divided"&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Terms&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Privacy&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Cookies&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <ul class="ar-list-inline ar-list-inline--divided">
+                <li><a href="#" class="ar-text-link">Terms</a></li>
+                <li><a href="#" class="ar-text-link">Privacy</a></li>
+                <li><a href="#" class="ar-text-link">Cookies</a></li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Inline Elements -->
+          <section id="inline-elements">
+            <h2>Inline Elements</h2>
+            <p>
+              HTML inline elements are styled automatically.
+            </p>
+
+            <div class="doc-example-box">
+              <p>
+                This paragraph contains <strong>strong text</strong>, <em>emphasized text</em>,
+                and <a href="#">a link</a>. It also has <code>inline code</code> and
+                <kbd>kbd</kbd> elements. Use <mark>mark</mark> to highlight text.
+              </p>
+              <p>
+                <abbr title="Cascading Style Sheets">CSS</abbr> is a style sheet language.
+                <small>This is small text.</small>
+              </p>
+            </div>
+
+            <div class="doc-code-block">
+              <code>&lt;p&gt;
+  &lt;strong&gt;strong text&lt;/strong&gt;,
+  &lt;em&gt;emphasized text&lt;/em&gt;,
+  &lt;a href="#"&gt;a link&lt;/a&gt;.
+  &lt;code&gt;inline code&lt;/code&gt; and
+  &lt;kbd&gt;kbd&lt;/kbd&gt;.
+  &lt;mark&gt;mark&lt;/mark&gt; to highlight.
+  &lt;abbr title="..."&gt;CSS&lt;/abbr&gt;.
+  &lt;small&gt;small text&lt;/small&gt;.
+&lt;/p&gt;</code>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Note:</strong> <code>&lt;code&gt;</code> elements are styled with
+                a monospace font, sunken background, and rounded corners. Perfect for
+                inline code references.
+              </div>
+            </div>
+          </section>
+
+          <!-- Typography Utilities -->
+          <section id="typography-utilities">
+            <h2>Typography Utilities</h2>
+            <p>
+              ArianaCSS provides a full set of typography utilities for fine-grained control.
+              See the <a href="utilities/typography.html" class="ar-text-link">Typography Utilities</a>
+              page for complete documentation.
+            </p>
+
+            <h3>Common Utilities</h3>
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Font Size</h4>
+                <p class="ar-text-xs">.ar-text-xs — 12px</p>
+                <p class="ar-text-sm">.ar-text-sm — 14px</p>
+                <p class="ar-text-base">.ar-text-base — 16px</p>
+                <p class="ar-text-lg">.ar-text-lg — 18px</p>
+                <p class="ar-text-xl">.ar-text-xl — 20px</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Font Weight</h4>
+                <p class="ar-font-normal">.ar-font-normal — 400</p>
+                <p class="ar-font-medium">.ar-font-medium — 500</p>
+                <p class="ar-font-semibold">.ar-font-semibold — 600</p>
+                <p class="ar-font-bold">.ar-font-bold — 700</p>
+                <p class="ar-font-extrabold">.ar-font-extrabold — 800</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Text Color</h4>
+                <p class="ar-text-default">.ar-text-default</p>
+                <p class="ar-text-heading">.ar-text-heading</p>
+                <p class="ar-text-muted">.ar-text-muted</p>
+                <p class="ar-text-primary">.ar-text-primary</p>
+                <p class="ar-text-danger">.ar-text-danger</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Other Utilities</h4>
+                <p class="ar-text-center">.ar-text-center</p>
+                <p class="ar-text-uppercase">.ar-text-uppercase</p>
+                <p class="ar-truncate" style="max-width:200px;">.ar-truncate — long text that gets truncated</p>
+                <p class="ar-tabular-nums">.ar-tabular-nums — 1,234,567</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Accessibility -->
+          <section id="accessibility">
+            <h2>Accessibility</h2>
+            <p>
+              ArianaCSS typography is built with accessibility in mind.
+            </p>
+
+            <ul class="ar-list ar-mt-4">
+              <li>
+                <strong>1rem base font size:</strong> Respects user browser preferences
+                (WCAG 1.4.4 — Resize Text)
+              </li>
+              <li>
+                <strong>Sufficient contrast:</strong> All text color tokens meet WCAG AA
+                contrast requirements (4.5:1 for normal text, 3:1 for large text)
+              </li>
+              <li>
+                <strong>Responsive headings:</strong> Large headings scale down on mobile
+                for better readability
+              </li>
+              <li>
+                <strong>Semantic heading levels:</strong> Heading classes allow visual
+                styling without changing document structure
+              </li>
+              <li>
+                <strong>Logical properties:</strong> RTL support via CSS logical properties
+              </li>
+            </ul>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>♿ Best Practice:</strong> Always use semantic HTML elements
+                (<code>h1</code>–<code>h6</code>, <code>p</code>, <code>ul</code>, etc.)
+                for content structure. Use classes only for visual styling.
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Learn about <a href="components/button.html" class="ar-text-link">Components</a>
+              or explore <a href="utilities/typography.html" class="ar-text-link">Typography Utilities</a>
+              for more control.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

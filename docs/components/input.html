@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-input-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--ar-space-4);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .doc-input-grid .ar-field {
+      width: 100%;
+    }
+
+    .doc-input-grid--compact {
+      max-width: 600px;
+    }
+
+    .doc-field-demo {
+      padding: var(--ar-space-4);
+      background: var(--ar-color-layer-raised);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+
+      .doc-input-grid {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="button.html" class="doc-nav-link doc-nav-link--active">Components</a>
+          <a href="../utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Components</span></li>
+              <li><a href="button.html">Button</a></li>
+              <li><a href="card.html">Card</a></li>
+              <li><a href="alert.html">Alert</a></li>
+              <li><a href="indicators.html">Indicators</a></li>
+              <li><a href="input.html" class="doc-sidebar-active">Input</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Input</h1>
+          <p class="ar-lead">
+            Form input styles for all text-entry elements — text, email, password, number, search, url, tel, and textarea.
+            Includes labels, field wrappers, hints, and validation states.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Two-Signal Validation</div>
+            <div class="ar-alert__message">
+              Input states use <strong>two signals</strong> to communicate validation:
+              <ul class="ar-list ar-mt-2">
+                <li><strong>Color:</strong> Border color changes (green for success, red for error)</li>
+                <li><strong>Width:</strong> Border width increases from 1px → 2px</li>
+              </ul>
+              This ensures validation states are accessible to color-blind users.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              The input component covers all text-entry form elements. It includes the input itself,
+              labels, field wrappers, helper text, error messages, and validation states.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📝</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Text, email, password, number, search, url, tel, textarea
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">✅</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  States: default, error, success, disabled
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📏</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  3 sizes: sm, base, lg
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Basic Usage -->
+          <section id="basic-usage">
+            <h2>Basic Usage</h2>
+            <p>
+              The simplest input uses the <code>.ar-input</code> class with a label.
+              Always use the <code>.ar-field</code> wrapper for proper spacing and structure.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-field"&gt;
+  &lt;label class="ar-label" for="email"&gt;Email Address&lt;/label&gt;
+  &lt;input class="ar-input" type="email" id="email" placeholder="you@example.com"&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-input-grid">
+                <div class="ar-field">
+                  <label class="ar-label" for="email-basic">Email Address</label>
+                  <input class="ar-input" type="email" id="email-basic" placeholder="you@example.com">
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Tip:</strong> The <code>for</code> attribute on the label must match
+                the <code>id</code> on the input for accessibility. Clicking the label focuses the input.
+              </div>
+            </div>
+          </section>
+
+          <!-- Label -->
+          <section id="label">
+            <h2>Label</h2>
+            <p>
+              Labels use <code>.ar-label</code> with optional <code>--required</code> or
+              <code>--optional</code> modifiers.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;label class="ar-label" for="name"&gt;Full Name&lt;/label&gt;
+&lt;label class="ar-label ar-label--required" for="email"&gt;Email Address&lt;/label&gt;
+&lt;label class="ar-label ar-label--optional" for="phone"&gt;Phone Number&lt;/label&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-input-grid">
+                <div class="ar-field">
+                  <label class="ar-label" for="name-label">Full Name</label>
+                  <input class="ar-input" type="text" id="name-label" placeholder="John Doe">
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label ar-label--required" for="email-label">Email Address</label>
+                  <input class="ar-input" type="email" id="email-label" placeholder="you@example.com">
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label ar-label--optional" for="phone-label">Phone Number</label>
+                  <input class="ar-input" type="tel" id="phone-label" placeholder="+1 234 567 8900">
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Input Types -->
+          <section id="input-types">
+            <h2>Input Types</h2>
+            <p>
+              The <code>.ar-input</code> class works with all text-entry input types.
+            </p>
+
+            <div class="doc-example-box">
+              <div class="doc-input-grid">
+                <div class="ar-field">
+                  <label class="ar-label" for="text-type">Text</label>
+                  <input class="ar-input" type="text" id="text-type" placeholder="Text input">
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label" for="email-type">Email</label>
+                  <input class="ar-input" type="email" id="email-type" placeholder="you@example.com">
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label" for="password-type">Password</label>
+                  <input class="ar-input" type="password" id="password-type" placeholder="••••••••">
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label" for="number-type">Number</label>
+                  <input class="ar-input" type="number" id="number-type" placeholder="42">
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label" for="search-type">Search</label>
+                  <input class="ar-input" type="search" id="search-type" placeholder="Search...">
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label" for="url-type">URL</label>
+                  <input class="ar-input" type="url" id="url-type" placeholder="https://example.com">
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label" for="tel-type">Telephone</label>
+                  <input class="ar-input" type="tel" id="tel-type" placeholder="+1 234 567 8900">
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Textarea -->
+          <section id="textarea">
+            <h2>Textarea</h2>
+            <p>
+              Textareas use the same <code>.ar-input</code> class with additional multi-line styling.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-field"&gt;
+  &lt;label class="ar-label" for="message"&gt;Message&lt;/label&gt;
+  &lt;textarea class="ar-input" id="message" rows="4" placeholder="Your message..."&gt;&lt;/textarea&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-input-grid">
+                <div class="ar-field">
+                  <label class="ar-label" for="message-area">Message</label>
+                  <textarea class="ar-input" id="message-area" rows="4" placeholder="Your message..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-code-block ar-mt-4">
+              <code>&lt;!-- Textarea sizes --&gt;
+&lt;textarea class="ar-input ar-input--sm" rows="3" placeholder="Small textarea"&gt;&lt;/textarea&gt;
+&lt;textarea class="ar-input" rows="4" placeholder="Default textarea"&gt;&lt;/textarea&gt;
+&lt;textarea class="ar-input ar-input--lg" rows="5" placeholder="Large textarea"&gt;&lt;/textarea&gt;</code>
+            </div>
+          </section>
+
+          <!-- Size Variants -->
+          <section id="sizes">
+            <h2>Size Variants</h2>
+            <p>
+              Inputs come in <strong>3 sizes</strong>: sm (32px), base (40px), and lg (48px).
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;input class="ar-input ar-input--sm" type="text" placeholder="Small"&gt;
+&lt;input class="ar-input" type="text" placeholder="Default"&gt;
+&lt;input class="ar-input ar-input--lg" type="text" placeholder="Large"&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-input-grid">
+                <div class="ar-field ar-field--sm">
+                  <label class="ar-label" for="input-sm">Small</label>
+                  <input class="ar-input ar-input--sm" type="text" id="input-sm" placeholder="Small (32px)">
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label" for="input-base">Default</label>
+                  <input class="ar-input" type="text" id="input-base" placeholder="Default (40px)">
+                </div>
+                <div class="ar-field ar-field--lg">
+                  <label class="ar-label" for="input-lg">Large</label>
+                  <input class="ar-input ar-input--lg" type="text" id="input-lg" placeholder="Large (48px)">
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📏 Sizing Guide:</strong>
+                <ul class="ar-list ar-mt-2">
+                  <li><strong>Sm (32px):</strong> Compact forms, table inline editing</li>
+                  <li><strong>Base (40px):</strong> Default for most contexts</li>
+                  <li><strong>Lg (48px):</strong> Hero forms, prominent inputs</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- States -->
+          <section id="states">
+            <h2>States</h2>
+            <p>
+              Inputs support <strong>4 interactive states</strong>: default, hover, focus, disabled,
+              error, and success.
+            </p>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Default State</h4>
+              <div class="doc-input-grid">
+                <div class="ar-field">
+                  <label class="ar-label" for="state-default">Default</label>
+                  <input class="ar-input" type="text" id="state-default" placeholder="Default state">
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Focus State</h4>
+              <div class="doc-input-grid">
+                <div class="ar-field">
+                  <label class="ar-label" for="state-focus">Focus</label>
+                  <input class="ar-input" type="text" id="state-focus" placeholder="Click to see focus state" value="Focused">
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">
+                  Focus ring appears via <code>:focus-visible</code> (keyboard only, not on mouse click)
+                </p>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Error State</h4>
+              <div class="doc-input-grid">
+                <div class="ar-field ar-field--error">
+                  <label class="ar-label" for="state-error">Email</label>
+                  <input class="ar-input ar-input--error" type="email" id="state-error" value="invalid-email" aria-describedby="error-msg" aria-invalid="true">
+                  <p class="ar-field__error" id="error-msg">Please enter a valid email address.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Success State</h4>
+              <div class="doc-input-grid">
+                <div class="ar-field ar-field--success">
+                  <label class="ar-label" for="state-success">Username</label>
+                  <input class="ar-input ar-input--success" type="text" id="state-success" value="johndoe" aria-describedby="success-msg">
+                  <p class="ar-field__success" id="success-msg">Username is available.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Disabled State</h4>
+              <div class="doc-input-grid">
+                <div class="ar-field ar-field--disabled">
+                  <label class="ar-label ar-label--disabled" for="state-disabled">Disabled</label>
+                  <input class="ar-input" type="text" id="state-disabled" value="This field is disabled" disabled>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Helper Text -->
+          <section id="helper-text">
+            <h2>Helper Text</h2>
+            <p>
+              Use <code>.ar-field__hint</code> for helper text below the input.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-field"&gt;
+  &lt;label class="ar-label" for="password-helper"&gt;Password&lt;/label&gt;
+  &lt;input class="ar-input" type="password" id="password-helper" placeholder="Enter your password"&gt;
+  &lt;p class="ar-field__hint"&gt;Must be at least 8 characters.&lt;/p&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-input-grid">
+                <div class="ar-field">
+                  <label class="ar-label" for="password-hint">Password</label>
+                  <input class="ar-input" type="password" id="password-hint" placeholder="Enter your password">
+                  <p class="ar-field__hint">Must be at least 8 characters.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Character Count -->
+          <section id="character-count">
+            <h2>Character Count</h2>
+            <p>
+              Use <code>.ar-field__count</code> to show character count with optional warning and limit states.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-field"&gt;
+  &lt;label class="ar-label" for="bio"&gt;Bio&lt;/label&gt;
+  &lt;textarea class="ar-input" id="bio" maxlength="150" rows="3" placeholder="Tell us about yourself..."&gt;&lt;/textarea&gt;
+  &lt;p class="ar-field__count"&gt;&lt;span id="bio-count"&gt;0&lt;/span&gt; / 150&lt;/p&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-input-grid">
+                <div class="ar-field">
+                  <label class="ar-label" for="bio-count-demo">Bio</label>
+                  <textarea class="ar-input" id="bio-count-demo" maxlength="150" rows="3" placeholder="Tell us about yourself..."></textarea>
+                  <p class="ar-field__count">0 / 150</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Warning and Limit States</h4>
+              <div class="doc-input-grid">
+                <div class="ar-field">
+                  <label class="ar-label" for="bio-warning">Bio</label>
+                  <textarea class="ar-input" id="bio-warning" maxlength="150" rows="3" placeholder="Tell us about yourself...">This is a bio that is getting close to the character limit.</textarea>
+                  <p class="ar-field__count ar-field__count--warning">120 / 150</p>
+                </div>
+                <div class="ar-field">
+                  <label class="ar-label" for="bio-limit">Bio</label>
+                  <textarea class="ar-input" id="bio-limit" maxlength="150" rows="3" placeholder="Tell us about yourself...">This bio has reached the character limit of 150 characters. No more text can be added.</textarea>
+                  <p class="ar-field__count ar-field__count--limit">150 / 150</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Input Groups -->
+          <section id="input-groups">
+            <h2>Input Groups</h2>
+            <p>
+              Use <code>.ar-input-group</code> to add prefix/suffix addons to inputs.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Prefix addon --&gt;
+&lt;div class="ar-input-group"&gt;
+  &lt;span class="ar-input-group__addon"&gt;https://&lt;/span&gt;
+  &lt;input class="ar-input" type="url" placeholder="example.com"&gt;
+&lt;/div&gt;
+
+&lt;!-- Suffix addon --&gt;
+&lt;div class="ar-input-group"&gt;
+  &lt;input class="ar-input" type="text" placeholder="Search..."&gt;
+  &lt;button class="ar-btn ar-btn--primary ar-input-group__btn"&gt;Search&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Both prefix and suffix --&gt;
+&lt;div class="ar-input-group"&gt;
+  &lt;span class="ar-input-group__addon"&gt;$&lt;/span&gt;
+  &lt;input class="ar-input" type="number" placeholder="0.00"&gt;
+  &lt;span class="ar-input-group__addon"&gt;USD&lt;/span&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-input-grid doc-input-grid--compact">
+                <div class="ar-input-group">
+                  <span class="ar-input-group__addon">https://</span>
+                  <input class="ar-input" type="url" placeholder="example.com">
+                </div>
+                <div class="ar-input-group">
+                  <input class="ar-input" type="text" placeholder="Search...">
+                  <button class="ar-btn ar-btn--primary ar-input-group__btn">Search</button>
+                </div>
+                <div class="ar-input-group">
+                  <span class="ar-input-group__addon">$</span>
+                  <input class="ar-input" type="number" placeholder="0.00">
+                  <span class="ar-input-group__addon">USD</span>
+                </div>
+                <div class="ar-input-group">
+                  <span class="ar-input-group__addon">@</span>
+                  <input class="ar-input" type="text" placeholder="username">
+                </div>
+                <div class="ar-input-group">
+                  <input class="ar-input" type="text" placeholder="Enter domain">
+                  <span class="ar-input-group__addon">.com</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Fieldset -->
+          <section id="fieldset">
+            <h2>Fieldset and Legend</h2>
+            <p>
+              Use <code>.ar-fieldset</code> and <code>.ar-legend</code> to group related fields.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;fieldset class="ar-fieldset"&gt;
+  &lt;legend class="ar-legend"&gt;Shipping Address&lt;/legend&gt;
+  &lt;div class="ar-field"&gt;
+    &lt;label class="ar-label" for="street"&gt;Street Address&lt;/label&gt;
+    &lt;input class="ar-input" type="text" id="street" placeholder="123 Main St"&gt;
+  &lt;/div&gt;
+  &lt;div class="ar-field"&gt;
+    &lt;label class="ar-label" for="city"&gt;City&lt;/label&gt;
+    &lt;input class="ar-input" type="text" id="city" placeholder="New York"&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-input-grid doc-input-grid--compact">
+                <fieldset class="ar-fieldset">
+                  <legend class="ar-legend">Shipping Address</legend>
+                  <div class="ar-field">
+                    <label class="ar-label" for="street-demo">Street Address</label>
+                    <input class="ar-input" type="text" id="street-demo" placeholder="123 Main St">
+                  </div>
+                  <div class="ar-field">
+                    <label class="ar-label" for="city-demo">City</label>
+                    <input class="ar-input" type="text" id="city-demo" placeholder="New York">
+                  </div>
+                  <div class="ar-field">
+                    <label class="ar-label" for="zip-demo">ZIP Code</label>
+                    <input class="ar-input" type="text" id="zip-demo" placeholder="10001">
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          </section>
+
+          <!-- Accessibility -->
+          <section id="accessibility">
+            <h2>Accessibility</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">✅ Best Practices</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Always associate labels with <code>for</code> attribute</li>
+                  <li>Use <code>aria-describedby</code> for error/hint messages</li>
+                  <li>Use <code>aria-invalid="true"</code> for error states</li>
+                  <li>Error messages should have <code>role="alert"</code></li>
+                  <li>Use <code>disabled</code> attribute for disabled inputs</li>
+                  <li>Placeholder text is not a substitute for labels</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">❌ Common Mistakes</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Missing <code>for</code> attribute on labels</li>
+                  <li>Using placeholder as the only label</li>
+                  <li>Missing <code>aria-describedby</code> on error inputs</li>
+                  <li>Forgetting <code>aria-invalid="true"</code> on error inputs</li>
+                  <li>Using <code>aria-disabled</code> instead of <code>disabled</code></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Accessible Form Example</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;div class="ar-field ar-field--error"&gt;
+  &lt;label class="ar-label ar-label--required" for="email-a11y"&gt;Email Address&lt;/label&gt;
+  &lt;input class="ar-input ar-input--error" type="email" id="email-a11y" 
+         value="invalid" aria-describedby="email-error" aria-invalid="true"&gt;
+  &lt;p class="ar-field__error" id="email-error" role="alert"&gt;
+    Please enter a valid email address.
+  &lt;/p&gt;
+&lt;/div&gt;</code>
+              </div>
+              <div class="doc-input-grid">
+                <div class="ar-field ar-field--error">
+                  <label class="ar-label ar-label--required" for="email-a11y-demo">Email Address</label>
+                  <input class="ar-input ar-input--error" type="email" id="email-a11y-demo" value="invalid" aria-describedby="email-error-demo" aria-invalid="true">
+                  <p class="ar-field__error" id="email-error-demo" role="alert">Please enter a valid email address.</p>
+                </div>
+                <div class="ar-field ar-field--success">
+                  <label class="ar-label" for="username-a11y">Username</label>
+                  <input class="ar-input ar-input--success" type="text" id="username-a11y" value="johndoe" aria-describedby="username-success">
+                  <p class="ar-field__success" id="username-success">Username is available.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- HTML Reference -->
+          <section id="html-reference">
+            <h2>HTML Reference</h2>
+
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Purpose</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>.ar-input</code></td>
+                  <td>Base input styles</td>
+                  <td>✅ Required</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-input--sm/lg</code></td>
+                  <td>Size variants</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-input--error</code></td>
+                  <td>Error state</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-input--success</code></td>
+                  <td>Success state</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-label</code></td>
+                  <td>Label styles</td>
+                  <td>✅ Recommended</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-label--required</code></td>
+                  <td>Required field indicator</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-label--optional</code></td>
+                  <td>Optional field indicator</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field</code></td>
+                  <td>Field wrapper</td>
+                  <td>✅ Recommended</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field--sm/lg</code></td>
+                  <td>Field size variants</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field--error</code></td>
+                  <td>Error field state</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field--success</code></td>
+                  <td>Success field state</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field--disabled</code></td>
+                  <td>Disabled field state</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field__hint</code></td>
+                  <td>Helper text</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field__error</code></td>
+                  <td>Error message</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field__success</code></td>
+                  <td>Success message</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field__count</code></td>
+                  <td>Character count</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field__count--warning</code></td>
+                  <td>Warning state</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-field__count--limit</code></td>
+                  <td>Limit state</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-input-group</code></td>
+                  <td>Input group container</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-input-group__addon</code></td>
+                  <td>Prefix/suffix addon</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-input-group__btn</code></td>
+                  <td>Button addon</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-fieldset</code></td>
+                  <td>Fieldset container</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-legend</code></td>
+                  <td>Legend for fieldset</td>
+                  <td>Optional</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Do / Don't -->
+          <section id="do-dont">
+            <h2>Do / Don't</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use labels</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-field"&gt;
+  &lt;label class="ar-label" for="email"&gt;Email&lt;/label&gt;
+  &lt;input class="ar-input" type="email" id="email"&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Labels are essential for accessibility and user experience.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Use placeholder as label</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;input class="ar-input" type="email" placeholder="Email"&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Placeholder text disappears when typing and is not a label.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use error messages</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-field ar-field--error"&gt;
+  &lt;input class="ar-input ar-input--error" aria-describedby="error-msg" aria-invalid="true"&gt;
+  &lt;p class="ar-field__error" id="error-msg" role="alert"&gt;Invalid input.&lt;/p&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Error messages help users correct mistakes.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Skip ARIA attributes</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;input class="ar-input ar-input--error" value="invalid"&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Screen readers need <code>aria-invalid</code> and <code>aria-describedby</code> to understand error states.</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Return to <a href="../index.html" class="ar-text-link">Documentation Home</a>
+              or explore <a href="../utilities/spacing.html" class="ar-text-link">Spacing Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

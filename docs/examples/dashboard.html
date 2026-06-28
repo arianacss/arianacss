@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard · ArianaCSS</title>
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+  <style>
+    /* Page-specific styles — minimal, only for demo structure */
+    body {
+      min-height: 100dvh;
+      background: var(--ar-color-layer-base);
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100dvh;
+    }
+    .dashboard-main {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+    }
+    .stat-card .ar-card__body {
+      padding: 1.25rem 1.5rem;
+    }
+    .stat-number {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--ar-color-text-heading);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ar-color-text-muted);
+    }
+    .stat-change--positive { color: var(--ar-color-success-text); }
+    .stat-change--negative { color: var(--ar-color-danger-text); }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--ar-radius-base);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+    .sidebar-link:hover {
+      background-color: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-heading);
+    }
+    .sidebar-link--active {
+      background-color: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-emphasis);
+    }
+    .sidebar-link .ar-badge {
+      margin-inline-start: auto;
+    }
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+    .avatar-stack .ar-avatar {
+      margin-inline-start: -0.5rem;
+      border: 2px solid var(--ar-color-layer-base);
+    }
+    .avatar-stack .ar-avatar:first-child {
+      margin-inline-start: 0;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    .table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--ar-text-size-sm);
+    }
+    .table-wrapper th {
+      text-align: left;
+      padding: 0.75rem 0.75rem 0.75rem 0;
+      font-weight: 600;
+      color: var(--ar-color-text-muted);
+      border-bottom: 2px solid var(--ar-color-border-default);
+    }
+    .table-wrapper td {
+      padding: 0.75rem 0.75rem 0.75rem 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-default);
+    }
+    .table-wrapper tr:last-child td {
+      border-bottom: none;
+    }
+    .table-wrapper .ar-badge {
+      font-size: 0.65rem;
+    }
+    @media (max-width: 1023px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .dashboard-sidebar {
+        display: none;
+      }
+      .dashboard-sidebar--open {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: var(--ar-color-layer-base);
+        z-index: 400;
+        padding: 1.5rem;
+        width: 280px;
+        box-shadow: var(--ar-shadow-4);
+      }
+      .dashboard-main {
+        padding: 1rem;
+      }
+    }
+    @media (max-width: 767px) {
+      .stat-grid {
+        grid-template-columns: 1fr 1fr !important;
+      }
+    }
+    @media (max-width: 479px) {
+      .stat-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .dashboard-main {
+        padding: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!-- DASHBOARD LAYOUT                                             -->
+  <!-- ============================================================ -->
+
+  <div class="dashboard-grid">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="dashboard-sidebar ar-bg-base ar-border-right" style="padding:1.5rem 1rem; border-right:1px solid var(--ar-color-divider);">
+
+      <!-- Logo -->
+      <div class="ar-flex ar-items-center ar-gap-2 ar-mb-6">
+        <div class="ar-avatar ar-avatar--sm ar-bg-primary ar-text-on-primary" style="border-radius:var(--ar-radius-base);">A</div>
+        <span class="ar-text-heading ar-font-bold ar-text-lg">ArianaCSS</span>
+        <span class="ar-badge ar-badge--info ar-badge--pill">v1.0</span>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="ar-flex ar-flex-col ar-gap-1">
+        <a href="#" class="sidebar-link sidebar-link--active">
+          <span>📊</span> Dashboard
+        </a>
+        <a href="#" class="sidebar-link">
+          <span>📈</span> Analytics
+          <span class="ar-badge ar-badge--danger ar-badge--filled ar-badge--pill">12</span>
+        </a>
+        <a href="#" class="sidebar-link">
+          <span>👥</span> Users
+          <span class="ar-badge ar-badge--info ar-badge--pill">84</span>
+        </a>
+        <a href="#" class="sidebar-link">
+          <span>📦</span> Products
+        </a>
+        <a href="#" class="sidebar-link">
+          <span>📋</span> Orders
+          <span class="ar-badge ar-badge--warning ar-badge--filled ar-badge--pill">5</span>
+        </a>
+        <a href="#" class="sidebar-link">
+          <span>⚙️</span> Settings
+        </a>
+      </nav>
+
+      <!-- User profile -->
+      <div class="ar-mt-8 ar-pt-4 ar-border-top">
+        <div class="ar-flex ar-items-center ar-gap-3">
+          <img class="ar-avatar ar-avatar--sm" src="https://i.pravatar.cc/80?img=11" alt="User avatar">
+          <div>
+            <div class="ar-text-sm ar-font-semibold ar-text-heading">Sarah Ahmad</div>
+            <div class="ar-text-xs ar-text-muted">sarah@arianacss.dev</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="dashboard-main">
+
+      <!-- Header -->
+      <header class="ar-flex ar-flex-wrap ar-items-center ar-justify-between ar-mb-6">
+        <div>
+          <h1 class="ar-h1 ar-mb-0" style="font-size:1.75rem;">Dashboard</h1>
+          <p class="ar-text-muted">Welcome back, Sarah 👋</p>
+        </div>
+        <div class="ar-flex ar-items-center ar-gap-3">
+          <button class="ar-btn ar-btn--ghost ar-btn--icon-only" aria-label="Notifications">
+            <svg class="ar-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="ar-badge ar-badge--dot ar-badge--danger" style="position:absolute;top:-4px;right:-4px;" aria-label="3 notifications"></span>
+          </button>
+          <button class="ar-btn ar-btn--primary">+ New Project</button>
+        </div>
+      </header>
+
+      <!-- ========== STATS ROW ========== -->
+      <div class="ar-grid ar-grid-cols-4 ar-gap-4 stat-grid ar-mb-6">
+
+        <div class="ar-card ar-card--flat ar-card--bordered stat-card">
+          <div class="ar-card__body">
+            <div class="stat-label">Total Revenue</div>
+            <div class="stat-number">$48,295</div>
+            <div class="stat-change--positive ar-text-sm">↑ 12.5% from last month</div>
+          </div>
+        </div>
+
+        <div class="ar-card ar-card--flat ar-card--bordered stat-card">
+          <div class="ar-card__body">
+            <div class="stat-label">Active Users</div>
+            <div class="stat-number">2,847</div>
+            <div class="stat-change--positive ar-text-sm">↑ 8.2% from last month</div>
+          </div>
+        </div>
+
+        <div class="ar-card ar-card--flat ar-card--bordered stat-card">
+          <div class="ar-card__body">
+            <div class="stat-label">Orders</div>
+            <div class="stat-number">1,203</div>
+            <div class="stat-change--negative ar-text-sm">↓ 2.4% from last month</div>
+          </div>
+        </div>
+
+        <div class="ar-card ar-card--flat ar-card--bordered stat-card">
+          <div class="ar-card__body">
+            <div class="stat-label">Conversion Rate</div>
+            <div class="stat-number">3.86%</div>
+            <div class="stat-change--positive ar-text-sm">↑ 0.8% from last month</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========== RECENT ACTIVITY + QUICK ACTIONS ========== -->
+      <div class="ar-grid ar-grid-cols-3 ar-gap-6 ar-mb-6">
+
+        <!-- Recent Activity (2/3 width) -->
+        <div class="ar-col-8">
+          <div class="ar-card">
+            <div class="ar-card__header ar-card__header--row">
+              <h3 class="ar-card__title" style="font-size:1rem;">Recent Activity</h3>
+              <a href="#" class="ar-text-link ar-text-sm">View all →</a>
+            </div>
+            <div class="ar-card__body" style="padding-block-start:0;">
+              <div class="ar-flex ar-flex-col ar-gap-3">
+                <div class="ar-flex ar-items-center ar-gap-3">
+                  <div class="ar-avatar ar-avatar--sm"><img src="https://i.pravatar.cc/80?img=1" alt="User"></div>
+                  <div class="ar-flex-1">
+                    <div class="ar-text-sm"><span class="ar-font-semibold">Alex</span> created a new project <span class="ar-font-semibold">"Dashboard Redesign"</span></div>
+                    <div class="ar-text-xs ar-text-muted">2 min ago</div>
+                  </div>
+                  <span class="ar-badge ar-badge--success ar-badge--pill">Done</span>
+                </div>
+                <div class="ar-flex ar-items-center ar-gap-3">
+                  <div class="ar-avatar ar-avatar--sm"><img src="https://i.pravatar.cc/80?img=2" alt="User"></div>
+                  <div class="ar-flex-1">
+                    <div class="ar-text-sm"><span class="ar-font-semibold">Maria</span> commented on <span class="ar-font-semibold">"API Documentation"</span></div>
+                    <div class="ar-text-xs ar-text-muted">18 min ago</div>
+                  </div>
+                  <span class="ar-badge ar-badge--warning ar-badge--pill">Review</span>
+                </div>
+                <div class="ar-flex ar-items-center ar-gap-3">
+                  <div class="ar-avatar ar-avatar--sm"><img src="https://i.pravatar.cc/80?img=3" alt="User"></div>
+                  <div class="ar-flex-1">
+                    <div class="ar-text-sm"><span class="ar-font-semibold">James</span> merged pull request <span class="ar-font-semibold">#234</span></div>
+                    <div class="ar-text-xs ar-text-muted">1 hour ago</div>
+                  </div>
+                  <span class="ar-badge ar-badge--info ar-badge--pill">Merged</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions (1/3 width) -->
+        <div class="ar-col-4">
+          <div class="ar-card">
+            <div class="ar-card__header">
+              <h3 class="ar-card__title" style="font-size:1rem;">Quick Actions</h3>
+            </div>
+            <div class="ar-card__body" style="padding-block-start:0;">
+              <div class="ar-flex ar-flex-col ar-gap-2">
+                <button class="ar-btn ar-btn--ghost ar-btn--full ar-text-left" style="justify-content:flex-start;">
+                  📝 New Note
+                </button>
+                <button class="ar-btn ar-btn--ghost ar-btn--full ar-text-left" style="justify-content:flex-start;">
+                  👤 Add Team Member
+                </button>
+                <button class="ar-btn ar-btn--ghost ar-btn--full ar-text-left" style="justify-content:flex-start;">
+                  📊 Generate Report
+                </button>
+                <button class="ar-btn ar-btn--danger-ghost ar-btn--full ar-text-left" style="justify-content:flex-start;">
+                  🗑️ Clear Cache
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========== TEAM AVATARS ========== -->
+      <div class="ar-card ar-mb-6">
+        <div class="ar-card__header ar-card__header--row">
+          <h3 class="ar-card__title" style="font-size:1rem;">Team Members</h3>
+          <button class="ar-btn ar-btn--ghost ar-btn--sm">+ Invite</button>
+        </div>
+        <div class="ar-card__body" style="padding-block-start:0;">
+          <div class="ar-flex ar-flex-wrap ar-gap-4 ar-items-center">
+            <div class="ar-flex ar-items-center ar-gap-2">
+              <img class="ar-avatar ar-avatar--sm" src="https://i.pravatar.cc/80?img=4" alt="User">
+              <span class="ar-text-sm">Alice</span>
+            </div>
+            <div class="ar-flex ar-items-center ar-gap-2">
+              <img class="ar-avatar ar-avatar--sm" src="https://i.pravatar.cc/80?img=5" alt="User">
+              <span class="ar-text-sm">Bob</span>
+            </div>
+            <div class="ar-flex ar-items-center ar-gap-2">
+              <img class="ar-avatar ar-avatar--sm" src="https://i.pravatar.cc/80?img=6" alt="User">
+              <span class="ar-text-sm">Carol</span>
+            </div>
+            <div class="ar-flex ar-items-center ar-gap-2">
+              <img class="ar-avatar ar-avatar--sm" src="https://i.pravatar.cc/80?img=7" alt="User">
+              <span class="ar-text-sm">Dave</span>
+            </div>
+            <div class="ar-flex ar-items-center ar-gap-2">
+              <div class="ar-avatar ar-avatar--sm ar-bg-primary ar-text-on-primary ar-avatar--initials">+3</div>
+              <span class="ar-text-sm ar-text-muted">3 more</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== RECENT ORDERS TABLE ========== -->
+      <div class="ar-card">
+        <div class="ar-card__header ar-card__header--row">
+          <h3 class="ar-card__title" style="font-size:1rem;">Recent Orders</h3>
+          <a href="#" class="ar-text-link ar-text-sm">View all →</a>
+        </div>
+        <div class="ar-card__body" style="padding-block-start:0;overflow-x:auto;">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Product</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="ar-font-medium">#ORD-001</td>
+                  <td>John Doe</td>
+                  <td>Pro Plan</td>
+                  <td class="ar-tabular-nums">$299.00</td>
+                  <td><span class="ar-badge ar-badge--success ar-badge--pill">Completed</span></td>
+                </tr>
+                <tr>
+                  <td class="ar-font-medium">#ORD-002</td>
+                  <td>Jane Smith</td>
+                  <td>Enterprise</td>
+                  <td class="ar-tabular-nums">$1,499.00</td>
+                  <td><span class="ar-badge ar-badge--warning ar-badge--pill">Processing</span></td>
+                </tr>
+                <tr>
+                  <td class="ar-font-medium">#ORD-003</td>
+                  <td>Robert Brown</td>
+                  <td>Starter Kit</td>
+                  <td class="ar-tabular-nums">$49.00</td>
+                  <td><span class="ar-badge ar-badge--danger ar-badge--pill">Failed</span></td>
+                </tr>
+                <tr>
+                  <td class="ar-font-medium">#ORD-004</td>
+                  <td>Emily Davis</td>
+                  <td>Pro Plan</td>
+                  <td class="ar-tabular-nums">$299.00</td>
+                  <td><span class="ar-badge ar-badge--info ar-badge--pill">Pending</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Mobile toggle (hidden on desktop) -->
+  <button class="ar-btn ar-btn--ghost ar-btn--sm ar-md:hidden" style="position:fixed;bottom:1rem;left:1rem;z-index:500;background:var(--ar-color-layer-base);box-shadow:var(--ar-shadow-2);border-radius:var(--ar-radius-full);padding:0.75rem 1rem;" onclick="document.querySelector('.dashboard-sidebar').classList.toggle('dashboard-sidebar--open')">
+    ☰ Menu
+  </button>
+
+  <script>
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(e) {
+      const sidebar = document.querySelector('.dashboard-sidebar');
+      const toggle = document.querySelector('.ar-btn');
+      if (window.innerWidth < 1024 && sidebar.classList.contains('dashboard-sidebar--open')) {
+        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+          sidebar.classList.remove('dashboard-sidebar--open');
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

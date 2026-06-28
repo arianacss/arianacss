@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indicators — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+	.doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-indicators-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--ar-space-3);
+      padding: var(--ar-space-3);
+      background: var(--ar-color-layer-raised);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      align-items: center;
+      justify-items: center;
+    }
+
+    .doc-indicators-grid .ar-badge {
+      justify-self: center;
+    }
+
+    .doc-avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: var(--ar-space-3);
+      padding: var(--ar-space-3);
+      background: var(--ar-color-layer-raised);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      align-items: center;
+      justify-items: center;
+    }
+
+    .doc-avatar-group-demo {
+      display: flex;
+      justify-content: center;
+      padding: var(--ar-space-4);
+      background: var(--ar-color-layer-raised);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+
+      .doc-indicators-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+
+      .doc-avatar-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="button.html" class="doc-nav-link doc-nav-link--active">Components</a>
+          <a href="../utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Components</span></li>
+			  <li><a href="button.html">Button</a></li>
+              <li><a href="card.html">Card</a></li>
+              <li><a href="alert.html">Alert</a></li>
+              <li><a href="indicators.html" class="doc-sidebar-active">Indicators</a></li>
+              <li><a href="input.html">Input</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Indicators</h1>
+          <p class="ar-lead">
+            Two small, essential UI components — <strong>Badge</strong> and <strong>Avatar</strong> —
+            combined for efficiency. Perfect for status labels, notifications, user profiles, and team displays.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Two Components in One</div>
+            <div class="ar-alert__message">
+              Badges and avatars share structural similarities and are often used together.
+              They're combined in a single file for efficiency while remaining fully independent.
+            </div>
+          </div>
+
+          <!-- Part 1: Badge -->
+          <section id="badge">
+            <h2>Badge</h2>
+            <p>
+              A small label used to communicate status, count, category, or metadata.
+              Badges are inline elements that attach to or appear alongside other content.
+            </p>
+
+            <div class="ar-alert ar-alert--info ar-mb-4">
+              <div class="ar-alert__message">
+                <strong>💡 Badge Variants:</strong> Surface (tinted), Filled (solid), Outline (border only), and Dot (status indicator).
+              </div>
+            </div>
+
+            <h3>Basic Usage</h3>
+            <div class="doc-code-block">
+              <code>&lt;span class="ar-badge"&gt;Default&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--primary"&gt;Primary&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--success"&gt;Success&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--warning"&gt;Warning&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--danger"&gt;Danger&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--info"&gt;Info&lt;/span&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-indicators-grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));">
+                <span class="ar-badge">Default</span>
+                <span class="ar-badge ar-badge--primary">Primary</span>
+                <span class="ar-badge ar-badge--success">Success</span>
+                <span class="ar-badge ar-badge--warning">Warning</span>
+                <span class="ar-badge ar-badge--danger">Danger</span>
+                <span class="ar-badge ar-badge--info">Info</span>
+              </div>
+            </div>
+
+            <h3>Filled Variant</h3>
+            <div class="doc-code-block">
+              <code>&lt;span class="ar-badge ar-badge--primary ar-badge--filled"&gt;3&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--success ar-badge--filled"&gt;✓ Done&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--danger ar-badge--filled"&gt;!&lt;/span&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-indicators-grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));">
+                <span class="ar-badge ar-badge--primary ar-badge--filled">3</span>
+                <span class="ar-badge ar-badge--success ar-badge--filled">✓ Done</span>
+                <span class="ar-badge ar-badge--warning ar-badge--filled">⚠️</span>
+                <span class="ar-badge ar-badge--danger ar-badge--filled">!</span>
+                <span class="ar-badge ar-badge--info ar-badge--filled">i</span>
+              </div>
+            </div>
+			<div class="ar-alert ar-alert--warning ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>⚠️ Important:</strong> <code>ar-badge--warning ar-badge--filled</code> uses
+                <strong>white text</strong>. This is correct and verified to pass contrast requirements.
+              </div>
+            </div>
+
+            <h3>Outline Variant</h3>
+            <div class="doc-code-block">
+              <code>&lt;span class="ar-badge ar-badge--primary ar-badge--outline"&gt;Outline&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--success ar-badge--outline"&gt;Draft&lt;/span&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-indicators-grid" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));">
+                <span class="ar-badge ar-badge--primary ar-badge--outline">Primary</span>
+                <span class="ar-badge ar-badge--success ar-badge--outline">Success</span>
+                <span class="ar-badge ar-badge--warning ar-badge--outline">Warning</span>
+                <span class="ar-badge ar-badge--danger ar-badge--outline">Danger</span>
+                <span class="ar-badge ar-badge--info ar-badge--outline">Info</span>
+              </div>
+            </div>
+
+            <h3>Pill Shape</h3>
+            <div class="doc-code-block">
+              <code>&lt;span class="ar-badge ar-badge--primary ar-badge--pill"&gt;Pill&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--success ar-badge--filled ar-badge--pill"&gt;Active&lt;/span&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-indicators-grid" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));">
+                <span class="ar-badge ar-badge--primary ar-badge--pill">Pill</span>
+                <span class="ar-badge ar-badge--success ar-badge--filled ar-badge--pill">Active</span>
+                <span class="ar-badge ar-badge--danger ar-badge--filled ar-badge--pill">Danger</span>
+                <span class="ar-badge ar-badge--info ar-badge--outline ar-badge--pill">Info</span>
+              </div>
+            </div>
+
+            <h3>Size Variants</h3>
+            <div class="doc-code-block">
+              <code>&lt;span class="ar-badge ar-badge--primary ar-badge--sm"&gt;Small&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--primary"&gt;Default&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--primary ar-badge--lg"&gt;Large&lt;/span&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-indicators-grid" style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));">
+                <span class="ar-badge ar-badge--primary ar-badge--sm">Small</span>
+                <span class="ar-badge ar-badge--primary">Default</span>
+                <span class="ar-badge ar-badge--primary ar-badge--lg">Large</span>
+                <span class="ar-badge ar-badge--success ar-badge--filled ar-badge--pill ar-badge--sm">Sm</span>
+                <span class="ar-badge ar-badge--danger ar-badge--filled ar-badge--pill ar-badge--lg">Lg</span>
+              </div>
+            </div>
+
+            <h3>Dot Indicator</h3>
+            <div class="doc-code-block">
+              <code>&lt;span class="ar-badge--dot ar-badge--success" aria-label="Online"&gt;&lt;/span&gt;
+&lt;span class="ar-badge--dot ar-badge--danger" aria-label="Offline"&gt;&lt;/span&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-indicators-grid" style="grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));">
+                <span class="ar-badge--dot ar-badge--primary" aria-label="Primary"></span>
+                <span class="ar-badge--dot ar-badge--success" aria-label="Online"></span>
+				<span class="ar-badge--dot ar-badge--warning" aria-label="Away"></span>
+                <span class="ar-badge--dot ar-badge--danger" aria-label="Offline"></span>
+                <span class="ar-badge--dot ar-badge--info" aria-label="Info"></span>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                <strong>♿ Accessibility:</strong> Always include <code>aria-label</code> on dot badges.
+              </p>
+            </div>
+
+            <h3>Interactive Badge</h3>
+            <div class="doc-code-block">
+              <code>&lt;span class="ar-badge ar-badge--primary ar-badge--interactive" tabindex="0" role="button"&gt;
+  Clickable
+&lt;/span&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-indicators-grid" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));">
+                <span class="ar-badge ar-badge--primary ar-badge--interactive" tabindex="0" role="button" style="cursor: pointer;">Clickable</span>
+                <span class="ar-badge ar-badge--success ar-badge--filled ar-badge--pill ar-badge--interactive" tabindex="0" role="button" style="cursor: pointer;">Filter</span>
+                <span class="ar-badge ar-badge--danger ar-badge--outline ar-badge--interactive" tabindex="0" role="button" style="cursor: pointer;">Remove</span>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Hover or focus to see interactive states. <code>tabindex="0"</code> and <code>role="button"</code>
+                make badges keyboard accessible.
+              </p>
+            </div>
+
+            <h3>Inverse Badge (Dark Background)</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-bg-inverse ar-p-4 ar-rounded"&gt;
+  &lt;span class="ar-badge ar-badge--inverse"&gt;Dark Mode&lt;/span&gt;
+  &lt;span class="ar-badge ar-badge--inverse ar-badge--pill"&gt;Beta&lt;/span&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-bg-inverse ar-p-4 ar-rounded">
+                <div class="doc-indicators-grid" style="background: transparent; border: none; padding: 0;">
+                  <span class="ar-badge ar-badge--inverse">Dark Mode</span>
+                  <span class="ar-badge ar-badge--inverse ar-badge--pill">Beta</span>
+                  <span class="ar-badge ar-badge--inverse ar-badge--filled ar-badge--pill">3</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Part 2: Avatar -->
+          <section id="avatar">
+            <h2>Avatar</h2>
+            <p>
+              A circular or square container representing a person, entity, or object.
+              Avatars appear in navigation, comments, tables, cards, and profile contexts.
+            </p>
+
+            <div class="ar-alert ar-alert--info ar-mb-4">
+              <div class="ar-alert__message">
+                <strong>💡 Avatar Variants:</strong> Image, Initials, Sizes (xs, sm, base, lg, xl, 2xl), Shapes (circle, square, rounded), and Groups.
+              </div>
+            </div>
+
+            <h3>Basic Usage</h3>
+            <div class="doc-code-block">
+              <code>&lt;!-- Image avatar --&gt;
+&lt;div class="ar-avatar"&gt;
+  &lt;img src="user.jpg" alt="Username"&gt;
+&lt;/div&gt;
+
+&lt;!-- Initials avatar --&gt;
+&lt;div class="ar-avatar ar-avatar--initials ar-avatar--primary"&gt;
+  &lt;span&gt;JD&lt;/span&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-avatar-grid">
+                <div class="ar-avatar">
+                  <div style="width:100%;height:100%;background:var(--ar-color-primary-surface);display:flex;align-items:center;justify-content:center;color:var(--ar-color-primary-emphasis);font-weight:var(--ar-text-weight-bold);">
+				  JD
+                  </div>
+                </div>
+                <div class="ar-avatar ar-avatar--initials ar-avatar--primary">
+                  <span>JD</span>
+                </div>
+                <div class="ar-avatar ar-avatar--initials ar-avatar--success">
+                  <span>JD</span>
+                </div>
+                <div class="ar-avatar ar-avatar--initials ar-avatar--warning">
+                  <span>JD</span>
+                </div>
+                <div class="ar-avatar ar-avatar--initials ar-avatar--danger">
+                  <span>JD</span>
+                </div>
+                <div class="ar-avatar ar-avatar--initials ar-avatar--info">
+                  <span>JD</span>
+                </div>
+              </div>
+            </div>
+
+            <h3>Size Variants</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-avatar ar-avatar--xs"&gt;...&lt;/div&gt;
+&lt;div class="ar-avatar ar-avatar--sm"&gt;...&lt;/div&gt;
+&lt;div class="ar-avatar"&gt;...&lt;/div&gt;
+&lt;div class="ar-avatar ar-avatar--lg"&gt;...&lt;/div&gt;
+&lt;div class="ar-avatar ar-avatar--xl"&gt;...&lt;/div&gt;
+&lt;div class="ar-avatar ar-avatar--2xl"&gt;...&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-avatar-grid">
+                <div class="ar-avatar ar-avatar--xs ar-avatar--initials ar-avatar--primary"><span>XS</span></div>
+                <div class="ar-avatar ar-avatar--sm ar-avatar--initials ar-avatar--success"><span>SM</span></div>
+                <div class="ar-avatar ar-avatar--initials ar-avatar--warning"><span>MD</span></div>
+                <div class="ar-avatar ar-avatar--lg ar-avatar--initials ar-avatar--danger"><span>LG</span></div>
+                <div class="ar-avatar ar-avatar--xl ar-avatar--initials ar-avatar--info"><span>XL</span></div>
+                <div class="ar-avatar ar-avatar--2xl ar-avatar--initials ar-avatar--primary"><span>2XL</span></div>
+              </div>
+            </div>
+
+            <h3>Shape Variants</h3>
+            <div class="doc-code-block">
+              <code>&lt;!-- Circle (default) --&gt;
+&lt;div class="ar-avatar"&gt;...&lt;/div&gt;
+
+&lt;!-- Square --&gt;
+&lt;div class="ar-avatar ar-avatar--square"&gt;...&lt;/div&gt;
+
+&lt;!-- Rounded --&gt;
+&lt;div class="ar-avatar ar-avatar--rounded"&gt;...&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-avatar-grid">
+                <div class="ar-avatar ar-avatar--initials ar-avatar--primary"><span>○</span></div>
+                <div class="ar-avatar ar-avatar--square ar-avatar--initials ar-avatar--success"><span>□</span></div>
+                <div class="ar-avatar ar-avatar--rounded ar-avatar--initials ar-avatar--warning"><span>▢</span></div>
+              </div>
+            </div>
+
+            <h3>Status Dot</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-avatar"&gt;
+  &lt;img src="user.jpg" alt="Username"&gt;
+  &lt;span class="ar-badge--dot ar-badge--success ar-avatar__status"&gt;&lt;/span&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-avatar-grid">
+                <div style="position:relative;display:inline-flex;">
+                  <div class="ar-avatar ar-avatar--initials ar-avatar--primary"><span>JD</span></div>
+                  <span class="ar-badge--dot ar-badge--success ar-avatar__status"></span>
+                </div>
+                <div style="position:relative;display:inline-flex;">
+                  <div class="ar-avatar ar-avatar--initials ar-avatar--success"><span>JD</span></div>
+                  <span class="ar-badge--dot ar-badge--warning ar-avatar__status"></span>
+				  </div>
+                <div style="position:relative;display:inline-flex;">
+                  <div class="ar-avatar ar-avatar--initials ar-avatar--danger"><span>JD</span></div>
+                  <span class="ar-badge--dot ar-badge--danger ar-avatar__status"></span>
+                </div>
+                <div style="position:relative;display:inline-flex;">
+                  <div class="ar-avatar ar-avatar--lg ar-avatar--initials ar-avatar--info"><span>JD</span></div>
+                  <span class="ar-badge--dot ar-badge--success ar-avatar__status"></span>
+                </div>
+              </div>
+            </div>
+
+            <h3>Avatar Group</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-avatar-group"&gt;
+  &lt;div class="ar-avatar"&gt;&lt;img src="user1.jpg" alt="Alice"&gt;&lt;/div&gt;
+  &lt;div class="ar-avatar"&gt;&lt;img src="user2.jpg" alt="Bob"&gt;&lt;/div&gt;
+  &lt;div class="ar-avatar"&gt;&lt;img src="user3.jpg" alt="Carol"&gt;&lt;/div&gt;
+  &lt;div class="ar-avatar ar-avatar--initials ar-avatar--info"&gt;+4&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-avatar-group-demo">
+                <div class="ar-avatar-group">
+                  <div class="ar-avatar ar-avatar--initials ar-avatar--primary"><span>AL</span></div>
+                  <div class="ar-avatar ar-avatar--initials ar-avatar--success"><span>BO</span></div>
+                  <div class="ar-avatar ar-avatar--initials ar-avatar--warning"><span>CA</span></div>
+                  <div class="ar-avatar ar-avatar--initials ar-avatar--danger"><span>DA</span></div>
+                  <div class="ar-avatar ar-avatar--initials ar-avatar--info"><span>+4</span></div>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Avatars overlap from right to left. The "+N" overflow badge is always visible.
+              </p>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Interactive Avatar</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;div class="ar-avatar ar-avatar--interactive ar-avatar--initials ar-avatar--primary" tabindex="0" role="button"&gt;
+  &lt;span&gt;JD&lt;/span&gt;
+&lt;/div&gt;</code>
+              </div>
+              <div class="doc-avatar-grid">
+                <div class="ar-avatar ar-avatar--interactive ar-avatar--initials ar-avatar--primary" tabindex="0" role="button" style="cursor: pointer;">
+                  <span>JD</span>
+                </div>
+                <div class="ar-avatar ar-avatar--interactive ar-avatar--lg ar-avatar--initials ar-avatar--success" tabindex="0" role="button" style="cursor: pointer;">
+                  <span>JD</span>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Hover to see scale and shadow effects. <code>tabindex="0"</code> and <code>role="button"</code>
+                make avatars keyboard accessible.
+              </p>
+            </div>
+          </section>
+
+          <!-- Accessibility -->
+          <section id="accessibility">
+            <h2>Accessibility</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">✅ Badge Best Practices</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Use <code>aria-label</code> on dot badges</li>
+                  <li>Interactive badges need <code>tabindex="0"</code> and <code>role="button"</code></li>
+                  <li>Badges should be <code>&lt;span&gt;</code> or <code>&lt;div&gt;</code> with proper semantics</li>
+				  <li>Ensure sufficient color contrast (verified in token system)</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">✅ Avatar Best Practices</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Images must have <code>alt</code> text</li>
+                  <li>Initials avatars should have <code>aria-label</code> with the full name</li>
+                  <li>Interactive avatars need <code>tabindex="0"</code> and <code>role="button"</code></li>
+                  <li>Avatar groups should be announced as a list when possible</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Accessible Examples</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;!-- Accessible dot badge --&gt;
+&lt;span class="ar-badge--dot ar-badge--success" aria-label="User is online"&gt;&lt;/span&gt;
+
+&lt;!-- Accessible initials avatar --&gt;
+&lt;div class="ar-avatar ar-avatar--initials ar-avatar--primary" aria-label="Jane Doe"&gt;
+  &lt;span&gt;JD&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- Accessible interactive avatar --&gt;
+&lt;div class="ar-avatar ar-avatar--interactive ar-avatar--initials ar-avatar--primary" 
+     tabindex="0" role="button" aria-label="Open profile: Jane Doe"&gt;
+  &lt;span&gt;JD&lt;/span&gt;
+&lt;/div&gt;</code>
+              </div>
+              <div class="ar-flex ar-gap-4 ar-flex-wrap ar-items-center">
+                <span class="ar-badge--dot ar-badge--success" aria-label="User is online"></span>
+                <div class="ar-avatar ar-avatar--initials ar-avatar--primary" aria-label="Jane Doe">
+                  <span>JD</span>
+                </div>
+                <div class="ar-avatar ar-avatar--interactive ar-avatar--initials ar-avatar--primary" tabindex="0" role="button" aria-label="Open profile: Jane Doe" style="cursor: pointer;">
+                  <span>JD</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- HTML Reference -->
+          <section id="html-reference">
+            <h2>HTML Reference</h2>
+
+            <h3>Badge Classes</h3>
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Purpose</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>.ar-badge</code></td>
+                  <td>Base badge styles</td>
+                  <td>✅ Required</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-badge--primary/success/warning/danger/info</code></td>
+                  <td>Color variants</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-badge--filled</code></td>
+                  <td>Solid background</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-badge--outline</code></td>
+                  <td>Border only</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-badge--pill</code></td>
+                  <td>Pill shape</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-badge--square</code></td>
+                  <td>Square shape</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-badge--sm/lg</code></td>
+                  <td>Size variants</td>
+                  <td>Optional</td>
+                </tr>
+				<tr>
+                  <td><code>.ar-badge--dot</code></td>
+                  <td>Status dot</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-badge--interactive</code></td>
+                  <td>Interactive state</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-badge--inverse</code></td>
+                  <td>Dark surface variant</td>
+                  <td>Optional</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3>Avatar Classes</h3>
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Purpose</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>.ar-avatar</code></td>
+                  <td>Base avatar styles</td>
+                  <td>✅ Required</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-avatar--xs/sm/lg/xl/2xl</code></td>
+                  <td>Size variants</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-avatar--square</code></td>
+                  <td>Square shape</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-avatar--rounded</code></td>
+                  <td>Rounded square</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-avatar--initials</code></td>
+                  <td>Initials avatar</td>
+                  <td>For initials</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-avatar--initials + color variant</code></td>
+                  <td>Colored initials</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-avatar__status</code></td>
+                  <td>Status dot position</td>
+                  <td>With dot</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-avatar-group</code></td>
+                  <td>Overlapping avatars</td>
+                  <td>For groups</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-avatar--interactive</code></td>
+                  <td>Interactive state</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-avatar--print</code></td>
+                  <td>Visible in print</td>
+                  <td>Optional</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Do / Don't -->
+          <section id="do-dont">
+            <h2>Do / Don't</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use semantic variants</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;span class="ar-badge ar-badge--success"&gt;Published&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--warning"&gt;Draft&lt;/span&gt;
+&lt;span class="ar-badge ar-badge--danger"&gt;Archived&lt;/span&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Match the badge role to the status meaning.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Use wrong color for status</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;span class="ar-badge ar-badge--danger"&gt;Published&lt;/span&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Danger should only be used for errors or destructive states.</p>
+              </div>
+			  <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use alt text for avatars</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-avatar"&gt;
+  &lt;img src="user.jpg" alt="Jane Doe"&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Always include <code>alt</code> text for image avatars.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Skip alt text</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-avatar"&gt;
+  &lt;img src="user.jpg"&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Images without <code>alt</code> text are inaccessible to screen readers.</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="input.html" class="ar-text-link">Input Component</a>
+              or learn about <a href="../utilities/display.html" class="ar-text-link">Display Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
+</html>

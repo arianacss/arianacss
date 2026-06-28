@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ratio Utilities — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-ratio-demo {
+      background: var(--ar-color-primary-surface);
+      border: 2px solid var(--ar-color-primary-border);
+      border-radius: var(--ar-radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--ar-text-size-sm);
+      font-weight: var(--ar-text-weight-medium);
+      color: var(--ar-color-primary-emphasis);
+      width: 100%;
+      max-width: 300px;
+      margin: var(--ar-space-2) auto;
+      padding: var(--ar-space-2);
+      text-align: center;
+      transition: all var(--ar-duration-base) var(--ar-ease-standard);
+    }
+
+    .doc-ratio-demo--success {
+      background: var(--ar-color-success-surface);
+      border-color: var(--ar-color-success-border);
+      color: var(--ar-color-success-text);
+    }
+
+    .doc-ratio-demo--warning {
+      background: var(--ar-color-warning-surface);
+      border-color: var(--ar-color-warning-border);
+      color: var(--ar-color-warning-text);
+    }
+
+    .doc-ratio-demo--danger {
+      background: var(--ar-color-danger-surface);
+      border-color: var(--ar-color-danger-border);
+      color: var(--ar-color-danger-text);
+    }
+
+    .doc-ratio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--ar-space-3);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-ratio-grid .doc-ratio-demo {
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .doc-ratio-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      text-align: center;
+      margin-top: var(--ar-space-1);
+    }
+
+    .doc-ratio-use {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      display: block;
+      text-align: center;
+      margin-top: var(--ar-space-1);
+    }
+
+    .doc-ratio-container {
+      max-width: 400px;
+      margin: var(--ar-space-2) auto;
+    }
+
+    .doc-ratio-container .doc-ratio-demo {
+      max-width: 100%;
+      margin: 0;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-ratio-embed {
+      background: var(--ar-color-layer-sunken);
+      border-radius: var(--ar-radius-sm);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .doc-ratio-embed iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+
+      .doc-ratio-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="../components/button.html" class="doc-nav-link">Components</a>
+          <a href="spacing.html" class="doc-nav-link doc-nav-link--active">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Utilities</span></li>
+              <li><a href="spacing.html">Spacing</a></li>
+              <li><a href="display.html">Display</a></li>
+              <li><a href="flex.html">Flexbox</a></li>
+              <li><a href="grid.html">Grid</a></li>
+              <li><a href="typography.html">Typography</a></li>
+              <li><a href="color.html">Color</a></li>
+              <li><a href="border.html">Border</a></li>
+              <li><a href="shadow.html">Shadow</a></li>
+              <li><a href="ratio.html" class="doc-sidebar-active">Ratio</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Ratio Utilities</h1>
+          <p class="ar-lead">
+            Maintain consistent aspect ratios for images, videos, and responsive containers.
+            Six named ratios with responsive variants for every layout need.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Modern CSS aspect-ratio</div>
+            <div class="ar-alert__message">
+              Ratio utilities use the modern <code>aspect-ratio</code> CSS property.
+              Supported in all target browsers: Chrome 88+, Firefox 89+, Safari 15+.
+              No padding-bottom hacks required.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              Ratio utilities ensure content maintains a fixed aspect ratio regardless of
+              container width. Perfect for images, videos, embeds, and responsive cards.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📐</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  6 named ratios (square, video, photo, portrait, wide, golden)
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🔄</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Responsive variants at all 4 breakpoints
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🎯</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Semantic names for real-world use cases
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Available Ratios -->
+          <section id="available-ratios">
+            <h2>Available Ratios</h2>
+
+            <div class="doc-ratio-grid">
+              <!-- Square -->
+              <div>
+                <div class="doc-ratio-demo ar-ratio-square">1:1</div>
+                <span class="doc-ratio-label">ar-ratio-square</span>
+                <span class="doc-ratio-use">Avatars · Icons · Thumbnails</span>
+              </div>
+
+              <!-- Video -->
+              <div>
+                <div class="doc-ratio-demo ar-ratio-video doc-ratio-demo--success">16:9</div>
+                <span class="doc-ratio-label">ar-ratio-video</span>
+                <span class="doc-ratio-use">YouTube · Vimeo · Hero banners</span>
+              </div>
+
+              <!-- Photo -->
+              <div>
+                <div class="doc-ratio-demo ar-ratio-photo doc-ratio-demo--warning">4:3</div>
+                <span class="doc-ratio-label">ar-ratio-photo</span>
+                <span class="doc-ratio-use">DSLR photos · Blog images · Products</span>
+              </div>
+
+              <!-- Portrait -->
+              <div>
+                <div class="doc-ratio-demo ar-ratio-portrait doc-ratio-demo--danger">3:4</div>
+                <span class="doc-ratio-label">ar-ratio-portrait</span>
+                <span class="doc-ratio-use">Mobile photos · Book covers · Tall cards</span>
+              </div>
+
+              <!-- Wide -->
+              <div>
+                <div class="doc-ratio-demo ar-ratio-wide">21:9</div>
+                <span class="doc-ratio-label">ar-ratio-wide</span>
+                <span class="doc-ratio-use">Cinema banners · Panoramas · Headers</span>
+              </div>
+
+              <!-- Golden -->
+              <div>
+                <div class="doc-ratio-demo ar-ratio-golden" style="background: var(--ar-color-info-surface); border-color: var(--ar-color-info-border); color: var(--ar-color-info-text);">φ</div>
+                <span class="doc-ratio-label">ar-ratio-golden</span>
+                <span class="doc-ratio-use">Feature cards · Editorial · Balanced design</span>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Ratio Removal</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;div class="ar-ratio-video ar-lg:ratio-auto"&gt;...&lt;/div&gt;</code>
+              </div>
+              <p class="ar-text-sm ar-text-muted">
+                Use <code>ar-ratio-auto</code> to restore the element's natural intrinsic ratio.
+                Perfect for responsive behavior where a fixed ratio is only needed at certain breakpoints.
+              </p>
+            </div>
+          </section>
+
+          <!-- Real-World Examples -->
+          <section id="examples">
+            <h2>Real-World Examples</h2>
+
+            <h3>YouTube / Vimeo Embed</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-ratio-video ar-rounded-lg ar-overflow-hidden"&gt;
+  &lt;iframe src="https://www.youtube.com/embed/..." 
+          style="width:100%;height:100%;" 
+          allowfullscreen&gt;
+  &lt;/iframe&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-ratio-container">
+                <div class="ar-ratio-video ar-rounded-lg ar-overflow-hidden" style="background: var(--ar-color-layer-sunken); border: 1px solid var(--ar-color-divider);">
+                  <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background: var(--ar-color-layer-sunken); color: var(--ar-color-text-muted); font-size: var(--ar-text-size-sm);">
+                    📹 YouTube Embed (16:9)
+                  </div>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">16:9 ratio with rounded corners</p>
+            </div>
+
+            <h3>Avatar / Profile Image</h3>
+            <div class="doc-code-block">
+              <code>&lt;img class="ar-ratio-square ar-rounded-full" 
+     style="object-fit:cover;width:100%;height:100%;" 
+     src="avatar.jpg" alt="User avatar"&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-flex ar-gap-4 ar-flex-wrap ar-items-center">
+                <div style="width:80px;height:80px;">
+                  <div class="ar-ratio-square ar-rounded-full ar-bg-primary ar-flex ar-items-center ar-justify-center" style="aspect-ratio:1/1; background: var(--ar-color-primary-base); color: var(--ar-color-text-on-primary); font-size: var(--ar-text-size-xl); font-weight: var(--ar-text-weight-bold);">
+                    JD
+                  </div>
+                </div>
+                <div style="width:120px;height:120px;">
+                  <div class="ar-ratio-square ar-rounded-full ar-bg-success ar-flex ar-items-center ar-justify-center" style="aspect-ratio:1/1; background: var(--ar-color-success-base); color: var(--ar-color-text-on-success); font-size: var(--ar-text-size-3xl); font-weight: var(--ar-text-weight-bold);">
+                    JD
+                  </div>
+                </div>
+                <div style="width:60px;height:60px;">
+                  <div class="ar-ratio-square ar-rounded-full ar-bg-warning ar-flex ar-items-center ar-justify-center" style="aspect-ratio:1/1; background: var(--ar-color-warning-base); color: var(--ar-color-text-on-warning); font-size: var(--ar-text-size-base); font-weight: var(--ar-text-weight-bold);">
+                    JD
+                  </div>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">ar-ratio-square + ar-rounded-full for circular avatars</p>
+            </div>
+
+            <h3>Responsive Card Ratio</h3>
+            <div class="doc-code-block">
+              <code>&lt;!-- Portrait on mobile, landscape on desktop --&gt;
+&lt;div class="ar-ratio-portrait ar-md:ratio-photo ar-lg:ratio-video"&gt;
+  &lt;img style="object-fit:cover;width:100%;height:100%;" src="image.jpg" alt="Image"&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4">
+                <div>
+                  <div class="ar-ratio-portrait ar-rounded ar-overflow-hidden" style="background: var(--ar-color-primary-surface); border: 1px solid var(--ar-color-primary-border);">
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:var(--ar-text-size-sm);color:var(--ar-color-primary-emphasis);">
+                      Portrait (3:4)
+                    </div>
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">ar-ratio-portrait</p>
+                </div>
+                <div>
+                  <div class="ar-ratio-photo ar-rounded ar-overflow-hidden" style="background: var(--ar-color-success-surface); border: 1px solid var(--ar-color-success-border);">
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:var(--ar-text-size-sm);color:var(--ar-color-success-text);">
+                      Photo (4:3)
+                    </div>
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">ar-ratio-photo</p>
+                </div>
+                <div>
+                  <div class="ar-ratio-video ar-rounded ar-overflow-hidden" style="background: var(--ar-color-warning-surface); border: 1px solid var(--ar-color-warning-border);">
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:var(--ar-text-size-sm);color:var(--ar-color-warning-text);">
+                      Video (16:9)
+                    </div>
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">ar-ratio-video</p>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">Different ratios for different content types</p>
+            </div>
+
+            <h3>Golden Ratio Card</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-ratio-golden ar-rounded-lg ar-overflow-hidden"&gt;
+  &lt;img style="object-fit:cover;width:100%;height:100%;" src="image.jpg" alt="Featured"&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-ratio-container" style="max-width: 350px;">
+                <div class="ar-ratio-golden ar-rounded-lg ar-overflow-hidden" style="background: var(--ar-color-info-surface); border: 1px solid var(--ar-color-info-border);">
+                  <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ar-color-info-text);">
+                    <span style="font-size: var(--ar-text-size-2xl);">φ</span>
+                    <span style="font-size: var(--ar-text-size-sm); font-weight: var(--ar-text-weight-medium);">Golden Ratio (1.618:1)</span>
+                  </div>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">ar-ratio-golden — aesthetically balanced proportions</p>
+            </div>
+          </section>
+
+          <!-- Responsive Ratios -->
+          <section id="responsive">
+            <h2>Responsive Ratios</h2>
+            <p>
+              All ratio utilities have responsive variants at all breakpoints.
+              Use them to change aspect ratio at different screen sizes.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Mobile: square · Tablet: 4:3 · Desktop: 16:9 --&gt;
+&lt;div class="ar-ratio-square ar-md:ratio-photo ar-lg:ratio-video"&gt;
+  &lt;img style="object-fit:cover;width:100%;height:100%;" src="image.jpg" alt="Responsive image"&gt;
+&lt;/div&gt;
+
+&lt;!-- Mobile: portrait · Desktop: auto (natural) --&gt;
+&lt;img class="ar-ratio-portrait ar-xl:ratio-auto" src="image.jpg" alt="Image"&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Responsive Ratio Example</h4>
+              <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4">
+                <div>
+                  <div class="ar-ratio-square ar-rounded ar-overflow-hidden" style="background: var(--ar-color-primary-surface); border: 1px solid var(--ar-color-primary-border);">
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:var(--ar-text-size-sm);color:var(--ar-color-primary-emphasis);">
+                      📱 Square
+                    </div>
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">ar-ratio-square</p>
+                </div>
+                <div>
+                  <div class="ar-ratio-square ar-md:ratio-photo ar-rounded ar-overflow-hidden" style="background: var(--ar-color-success-surface); border: 1px solid var(--ar-color-success-border);">
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:var(--ar-text-size-sm);color:var(--ar-color-success-text);">
+                      📐 4:3
+                    </div>
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">ar-md:ratio-photo</p>
+                </div>
+                <div>
+                  <div class="ar-ratio-square ar-md:ratio-photo ar-lg:ratio-video ar-rounded ar-overflow-hidden" style="background: var(--ar-color-warning-surface); border: 1px solid var(--ar-color-warning-border);">
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:var(--ar-text-size-sm);color:var(--ar-color-warning-text);">
+                      🎬 16:9
+                    </div>
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">ar-lg:ratio-video</p>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Resize your browser to see ratios change: square → 4:3 → 16:9
+              </p>
+            </div>
+          </section>
+
+          <!-- Common Mistakes -->
+          <section id="mistakes">
+            <h2>Common Mistakes to Avoid</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Missing object-fit on images</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-ratio-video"&gt;
+  &lt;img src="image.jpg" alt="Image"&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Images inside ratio containers need
+                  <code>object-fit: cover</code> or <code>contain</code> to fill
+                  the ratio container properly.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Always use object-fit</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-ratio-video"&gt;
+  &lt;img src="image.jpg" alt="Image" style="object-fit:cover;width:100%;height:100%;"&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> <code>object-fit: cover</code> ensures the
+                  image fills the ratio container without distortion.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Using ratio on the wrong element</h4>
+                <div class="doc-code-block">
+                  <code>&lt;img class="ar-ratio-video" src="image.jpg" alt="Image"&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> <code>aspect-ratio</code> works on images,
+                  but it's more commonly applied to a <strong>container</strong>
+                  that wraps the image or video.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Apply ratio to containers</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-ratio-video ar-overflow-hidden"&gt;
+  &lt;img src="image.jpg" alt="Image" style="object-fit:cover;width:100%;height:100%;"&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Wrapping the image in a ratio container
+                  gives you more control over layout and overflow behavior.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Reference -->
+          <section id="quick-reference">
+            <h2>Quick Reference</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Named Ratios</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-ratio-square</code> — 1:1</li>
+                  <li><code>ar-ratio-video</code> — 16:9</li>
+                  <li><code>ar-ratio-photo</code> — 4:3</li>
+                  <li><code>ar-ratio-portrait</code> — 3:4</li>
+                  <li><code>ar-ratio-wide</code> — 21:9</li>
+                  <li><code>ar-ratio-golden</code> — 1.618:1</li>
+                  <li><code>ar-ratio-auto</code> — natural ratio</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Responsive Prefixes</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-sm:ratio-*</code> — 480px</li>
+                  <li><code>ar-md:ratio-*</code> — 768px</li>
+                  <li><code>ar-lg:ratio-*</code> — 1024px</li>
+                  <li><code>ar-xl:ratio-*</code> — 1280px</li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Common Use Cases</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><strong>Square:</strong> Avatars, thumbnails</li>
+                  <li><strong>Video:</strong> YouTube, hero banners</li>
+                  <li><strong>Photo:</strong> Blog images, products</li>
+                  <li><strong>Portrait:</strong> Mobile photos, book covers</li>
+                  <li><strong>Wide:</strong> Cinema banners, headers</li>
+                  <li><strong>Golden:</strong> Editorial, feature cards</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pro Tip:</strong> Ratio utilities work best when combined with
+                <code>ar-overflow-hidden</code> and <code>ar-rounded-*</code> for
+                polished, production-ready image and video containers.
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Documentation Complete:</strong>
+              You've explored all utility categories. Return to the
+              <a href="../index.html" class="ar-text-link">Documentation Home</a>
+              or explore <a href="../components/button.html" class="ar-text-link">Components</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

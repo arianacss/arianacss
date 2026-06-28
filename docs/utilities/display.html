@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display Utilities — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-display-demo {
+      background: var(--ar-color-primary-surface);
+      border: 2px dashed var(--ar-color-primary-border);
+      padding: var(--ar-space-3);
+      border-radius: var(--ar-radius-sm);
+      text-align: center;
+      color: var(--ar-color-primary-emphasis);
+      font-weight: var(--ar-text-weight-medium);
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .doc-display-demo--inline {
+      display: inline;
+      background: var(--ar-color-success-surface);
+      border-color: var(--ar-color-success-border);
+      color: var(--ar-color-success-text);
+      padding: var(--ar-space-1) var(--ar-space-2);
+    }
+
+    .doc-display-demo--block {
+      background: var(--ar-color-warning-surface);
+      border-color: var(--ar-color-warning-border);
+      color: var(--ar-color-warning-text);
+      padding: var(--ar-space-2);
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-display-demo--flex {
+      background: var(--ar-color-danger-surface);
+      border-color: var(--ar-color-danger-border);
+      color: var(--ar-color-danger-text);
+      padding: var(--ar-space-2);
+      display: flex;
+      gap: var(--ar-space-2);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .doc-display-demo--flex-item {
+      background: var(--ar-color-layer-base);
+      padding: var(--ar-space-1) var(--ar-space-3);
+      border-radius: var(--ar-radius-sm);
+      border: 1px solid var(--ar-color-border-default);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sr-demo {
+      border: 2px solid var(--ar-color-border-default);
+      padding: var(--ar-space-3);
+      border-radius: var(--ar-radius-sm);
+      background: var(--ar-color-layer-raised);
+    }
+
+    .doc-sr-demo .ar-sr-only {
+      background: var(--ar-color-primary-surface);
+      border: 2px solid var(--ar-color-primary-border);
+      border-radius: var(--ar-radius-sm);
+      padding: var(--ar-space-2);
+      color: var(--ar-color-primary-emphasis);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="../components/button.html" class="doc-nav-link">Components</a>
+          <a href="spacing.html" class="doc-nav-link doc-nav-link--active">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Utilities</span></li>
+              <li><a href="spacing.html">Spacing</a></li>
+              <li><a href="display.html" class="doc-sidebar-active">Display</a></li>
+              <li><a href="flex.html">Flexbox</a></li>
+              <li><a href="grid.html">Grid</a></li>
+              <li><a href="typography.html">Typography</a></li>
+              <li><a href="color.html">Color</a></li>
+              <li><a href="border.html">Border</a></li>
+              <li><a href="shadow.html">Shadow</a></li>
+              <li><a href="ratio.html">Ratio</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Display Utilities</h1>
+          <p class="ar-lead">
+            Control the display behavior of elements — show, hide, and toggle visibility
+            across breakpoints with a single class.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Mobile-First Display</div>
+            <div class="ar-alert__message">
+              All display utilities are mobile-first. Elements are visible by default.
+              Use <code>ar-hidden</code> to hide an element, and responsive variants
+              to show/hide at specific breakpoints.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              Display utilities control the <code>display</code> property of an element.
+              They are essential for responsive design — showing and hiding content at
+              different screen sizes.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">👁️</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Show/hide elements at different breakpoints
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">♿</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  SR-only utilities for screen reader accessibility
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📱</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Responsive variants at all 4 breakpoints
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Display Values -->
+          <section id="display-values">
+            <h2>Display Values</h2>
+            <p>
+              Use these utilities to set the <code>display</code> property of any element.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-block"&gt;display: block&lt;/div&gt;
+&lt;div class="ar-inline"&gt;display: inline&lt;/div&gt;
+&lt;div class="ar-inline-block"&gt;display: inline-block&lt;/div&gt;
+&lt;div class="ar-flex"&gt;display: flex&lt;/div&gt;
+&lt;div class="ar-inline-flex"&gt;display: inline-flex&lt;/div&gt;
+&lt;div class="ar-grid"&gt;display: grid&lt;/div&gt;
+&lt;div class="ar-inline-grid"&gt;display: inline-grid&lt;/div&gt;
+&lt;div class="ar-contents"&gt;display: contents&lt;/div&gt;
+&lt;div class="ar-hidden"&gt;display: none&lt;/div&gt;</code>
+            </div>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Block</h4>
+                <div class="doc-display-demo ar-block">.ar-block — Full width, new line</div>
+                <div class="doc-display-demo ar-block ar-mt-1">Another .ar-block element</div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Inline</h4>
+                <div>
+                  <span class="doc-display-demo--inline ar-inline">.ar-inline</span>
+                  <span class="doc-display-demo--inline ar-inline" style="background:var(--ar-color-warning-surface);border-color:var(--ar-color-warning-border);color:var(--ar-color-warning-text);">Another inline</span>
+                  <span class="doc-display-demo--inline ar-inline" style="background:var(--ar-color-danger-surface);border-color:var(--ar-color-danger-border);color:var(--ar-color-danger-text);">Third inline</span>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">Inline elements flow in the text line</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Flex</h4>
+                <div class="doc-display-demo--flex ar-flex">
+                  <span class="doc-display-demo--flex-item">1</span>
+                  <span class="doc-display-demo--flex-item">2</span>
+                  <span class="doc-display-demo--flex-item">3</span>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">.ar-flex — Horizontal alignment with gap</p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Grid</h4>
+                <div class="doc-display-demo ar-grid ar-grid-cols-3 ar-gap-2" style="background:var(--ar-color-danger-surface);border-color:var(--ar-color-danger-border);color:var(--ar-color-danger-text);">
+                  <span class="doc-display-demo--flex-item">1</span>
+                  <span class="doc-display-demo--flex-item">2</span>
+                  <span class="doc-display-demo--flex-item">3</span>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">.ar-grid — 3 equal columns with gap</p>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--warning ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>⚠️ Note:</strong> <code>ar-contents</code> removes the element's box
+                while keeping its children. Use sparingly — it can break accessibility and
+                layout in unexpected ways.
+              </div>
+            </div>
+          </section>
+
+          <!-- Hidden / Visibility -->
+          <section id="hidden">
+            <h2>Hidden Utilities</h2>
+            <p>
+              Use <code>ar-hidden</code> to completely remove an element from the layout
+              and accessibility tree. For responsive hide/show, use with responsive variants.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Hidden on all screens --&gt;
+&lt;div class="ar-hidden"&gt;This is hidden everywhere&lt;/div&gt;
+
+&lt;!-- Hidden on mobile, visible on tablet+ --&gt;
+&lt;div class="ar-hidden ar-md:flex"&gt;Visible on tablet and desktop&lt;/div&gt;
+
+&lt;!-- Visible on mobile, hidden on tablet+ --&gt;
+&lt;div class="ar-flex ar-md:hidden"&gt;Visible on mobile only&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Responsive Example</h4>
+              <div class="ar-bg-sunken ar-p-4 ar-rounded">
+                <div class="ar-hidden ar-md:flex ar-gap-2 ar-justify-center">
+                  <span class="doc-display-demo--flex-item">Visible on tablet+</span>
+                  <span class="doc-display-demo--flex-item">This row appears at 768px+</span>
+                </div>
+                <div class="ar-flex ar-md:hidden ar-gap-2 ar-justify-center">
+                  <span class="doc-display-demo--flex-item" style="background:var(--ar-color-warning-surface);border-color:var(--ar-color-warning-border);color:var(--ar-color-warning-text);">Visible on mobile only</span>
+                  <span class="doc-display-demo--flex-item" style="background:var(--ar-color-warning-surface);border-color:var(--ar-color-warning-border);color:var(--ar-color-warning-text);">This row appears below 768px</span>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Resize your browser to see the responsive behavior
+              </p>
+            </div>
+
+            <div class="ar-alert ar-alert--danger ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>⚠️ Important:</strong> <code>ar-hidden</code> removes the element
+                from the <strong>accessibility tree</strong>. Screen readers cannot see it.
+                For visually hiding content while keeping it accessible, use
+                <code>ar-sr-only</code> instead.
+              </div>
+            </div>
+          </section>
+
+          <!-- Screen Reader Utilities -->
+          <section id="sr-only">
+            <h2>Screen Reader Utilities</h2>
+            <p>
+              Use <code>ar-sr-only</code> to visually hide content while keeping it accessible
+              to screen readers. Use <code>ar-not-sr-only</code> to reverse this behavior.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Icon-only button with hidden label --&gt;
+&lt;button class="ar-btn ar-btn--ghost ar-btn--icon-only" aria-label="Close menu"&gt;
+  &lt;svg&gt;...&lt;/svg&gt;
+  &lt;span class="ar-sr-only"&gt;Close menu&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;!-- SR-only on mobile, visible on desktop --&gt;
+&lt;span class="ar-sr-only ar-lg:not-sr-only"&gt;Dashboard&lt;/span&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">SR-Only Example</h4>
+              <div class="doc-sr-demo">
+                <p class="ar-text-sm ar-mb-2">
+                  The text below is visually hidden but accessible to screen readers:
+                </p>
+                <div class="ar-sr-only">This text is only visible to screen readers</div>
+                <div style="border: 2px dashed var(--ar-color-border-default); padding: var(--ar-space-2); border-radius: var(--ar-radius-sm); background: var(--ar-color-layer-base); text-align: center; color: var(--ar-color-text-muted);">
+                  <span class="ar-text-muted">👀 Visible content here</span>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">
+                  The hidden text is not visible, but a screen reader will announce it.
+                </p>
+              </div>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Responsive SR-Only</h4>
+              <div class="doc-sr-demo">
+                <p class="ar-text-sm ar-mb-2">
+                  This text is hidden on mobile, visible on desktop:
+                </p>
+                <div class="ar-bg-primary-surface ar-p-3 ar-rounded ar-text-center">
+                  <span class="ar-sr-only ar-lg:not-sr-only ar-text-primary-emphasis ar-font-medium">
+                    This is visible on desktop, hidden on mobile
+                  </span>
+                  <span class="ar-lg:sr-only ar-text-muted">
+                    This is visible on mobile, hidden on desktop
+                  </span>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">
+                  <code>ar-sr-only ar-lg:not-sr-only</code> — hidden on mobile, visible at lg+
+                </p>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>♿ Accessibility Best Practice:</strong> Use <code>ar-sr-only</code> for:
+                <ul class="ar-list ar-mt-2">
+                  <li>Icon-only buttons (add descriptive text)</li>
+                  <li>Skip navigation links</li>
+                  <li>Additional context for complex UI elements</li>
+                  <li>Labels for form fields when the label is visually redundant</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Responsive Display -->
+          <section id="responsive">
+            <h2>Responsive Display</h2>
+            <p>
+              All display utilities have responsive variants. Use breakpoint prefixes
+              to change display behavior at different screen sizes.
+            </p>
+
+            <table class="doc-table ar-mt-4">
+              <thead>
+                <tr>
+                  <th>Prefix</th>
+                  <th>Min-Width</th>
+                  <th>Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ar-sm:flex</code></td>
+                  <td>480px</td>
+                  <td>Switch to flex on standard phones</td>
+                </tr>
+                <tr>
+                  <td><code>ar-md:hidden</code></td>
+                  <td>768px</td>
+                  <td>Hide on tablets and larger</td>
+                </tr>
+                <tr>
+                  <td><code>ar-lg:grid</code></td>
+                  <td>1024px</td>
+                  <td>Switch to grid on laptops</td>
+                </tr>
+                <tr>
+                  <td><code>ar-xl:block</code></td>
+                  <td>1280px</td>
+                  <td>Show as block on wide desktops</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Stack on mobile, flex row on tablet+ --&gt;
+&lt;div class="ar-flex ar-flex-col ar-md:flex-row ar-gap-4"&gt;
+  &lt;div&gt;Item 1&lt;/div&gt;
+  &lt;div&gt;Item 2&lt;/div&gt;
+  &lt;div&gt;Item 3&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Hide on mobile, show as flex on desktop --&gt;
+&lt;nav class="ar-hidden ar-lg:flex"&gt;
+  &lt;a href="#"&gt;Home&lt;/a&gt;
+  &lt;a href="#"&gt;About&lt;/a&gt;
+  &lt;a href="#"&gt;Contact&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;!-- Show on mobile, hide on desktop --&gt;
+&lt;button class="ar-flex ar-lg:hidden"&gt;☰ Menu&lt;/button&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Responsive Display Example</h4>
+              <div class="ar-bg-sunken ar-p-4 ar-rounded">
+                <!-- Visible on mobile only -->
+                <div class="ar-flex ar-md:hidden ar-gap-2 ar-justify-center">
+                  <span class="doc-display-demo--flex-item" style="background:var(--ar-color-primary-surface);border-color:var(--ar-color-primary-border);color:var(--ar-color-primary-emphasis);">📱 Mobile</span>
+                  <span class="doc-display-demo--flex-item" style="background:var(--ar-color-primary-surface);border-color:var(--ar-color-primary-border);color:var(--ar-color-primary-emphasis);">Only visible below 768px</span>
+                </div>
+
+                <!-- Visible on tablet+ -->
+                <div class="ar-hidden ar-md:flex ar-gap-2 ar-justify-center">
+                  <span class="doc-display-demo--flex-item" style="background:var(--ar-color-success-surface);border-color:var(--ar-color-success-border);color:var(--ar-color-success-text);">💻 Tablet+</span>
+                  <span class="doc-display-demo--flex-item" style="background:var(--ar-color-success-surface);border-color:var(--ar-color-success-border);color:var(--ar-color-success-text);">Visible at 768px and above</span>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Resize your browser to see the switch at 768px
+              </p>
+            </div>
+          </section>
+
+          <!-- Common Patterns -->
+          <section id="patterns">
+            <h2>Common Patterns</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Mobile Hamburger Menu</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;nav class="ar-flex ar-justify-between ar-items-center"&gt;
+  &lt;span&gt;Logo&lt;/span&gt;
+  &lt;button class="ar-flex ar-lg:hidden"&gt;☰&lt;/button&gt;
+  &lt;ul class="ar-hidden ar-lg:flex ar-gap-4"&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;About&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Responsive Card Grid</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-lg:grid-cols-3 ar-gap-6"&gt;
+  &lt;div class="ar-card"&gt;Card 1&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 2&lt;/div&gt;
+  &lt;div class="ar-card"&gt;Card 3&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Flex Navigation</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;nav class="ar-flex ar-flex-row ar-justify-between ar-items-center ar-gap-4"&gt;
+  &lt;div class="ar-flex ar-gap-4"&gt;
+    &lt;a href="#"&gt;Home&lt;/a&gt;
+    &lt;a href="#"&gt;About&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class="ar-flex ar-gap-2"&gt;
+    &lt;button class="ar-btn ar-btn--primary"&gt;Login&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;</code>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Centered Content</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-flex ar-justify-center ar-items-center" style="min-height: 200px;"&gt;
+  &lt;div class="ar-text-center"&gt;
+    &lt;h2&gt;Centered&lt;/h2&gt;
+    &lt;p&gt;Content in the middle&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Common Mistakes -->
+          <section id="mistakes">
+            <h2>Common Mistakes to Avoid</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Using hidden for accessibility</h4>
+                <div class="doc-code-block">
+                  <code>&lt;span class="ar-hidden"&gt;Read this text&lt;/span&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> <code>ar-hidden</code> removes content from the
+                  accessibility tree. Screen readers cannot see it.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Use sr-only for accessibility</h4>
+                <div class="doc-code-block">
+                  <code>&lt;span class="ar-sr-only"&gt;Read this text&lt;/span&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> <code>ar-sr-only</code> visually hides content
+                  while keeping it accessible to screen readers.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Inline styles with display utilities</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div style="display: flex;" class="ar-hidden"&gt;...&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Inline styles have higher specificity than classes
+                  and may override utility classes unexpectedly.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Use only utility classes</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-flex ar-hidden"&gt;...&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Utility classes are designed to work together
+                  in a predictable cascade order.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Reference -->
+          <section id="quick-reference">
+            <h2>Quick Reference</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Display Values</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-block</code> — display: block</li>
+                  <li><code>ar-inline</code> — display: inline</li>
+                  <li><code>ar-inline-block</code> — display: inline-block</li>
+                  <li><code>ar-flex</code> — display: flex</li>
+                  <li><code>ar-inline-flex</code> — display: inline-flex</li>
+                  <li><code>ar-grid</code> — display: grid</li>
+                  <li><code>ar-inline-grid</code> — display: inline-grid</li>
+                  <li><code>ar-contents</code> — display: contents</li>
+                  <li><code>ar-hidden</code> — display: none</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Screen Reader Utilities</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-sr-only</code> — Hide visually, keep for screen readers</li>
+                  <li><code>ar-not-sr-only</code> — Reverse sr-only (make visible)</li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Responsive Prefixes</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-sm:*</code> — 480px and above</li>
+                  <li><code>ar-md:*</code> — 768px and above</li>
+                  <li><code>ar-lg:*</code> — 1024px and above</li>
+                  <li><code>ar-xl:*</code> — 1280px and above</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pro Tip:</strong> Combine display utilities with spacing and
+                flex utilities for complete layout control.
+                <br>
+                <code>ar-flex ar-flex-col ar-md:flex-row ar-gap-4 ar-items-center</code>
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="flex.html" class="ar-text-link">Flexbox Utilities</a>
+              or learn about <a href="grid.html" class="ar-text-link">Grid Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

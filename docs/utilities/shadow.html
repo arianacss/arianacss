@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadow Utilities — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-shadow-demo {
+      width: 100%;
+      max-width: 200px;
+      height: 120px;
+      background: var(--ar-color-layer-base);
+      border-radius: var(--ar-radius-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--ar-text-size-sm);
+      font-weight: var(--ar-text-weight-medium);
+      color: var(--ar-color-text-muted);
+      margin: var(--ar-space-2);
+      padding: var(--ar-space-3);
+      text-align: center;
+      transition: box-shadow var(--ar-duration-base) var(--ar-ease-standard);
+    }
+
+    .doc-shadow-demo--dark {
+      background: var(--ar-color-layer-raised);
+    }
+
+    .doc-shadow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--ar-space-3);
+      justify-items: center;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-shadow-grid .doc-shadow-demo {
+      margin: 0;
+      width: 100%;
+      max-width: 220px;
+    }
+
+    .doc-shadow-comparison {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--ar-space-4);
+      justify-content: center;
+      padding: var(--ar-space-4);
+      background: var(--ar-color-layer-sunken);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-shadow-comparison .doc-shadow-demo {
+      margin: 0;
+    }
+
+    .doc-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      margin-bottom: var(--ar-space-1);
+      text-align: center;
+    }
+
+    .doc-shadow-use {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      display: block;
+      margin-top: var(--ar-space-1);
+      text-align: center;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-card-demo {
+      background: var(--ar-color-layer-base);
+      border-radius: var(--ar-radius-base);
+      padding: var(--ar-space-4);
+      max-width: 280px;
+      width: 100%;
+      transition: box-shadow var(--ar-duration-base) var(--ar-ease-standard),
+                  transform var(--ar-duration-base) var(--ar-ease-standard);
+    }
+
+    .doc-card-demo:hover {
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+
+      .doc-shadow-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="../components/button.html" class="doc-nav-link">Components</a>
+          <a href="spacing.html" class="doc-nav-link doc-nav-link--active">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Utilities</span></li>
+              <li><a href="spacing.html">Spacing</a></li>
+              <li><a href="display.html">Display</a></li>
+              <li><a href="flex.html">Flexbox</a></li>
+              <li><a href="grid.html">Grid</a></li>
+              <li><a href="typography.html">Typography</a></li>
+              <li><a href="color.html">Color</a></li>
+              <li><a href="border.html">Border</a></li>
+              <li><a href="shadow.html" class="doc-sidebar-active">Shadow</a></li>
+              <li><a href="ratio.html">Ratio</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Shadow Utilities</h1>
+          <p class="ar-lead">
+            Add elevation and depth to your UI with a calibrated shadow system.
+            From subtle resting states to prominent modal overlays — exactly 6 classes.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Semantic Elevation</div>
+            <div class="ar-alert__message">
+              Shadows in ArianaCSS are <strong>semantic</strong>, not decorative.
+              Each shadow level communicates a specific depth or interaction state.
+              Use shadows intentionally to guide user attention.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              The shadow system provides <strong>6 elevation levels</strong>:
+              <code>ar-shadow-0</code> through <code>ar-shadow-4</code>, plus
+              <code>ar-shadow-inset</code>. Each level has a specific semantic purpose.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📏</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  5 elevation levels + 1 inset shadow
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🎯</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Semantic use cases for every level
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🔄</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  No responsive variants — shadows don't change at breakpoints
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Shadow Levels -->
+          <section id="shadow-levels">
+            <h2>Shadow Levels</h2>
+
+            <div class="doc-shadow-grid">
+              <!-- Shadow 0 -->
+              <div>
+                <span class="doc-label">ar-shadow-0</span>
+                <div class="doc-shadow-demo ar-shadow-0" style="border: 1px solid var(--ar-color-divider);">
+                  No shadow
+                </div>
+                <span class="doc-shadow-use">Flat · Print · Explicit removal</span>
+              </div>
+
+              <!-- Shadow 1 -->
+              <div>
+                <span class="doc-label">ar-shadow-1</span>
+                <div class="doc-shadow-demo ar-shadow-1">
+                  Resting
+                </div>
+                <span class="doc-shadow-use">Cards · Panels · Inputs</span>
+              </div>
+
+              <!-- Shadow 2 -->
+              <div>
+                <span class="doc-label">ar-shadow-2</span>
+                <div class="doc-shadow-demo ar-shadow-2">
+                  Hover Lift
+                </div>
+                <span class="doc-shadow-use">Interactive cards · Floating buttons</span>
+              </div>
+
+              <!-- Shadow 3 -->
+              <div>
+                <span class="doc-label">ar-shadow-3</span>
+                <div class="doc-shadow-demo ar-shadow-3">
+                  Floating
+                </div>
+                <span class="doc-shadow-use">Dropdowns · Menus · Tooltips</span>
+              </div>
+
+              <!-- Shadow 4 -->
+              <div>
+                <span class="doc-label">ar-shadow-4</span>
+                <div class="doc-shadow-demo ar-shadow-4">
+                  Modal
+                </div>
+                <span class="doc-shadow-use">Dialogs · Drawers · Overlays</span>
+              </div>
+
+              <!-- Shadow Inset -->
+              <div>
+                <span class="doc-label">ar-shadow-inset</span>
+                <div class="doc-shadow-demo ar-shadow-inset" style="border: 1px solid var(--ar-color-divider);">
+                  Pressed
+                </div>
+                <span class="doc-shadow-use">Active buttons · Sunken inputs · Toggles</span>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Shadow Comparison (Side by Side)</h4>
+              <div class="doc-shadow-comparison">
+                <div class="doc-shadow-demo ar-shadow-0" style="width: 140px; height: 100px; border: 1px solid var(--ar-color-divider);">0</div>
+                <div class="doc-shadow-demo ar-shadow-1" style="width: 140px; height: 100px;">1</div>
+                <div class="doc-shadow-demo ar-shadow-2" style="width: 140px; height: 100px;">2</div>
+                <div class="doc-shadow-demo ar-shadow-3" style="width: 140px; height: 100px;">3</div>
+                <div class="doc-shadow-demo ar-shadow-4" style="width: 140px; height: 100px;">4</div>
+                <div class="doc-shadow-demo ar-shadow-inset" style="width: 140px; height: 100px; border: 1px solid var(--ar-color-divider);">inset</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Semantic Use Cases -->
+          <section id="semantic-use">
+            <h2>Semantic Use Cases</h2>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Resting card --&gt;
+&lt;div class="ar-card ar-shadow-1"&gt;...&lt;/div&gt;
+
+&lt;!-- Interactive card with hover lift --&gt;
+&lt;div class="ar-card ar-card--interactive"&gt;...&lt;/div&gt;
+&lt;!-- (ar-card--interactive applies shadow-1 at rest, shadow-2 on hover) --&gt;
+
+&lt;!-- Dropdown menu --&gt;
+&lt;div class="ar-shadow-3 ar-bg-base ar-p-4 ar-rounded"&gt;...&lt;/div&gt;
+
+&lt;!-- Modal dialog --&gt;
+&lt;div class="ar-shadow-4 ar-bg-base ar-p-6 ar-rounded-lg"&gt;...&lt;/div&gt;
+
+&lt;!-- Active/pressed button --&gt;
+&lt;button class="ar-btn ar-btn--primary ar-shadow-inset"&gt;Pressed&lt;/button&gt;
+
+&lt;!-- Remove shadow from a component --&gt;
+&lt;div class="ar-card ar-shadow-0"&gt;Flat card&lt;/div&gt;</code>
+            </div>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Resting State (shadow-1)</h4>
+                <div class="doc-card-demo ar-shadow-1">
+                  <h5 class="ar-h6 ar-mb-1">Card Title</h5>
+                  <p class="ar-text-sm ar-text-muted ar-m-0">This card is at rest. It has a subtle shadow that separates it from the page.</p>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">Default for cards, panels, and containers</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Hover Lift (shadow-2)</h4>
+                <div class="doc-card-demo ar-shadow-1" style="transition: box-shadow var(--ar-duration-base) var(--ar-ease-standard), transform var(--ar-duration-base) var(--ar-ease-standard);"
+                     onmouseenter="this.classList.add('ar-shadow-2'); this.style.transform='translateY(-2px)'"
+                     onmouseleave="this.classList.remove('ar-shadow-2'); this.style.transform=''">
+                  <h5 class="ar-h6 ar-mb-1">Interactive Card</h5>
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Hover over this card to see the lift effect.</p>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">Hover me for shadow-2 elevation</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-3">
+                <h4 class="ar-h6 ar-mb-2">Floating (shadow-3)</h4>
+                <p class="ar-text-sm ar-text-muted ar-m-0">This card uses shadow-3. It floats above the page — ideal for dropdowns and tooltips.</p>
+                <div class="ar-mt-2 ar-flex ar-gap-2">
+                  <span class="ar-badge ar-badge--info">Dropdown</span>
+                  <span class="ar-badge ar-badge--primary">Menu</span>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-4">
+                <h4 class="ar-h6 ar-mb-2">Modal (shadow-4)</h4>
+                <p class="ar-text-sm ar-text-muted ar-m-0">The highest elevation. Use for modal dialogs, drawers, and command palettes.</p>
+                <div class="ar-mt-2 ar-flex ar-gap-2">
+                  <button class="ar-btn ar-btn--primary ar-btn--sm">Confirm</button>
+                  <button class="ar-btn ar-btn--ghost ar-btn--sm">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Inset Shadow -->
+          <section id="inset-shadow">
+            <h2>Inset Shadow</h2>
+            <p>
+              Use <code>ar-shadow-inset</code> to create a pressed or sunken effect.
+              Perfect for active buttons, focused inputs, and toggle switches.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;button class="ar-btn ar-btn--primary ar-shadow-inset"&gt;Pressed Button&lt;/button&gt;
+&lt;input class="ar-input ar-shadow-inset" type="text" value="Focused input"&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-flex ar-flex-wrap ar-gap-4 ar-items-center">
+                <button class="ar-btn ar-btn--primary ar-shadow-inset" style="box-shadow: var(--ar-shadow-inset);">Pressed Button</button>
+                <input class="ar-input ar-shadow-inset" type="text" value="Focused input" style="box-shadow: var(--ar-shadow-inset); max-width: 200px;">
+                <div class="ar-btn ar-btn--ghost ar-shadow-inset ar-p-3" style="box-shadow: var(--ar-shadow-inset); border: 1px solid var(--ar-color-border-default); border-radius: var(--ar-radius-base);">
+                  Sunken Panel
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">ar-shadow-inset creates a recessed, pressed appearance</p>
+            </div>
+          </section>
+
+          <!-- Removing Shadows -->
+          <section id="removing-shadows">
+            <h2>Removing Shadows</h2>
+            <p>
+              Use <code>ar-shadow-0</code> to explicitly remove shadows from any element,
+              including components that have shadows by default.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Remove shadow from a card --&gt;
+&lt;div class="ar-card ar-shadow-0"&gt;Flat card without shadow&lt;/div&gt;
+
+&lt;!-- Remove shadow from a button group --&gt;
+&lt;button class="ar-btn ar-btn--primary ar-shadow-0"&gt;No shadow button&lt;/button&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-flex ar-flex-wrap ar-gap-4 ar-items-center">
+                <div class="ar-card ar-shadow-0 ar-p-4 ar-border ar-border-divider" style="box-shadow: none; max-width: 180px;">
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Flat card with ar-shadow-0</p>
+                </div>
+                <button class="ar-btn ar-btn--primary ar-shadow-0" style="box-shadow: none;">No shadow button</button>
+                <div class="ar-btn ar-btn--ghost ar-shadow-0 ar-p-3" style="box-shadow: none; border: 1px solid var(--ar-color-border-default); border-radius: var(--ar-radius-base);">
+                  Flat container
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">ar-shadow-0 removes all shadow effects</p>
+            </div>
+          </section>
+
+          <!-- Design Principles -->
+          <section id="design-principles">
+            <h2>Design Principles</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">🎯 Semantic Elevation</h4>
+                <p class="ar-text-sm ar-text-muted">
+                  Each shadow level has a <strong>specific meaning</strong>:
+                </p>
+                <ul class="ar-list ar-text-sm ar-mt-2">
+                  <li><strong>0:</strong> Flat — no elevation</li>
+                  <li><strong>1:</strong> Resting — default state</li>
+                  <li><strong>2:</strong> Hover — interactive lift</li>
+                  <li><strong>3:</strong> Floating — above page content</li>
+                  <li><strong>4:</strong> Modal — highest elevation</li>
+                  <li><strong>inset:</strong> Pressed — sunken state</li>
+                </ul>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">🌤️ Warm Shadows</h4>
+                <p class="ar-text-sm ar-text-muted">
+                  Shadows use a <strong>warm base color</strong> (hsl 35 20% 10%)
+                  that harmonizes with the Stone neutral palette.
+                </p>
+                <div class="ar-mt-2 ar-p-3 ar-bg-sunken ar-rounded" style="background: var(--ar-color-layer-sunken);">
+                  <p class="ar-text-xs ar-text-muted ar-m-0">
+                    Warm shadows look more natural than pure black shadows.
+                  </p>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">📐 Multi-Layer Realism</h4>
+                <p class="ar-text-sm ar-text-muted">
+                  Each shadow uses <strong>two layers</strong>:
+                  an ambient layer (close, subtle) and a direct layer (further, darker).
+                </p>
+                <div class="ar-mt-2 ar-p-3 ar-bg-sunken ar-rounded">
+                  <p class="ar-text-xs ar-text-muted ar-m-0">
+                    Single-layer shadows look flat and artificial.
+                  </p>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">🎨 Consistent Character</h4>
+                <p class="ar-text-sm ar-text-muted">
+                  The <strong>ratio</strong> between ambient and direct layers
+                  is consistent across all levels. Only the <strong>size</strong>
+                  changes, not the quality.
+                </p>
+                <div class="ar-mt-2 ar-p-3 ar-bg-sunken ar-rounded">
+                  <p class="ar-text-xs ar-text-muted ar-m-0">
+                    This creates a unified shadow language across your UI.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Common Patterns -->
+          <section id="patterns">
+            <h2>Common Patterns</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Card with Shadow</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-card ar-shadow-2"&gt;
+  &lt;div class="ar-card__body"&gt;
+    &lt;h3&gt;Elevated Card&lt;/h3&gt;
+    &lt;p&gt;Content with shadow-2.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-card ar-shadow-2 ar-p-3">
+                  <h4 class="ar-h6 ar-mb-1">Elevated Card</h4>
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Content with shadow-2.</p>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Dropdown Menu</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-shadow-3 ar-bg-base ar-p-4 ar-rounded ar-border"&gt;
+  &lt;ul class="ar-list ar-m-0"&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Profile&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Settings&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Logout&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-shadow-3 ar-bg-base ar-p-3 ar-rounded ar-border ar-border-divider" style="max-width: 200px;">
+                  <ul class="ar-list ar-m-0">
+                    <li><a href="#" class="ar-text-link">Profile</a></li>
+                    <li><a href="#" class="ar-text-link">Settings</a></li>
+                    <li><a href="#" class="ar-text-link">Logout</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Modal Dialog</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-shadow-4 ar-bg-base ar-p-6 ar-rounded-lg" style="max-width: 400px;"&gt;
+  &lt;h3&gt;Confirm Action&lt;/h3&gt;
+  &lt;p&gt;Are you sure you want to delete this item?&lt;/p&gt;
+  &lt;div class="ar-flex ar-gap-2 ar-mt-4"&gt;
+    &lt;button class="ar-btn ar-btn--danger"&gt;Delete&lt;/button&gt;
+    &lt;button class="ar-btn ar-btn--ghost"&gt;Cancel&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-shadow-4 ar-bg-base ar-p-4 ar-rounded-lg" style="max-width: 350px; border: 1px solid var(--ar-color-divider);">
+                  <h4 class="ar-h6 ar-mb-1">Confirm Action</h4>
+                  <p class="ar-text-sm ar-text-muted ar-mb-2">Are you sure you want to delete this item?</p>
+                  <div class="ar-flex ar-gap-2">
+                    <button class="ar-btn ar-btn--danger ar-btn--sm">Delete</button>
+                    <button class="ar-btn ar-btn--ghost ar-btn--sm">Cancel</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Interactive Card (Hover Lift)</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-card ar-card--interactive"&gt;
+  &lt;div class="ar-card__body"&gt;
+    &lt;h3&gt;Clickable Card&lt;/h3&gt;
+    &lt;p&gt;Hover to see the lift effect.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-card ar-card--interactive ar-p-3" style="cursor: pointer; max-width: 250px;">
+                  <div class="ar-card__body">
+                    <h4 class="ar-h6 ar-mb-1">Clickable Card</h4>
+                    <p class="ar-text-sm ar-text-muted ar-m-0">Hover to see the lift effect.</p>
+                  </div>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">Hover me — shadow transitions from 1 to 2</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Common Mistakes -->
+          <section id="mistakes">
+            <h2>Common Mistakes to Avoid</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Using shadows on too many elements</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-shadow-2"&gt;Everything has a shadow&lt;/div&gt;
+&lt;div class="ar-shadow-2"&gt;Even this&lt;/div&gt;
+&lt;div class="ar-shadow-2"&gt;And this&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Shadows should communicate <strong>elevation</strong>.
+                  When everything has a shadow, nothing feels elevated.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Use shadows intentionally</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-card ar-shadow-1"&gt;Resting card&lt;/div&gt;
+&lt;div class="ar-shadow-3"&gt;Dropdown menu only&lt;/div&gt;
+&lt;div class="ar-shadow-4"&gt;Modal overlay only&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Use shadows to create a clear elevation hierarchy.
+                  Resting elements get shadow-1. Floating elements get shadow-3.
+                  Overlays get shadow-4.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Using inset incorrectly</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-shadow-inset"&gt;Sunken content&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> <code>ar-shadow-inset</code> is for <strong>pressed states</strong>,
+                  not for general content. It should be used sparingly.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Use inset for interactive states</h4>
+                <div class="doc-code-block">
+                  <code>&lt;button class="ar-btn ar-btn--primary ar-shadow-inset"&gt;Active&lt;/button&gt;
+&lt;input class="ar-input ar-shadow-inset" type="text"&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Inset shadows communicate "pressed" or "focused"
+                  states for interactive elements.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Reference -->
+          <section id="quick-reference">
+            <h2>Quick Reference</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Shadow Levels</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-shadow-0</code> — Flat, no shadow</li>
+                  <li><code>ar-shadow-1</code> — Resting (cards, panels)</li>
+                  <li><code>ar-shadow-2</code> — Hover lift (interactive)</li>
+                  <li><code>ar-shadow-3</code> — Floating (dropdowns, menus)</li>
+                  <li><code>ar-shadow-4</code> — Modal (dialogs, drawers)</li>
+                  <li><code>ar-shadow-inset</code> — Pressed (active, sunken)</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Semantic Use</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><strong>shadow-1:</strong> Default card/panel elevation</li>
+                  <li><strong>shadow-2:</strong> Interactive hover states</li>
+                  <li><strong>shadow-3:</strong> Elements floating above content</li>
+                  <li><strong>shadow-4:</strong> Highest elevation (modals)</li>
+                  <li><strong>shadow-0:</strong> Explicit removal</li>
+                  <li><strong>shadow-inset:</strong> Pressed/focused states</li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Responsive</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><strong>No responsive variants</strong></li>
+                  <li>Shadows do not change at breakpoints</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pro Tip:</strong> Shadows are <strong>GPU-composited</strong> in modern browsers.
+                Use them for elevation but avoid applying them to hundreds of elements simultaneously
+                (e.g., inside virtual-scroll lists).
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="ratio.html" class="ar-text-link">Ratio Utilities</a>
+              or return to the <a href="../grid.html" class="ar-text-link">Grid System</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

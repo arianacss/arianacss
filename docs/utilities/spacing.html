@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spacing Utilities — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-spacing-demo {
+      background: var(--ar-color-layer-sunken);
+      border-radius: var(--ar-radius-sm);
+      border: 2px dashed var(--ar-color-border-default);
+      padding: var(--ar-space-4);
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-muted);
+      transition: all var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-spacing-demo--highlight {
+      background: var(--ar-color-primary-surface);
+      border-color: var(--ar-color-primary-base);
+      color: var(--ar-color-primary-emphasis);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-spacing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-spacing-table th,
+    .doc-spacing-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-spacing-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-spacing-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-spacing-table .ar-font-mono {
+      font-size: var(--ar-text-size-xs);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="../components/button.html" class="doc-nav-link">Components</a>
+          <a href="spacing.html" class="doc-nav-link doc-nav-link--active">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Utilities</span></li>
+              <li><a href="spacing.html" class="doc-sidebar-active">Spacing</a></li>
+              <li><a href="display.html">Display</a></li>
+              <li><a href="flex.html">Flexbox</a></li>
+              <li><a href="grid.html">Grid</a></li>
+              <li><a href="typography.html">Typography</a></li>
+              <li><a href="color.html">Color</a></li>
+              <li><a href="border.html">Border</a></li>
+              <li><a href="shadow.html">Shadow</a></li>
+              <li><a href="ratio.html">Ratio</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Spacing Utilities</h1>
+          <p class="ar-lead">
+            Margin, padding, and gap utilities based on the 8-point spacing scale.
+            Build consistent layouts with predictable spacing.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">8-Point Spacing Scale</div>
+            <div class="ar-alert__message">
+              ArianaCSS uses a <strong>4px base unit</strong> with an <strong>8px primary rhythm</strong>.
+              The spacing scale has <strong>17 steps</strong> from 0 to 96px, plus <code>hairline</code> (1px)
+              and <code>micro</code> (2px) for fine adjustments.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              Spacing utilities are the most frequently used utilities in any UI. ArianaCSS provides
+              a comprehensive system for margin, padding, and gap with logical CSS properties for RTL support.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📏</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  17 spacing steps from 0 to 96px
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🔄</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  RTL-ready with CSS logical properties
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📱</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Responsive variants at all 4 breakpoints
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Spacing Scale Reference -->
+          <section id="scale-reference">
+            <h2>Spacing Scale Reference</h2>
+            <p>
+              The spacing scale maps token names to pixel values. All spacing utilities use these values.
+            </p>
+
+            <table class="doc-spacing-table">
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Value</th>
+                  <th>Step</th>
+                  <th>Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>--ar-space-0</code></td>
+                  <td>0</td>
+                  <td>—</td>
+                  <td>Explicit zero — remove spacing</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-hairline</code></td>
+                  <td>1px</td>
+                  <td>—</td>
+                  <td>Border offsets, thin separators</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-micro</code></td>
+                  <td>2px</td>
+                  <td>0.5</td>
+                  <td>Ultra-fine gaps: icon labels, checkbox gaps</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-1</code></td>
+                  <td>4px</td>
+                  <td>1</td>
+                  <td>Tight internal component gaps</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-1h</code></td>
+                  <td>6px</td>
+                  <td>1.5</td>
+                  <td>Badge padding, chip spacing</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-2</code></td>
+                  <td>8px</td>
+                  <td>2</td>
+                  <td>Button padding-y, input padding-y</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-3</code></td>
+                  <td>12px</td>
+                  <td>3</td>
+                  <td>Form label gap, card header padding</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-4</code></td>
+                  <td>16px</td>
+                  <td>4</td>
+                  <td>Standard component padding</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-5</code></td>
+                  <td>20px</td>
+                  <td>5</td>
+                  <td>Section-internal spacing</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-6</code></td>
+                  <td>24px</td>
+                  <td>6</td>
+                  <td>Component separation in sections</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-7</code></td>
+                  <td>28px</td>
+                  <td>7</td>
+                  <td>Card section gaps, form field groups</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-8</code></td>
+                  <td>32px</td>
+                  <td>8</td>
+                  <td>Major spacing, section headers</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-10</code></td>
+                  <td>40px</td>
+                  <td>10</td>
+                  <td>Between components at page level</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-12</code></td>
+                  <td>48px</td>
+                  <td>12</td>
+                  <td>Section vertical padding</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-16</code></td>
+                  <td>64px</td>
+                  <td>16</td>
+                  <td>Major section separation</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-20</code></td>
+                  <td>80px</td>
+                  <td>20</td>
+                  <td>Page-level vertical padding</td>
+                </tr>
+                <tr>
+                  <td><code>--ar-space-24</code></td>
+                  <td>96px</td>
+                  <td>24</td>
+                  <td>Maximum standard spacing</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pro Tip:</strong> The <code>h</code> suffix in <code>space-1h</code> means "half-step"
+                (1.5 × 4px = 6px). This allows fine-grained spacing between the 4px and 8px steps.
+              </div>
+            </div>
+          </section>
+
+          <!-- Margin Utilities -->
+          <section id="margin">
+            <h2>Margin Utilities</h2>
+            <p>
+              Margin utilities use the format <code>ar-m{direction?}-{step}</code>.
+              All margin utilities support <code>auto</code> for centering.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Margin on all sides --&gt;
+&lt;div class="ar-m-4"&gt;16px margin on all sides&lt;/div&gt;
+
+&lt;!-- Margin top --&gt;
+&lt;div class="ar-mt-4"&gt;16px margin-top&lt;/div&gt;
+
+&lt;!-- Margin bottom --&gt;
+&lt;div class="ar-mb-8"&gt;32px margin-bottom&lt;/div&gt;
+
+&lt;!-- Margin block axis (top + bottom) --&gt;
+&lt;div class="ar-my-6"&gt;24px margin top and bottom&lt;/div&gt;
+
+&lt;!-- Margin inline axis (left + right) --&gt;
+&lt;div class="ar-mx-auto"&gt;Auto margin — horizontally centered&lt;/div&gt;</code>
+            </div>
+
+            <h3>Margin Examples</h3>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Margin All Sides</h4>
+              <div class="ar-m-4 doc-spacing-demo doc-spacing-demo--highlight">
+                <code>ar-m-4</code> — 16px margin on all sides
+              </div>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Margin Top</h4>
+              <div class="ar-bg-sunken ar-p-2 ar-rounded">
+                <div class="ar-mt-4 doc-spacing-demo doc-spacing-demo--highlight" style="margin-top: var(--ar-space-4);">
+                  <code>ar-mt-4</code> — 16px margin-top
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Horizontal Centering</h4>
+              <div style="max-width: 300px; background: var(--ar-color-layer-sunken); padding: var(--ar-space-2); border-radius: var(--ar-radius-sm);">
+                <div class="ar-mx-auto doc-spacing-demo doc-spacing-demo--highlight" style="max-width: 150px; margin-inline: auto;">
+                  <code>ar-mx-auto</code> — centered
+                </div>
+              </div>
+            </div>
+
+            <h3>Direction Reference</h3>
+            <table class="doc-spacing-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>CSS Property</th>
+                  <th>Direction</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ar-m-{step}</code></td>
+                  <td><code>margin</code></td>
+                  <td>All sides</td>
+                </tr>
+                <tr>
+                  <td><code>ar-mt-{step}</code></td>
+                  <td><code>margin-block-start</code></td>
+                  <td>Top (block-start)</td>
+                </tr>
+                <tr>
+                  <td><code>ar-mb-{step}</code></td>
+                  <td><code>margin-block-end</code></td>
+                  <td>Bottom (block-end)</td>
+                </tr>
+                <tr>
+                  <td><code>ar-ms-{step}</code></td>
+                  <td><code>margin-inline-start</code></td>
+                  <td>Left (inline-start) in LTR</td>
+                </tr>
+                <tr>
+                  <td><code>ar-me-{step}</code></td>
+                  <td><code>margin-inline-end</code></td>
+                  <td>Right (inline-end) in LTR</td>
+                </tr>
+                <tr>
+                  <td><code>ar-my-{step}</code></td>
+                  <td><code>margin-block</code></td>
+                  <td>Top + bottom</td>
+                </tr>
+                <tr>
+                  <td><code>ar-mx-{step}</code></td>
+                  <td><code>margin-inline</code></td>
+                  <td>Left + right</td>
+                </tr>
+                <tr>
+                  <td><code>ar-m-auto</code></td>
+                  <td><code>margin: auto</code></td>
+                  <td>All sides auto</td>
+                </tr>
+                <tr>
+                  <td><code>ar-mx-auto</code></td>
+                  <td><code>margin-inline: auto</code></td>
+                  <td>Horizontal centering</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="ar-alert ar-alert--warning ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>⚠️ Note:</strong> <code>ms</code> and <code>me</code> are logical properties.
+                In RTL languages (Dari, Pashto, Arabic), <code>ms</code> (inline-start) becomes the
+                right side and <code>me</code> (inline-end) becomes the left side. This is the correct
+                behavior for RTL layouts.
+              </div>
+            </div>
+          </section>
+
+          <!-- Padding Utilities -->
+          <section id="padding">
+            <h2>Padding Utilities</h2>
+            <p>
+              Padding utilities use the same pattern as margin utilities but with <code>p</code> instead of <code>m</code>.
+              Padding does not support <code>auto</code>.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Padding on all sides --&gt;
+&lt;div class="ar-p-4"&gt;16px padding on all sides&lt;/div&gt;
+
+&lt;!-- Padding top --&gt;
+&lt;div class="ar-pt-4"&gt;16px padding-top&lt;/div&gt;
+
+&lt;!-- Padding block axis (top + bottom) --&gt;
+&lt;div class="ar-py-6"&gt;24px padding top and bottom&lt;/div&gt;
+
+&lt;!-- Padding inline axis (left + right) --&gt;
+&lt;div class="ar-px-8"&gt;32px padding left and right&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Padding All Sides</h4>
+              <div class="ar-p-4 doc-spacing-demo doc-spacing-demo--highlight" style="padding: var(--ar-space-4);">
+                <code>ar-p-4</code> — 16px padding on all sides
+              </div>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Padding Axis</h4>
+              <div class="ar-py-6 doc-spacing-demo doc-spacing-demo--highlight" style="padding-block: var(--ar-space-6);">
+                <code>ar-py-6</code> — 24px padding top and bottom
+              </div>
+            </div>
+
+            <table class="doc-spacing-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>CSS Property</th>
+                  <th>Direction</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ar-p-{step}</code></td>
+                  <td><code>padding</code></td>
+                  <td>All sides</td>
+                </tr>
+                <tr>
+                  <td><code>ar-pt-{step}</code></td>
+                  <td><code>padding-block-start</code></td>
+                  <td>Top (block-start)</td>
+                </tr>
+                <tr>
+                  <td><code>ar-pb-{step}</code></td>
+                  <td><code>padding-block-end</code></td>
+                  <td>Bottom (block-end)</td>
+                </tr>
+                <tr>
+                  <td><code>ar-ps-{step}</code></td>
+                  <td><code>padding-inline-start</code></td>
+                  <td>Left (inline-start) in LTR</td>
+                </tr>
+                <tr>
+                  <td><code>ar-pe-{step}</code></td>
+                  <td><code>padding-inline-end</code></td>
+                  <td>Right (inline-end) in LTR</td>
+                </tr>
+                <tr>
+                  <td><code>ar-py-{step}</code></td>
+                  <td><code>padding-block</code></td>
+                  <td>Top + bottom</td>
+                </tr>
+                <tr>
+                  <td><code>ar-px-{step}</code></td>
+                  <td><code>padding-inline</code></td>
+                  <td>Left + right</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Gap Utilities -->
+          <section id="gap">
+            <h2>Gap Utilities</h2>
+            <p>
+              Gap utilities control spacing between items in flex and grid containers.
+              Use <code>ar-gap-{step}</code>, <code>ar-gap-x-{step}</code>, or <code>ar-gap-y-{step}</code>.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Equal gap on all axes --&gt;
+&lt;div class="ar-flex ar-gap-4"&gt;
+  &lt;span&gt;Item 1&lt;/span&gt;
+  &lt;span&gt;Item 2&lt;/span&gt;
+  &lt;span&gt;Item 3&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- Different row and column gaps --&gt;
+&lt;div class="ar-grid ar-gap-x-6 ar-gap-y-4"&gt;
+  &lt;div&gt;Item 1&lt;/div&gt;
+  &lt;div&gt;Item 2&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Flex with Gap</h4>
+              <div class="ar-flex ar-gap-4 ar-flex-wrap ar-bg-sunken ar-p-4 ar-rounded">
+                <span class="ar-badge ar-badge--primary ar-badge--pill">Item 1</span>
+                <span class="ar-badge ar-badge--success ar-badge--pill">Item 2</span>
+                <span class="ar-badge ar-badge--warning ar-badge--pill">Item 3</span>
+                <span class="ar-badge ar-badge--danger ar-badge--pill">Item 4</span>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2"><code>ar-flex ar-gap-4</code> — 16px gap between items</p>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Grid with Gap</h4>
+              <div class="ar-grid ar-grid-cols-2 ar-gap-6 ar-bg-sunken ar-p-4 ar-rounded">
+                <div class="doc-grid-demo" style="background:var(--ar-color-primary-surface);color:var(--ar-color-primary-emphasis);">1</div>
+                <div class="doc-grid-demo" style="background:var(--ar-color-success-surface);color:var(--ar-color-success-text);">2</div>
+                <div class="doc-grid-demo" style="background:var(--ar-color-warning-surface);color:var(--ar-color-warning-text);">3</div>
+                <div class="doc-grid-demo" style="background:var(--ar-color-danger-surface);color:var(--ar-color-danger-text);">4</div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2"><code>ar-grid ar-grid-cols-2 ar-gap-6</code> — 24px gap between items</p>
+            </div>
+
+            <table class="doc-spacing-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>CSS Property</th>
+                  <th>Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ar-gap-{step}</code></td>
+                  <td><code>gap</code></td>
+                  <td>Equal row and column gap</td>
+                </tr>
+                <tr>
+                  <td><code>ar-gap-x-{step}</code></td>
+                  <td><code>column-gap</code></td>
+                  <td>Horizontal gap only</td>
+                </tr>
+                <tr>
+                  <td><code>ar-gap-y-{step}</code></td>
+                  <td><code>row-gap</code></td>
+                  <td>Vertical gap only</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Responsive Spacing -->
+          <section id="responsive">
+            <h2>Responsive Spacing</h2>
+            <p>
+              All margin, padding, and gap utilities have responsive variants at all four breakpoints.
+              Use breakpoint prefixes to change spacing at different screen sizes.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Mobile: 16px margin · Tablet: 24px · Desktop: 32px --&gt;
+&lt;div class="ar-m-4 ar-md:m-6 ar-lg:m-8"&gt;
+  Responsive margin
+&lt;/div&gt;
+
+&lt;!-- Mobile: 16px padding · Desktop: 32px padding --&gt;
+&lt;section class="ar-p-4 ar-lg:p-8"&gt;
+  Responsive padding
+&lt;/section&gt;
+
+&lt;!-- Mobile: 8px gap · Tablet: 16px gap · Desktop: 24px gap --&gt;
+&lt;div class="ar-flex ar-gap-2 ar-md:gap-4 ar-lg:gap-6"&gt;
+  Responsive gap
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4">
+                <div class="ar-card ar-p-4 ar-shadow-1">
+                  <h4 class="ar-h6 ar-mb-2">Mobile</h4>
+                  <div class="ar-m-2 doc-spacing-demo doc-spacing-demo--highlight" style="margin: var(--ar-space-2);">
+                    <code>ar-m-2</code> — 8px
+                  </div>
+                </div>
+                <div class="ar-card ar-p-4 ar-shadow-1">
+                  <h4 class="ar-h6 ar-mb-2">Tablet</h4>
+                  <div class="ar-m-2 ar-md:m-4 doc-spacing-demo doc-spacing-demo--highlight" style="margin: var(--ar-space-2);">
+                    <code>ar-md:m-4</code> — 16px
+                  </div>
+                </div>
+                <div class="ar-card ar-p-4 ar-shadow-1">
+                  <h4 class="ar-h6 ar-mb-2">Desktop</h4>
+                  <div class="ar-m-2 ar-md:m-4 ar-lg:m-6 doc-spacing-demo doc-spacing-demo--highlight" style="margin: var(--ar-space-2);">
+                    <code>ar-lg:m-6</code> — 24px
+                  </div>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Resize your browser to see the margin change at each breakpoint
+              </p>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pro Tip:</strong> Responsive spacing is most commonly used for
+                section padding (more padding on larger screens) and card grids (tighter
+                spacing on mobile, looser on desktop).
+              </div>
+            </div>
+          </section>
+
+          <!-- Common Patterns -->
+          <section id="patterns">
+            <h2>Common Patterns</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Centered Container</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-mx-auto" style="max-width: 300px;"&gt;
+  Centered content
+&lt;/div&gt;</code>
+                </div>
+                <div style="max-width: 300px; margin-inline: auto; background: var(--ar-color-primary-surface); padding: var(--ar-space-3); border-radius: var(--ar-radius-sm); text-align: center; color: var(--ar-color-primary-emphasis);">
+                  Centered content
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Section with Vertical Spacing</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;section class="ar-py-12"&gt;
+  &lt;h2&gt;Section Title&lt;/h2&gt;
+  &lt;p&gt;Section content...&lt;/p&gt;
+&lt;/section&gt;</code>
+                </div>
+                <div class="ar-py-4 ar-bg-sunken ar-rounded ar-text-center">
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Section with <code>ar-py-4</code></p>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Card with Internal Padding</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-card ar-p-6"&gt;
+  &lt;h3&gt;Card Title&lt;/h3&gt;
+  &lt;p&gt;Card content...&lt;/p&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-card ar-p-4 ar-shadow-1">
+                  <h4 class="ar-h6 ar-mb-1">Card Title</h4>
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Card content with <code>ar-p-4</code></p>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Stacked Elements with Gap</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-flex ar-flex-col ar-gap-4"&gt;
+  &lt;button&gt;Action 1&lt;/button&gt;
+  &lt;button&gt;Action 2&lt;/button&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-flex ar-flex-col ar-gap-2">
+                  <button class="ar-btn ar-btn--primary">Action 1</button>
+                  <button class="ar-btn ar-btn--secondary">Action 2</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Common Mistakes -->
+          <section id="mistakes">
+            <h2>Common Mistakes to Avoid</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Using margin for spacing in flex/grid</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-flex"&gt;
+  &lt;div class="ar-mr-4"&gt;Item 1&lt;/div&gt;
+  &lt;div class="ar-mr-4"&gt;Item 2&lt;/div&gt;
+  &lt;div&gt;Item 3&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Margin creates spacing on one side only and requires
+                  special handling for the last item.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Use gap for flex/grid spacing</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-flex ar-gap-4"&gt;
+  &lt;div&gt;Item 1&lt;/div&gt;
+  &lt;div&gt;Item 2&lt;/div&gt;
+  &lt;div&gt;Item 3&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Gap applies consistent spacing between all items
+                  without edge-case handling.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Overusing margin on components</h4>
+                <div class="doc-code-block">
+                  <code>&lt;button class="ar-btn ar-btn--primary ar-mt-4 ar-mb-4"&gt;
+  Button
+&lt;/button&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Component spacing should be handled by the container
+                  or layout, not by adding margin to every component.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Use layout for component spacing</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-flex ar-gap-4"&gt;
+  &lt;button class="ar-btn ar-btn--primary"&gt;Button&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--secondary"&gt;Cancel&lt;/button&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Layout utilities handle spacing between components,
+                  leaving components themselves clean and reusable.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Reference -->
+          <section id="quick-reference">
+            <h2>Quick Reference</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Margin Classes</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-m-{step}</code> — All sides</li>
+                  <li><code>ar-mt-{step}</code> — Top</li>
+                  <li><code>ar-mb-{step}</code> — Bottom</li>
+                  <li><code>ar-ms-{step}</code> — Left (inline-start)</li>
+                  <li><code>ar-me-{step}</code> — Right (inline-end)</li>
+                  <li><code>ar-my-{step}</code> — Top + bottom</li>
+                  <li><code>ar-mx-{step}</code> — Left + right</li>
+                  <li><code>ar-m-auto</code> — All sides auto</li>
+                  <li><code>ar-mx-auto</code> — Horizontal centering</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Padding Classes</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-p-{step}</code> — All sides</li>
+                  <li><code>ar-pt-{step}</code> — Top</li>
+                  <li><code>ar-pb-{step}</code> — Bottom</li>
+                  <li><code>ar-ps-{step}</code> — Left (inline-start)</li>
+                  <li><code>ar-pe-{step}</code> — Right (inline-end)</li>
+                  <li><code>ar-py-{step}</code> — Top + bottom</li>
+                  <li><code>ar-px-{step}</code> — Left + right</li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Gap Classes</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-gap-{step}</code> — Row + column</li>
+                  <li><code>ar-gap-x-{step}</code> — Column gap</li>
+                  <li><code>ar-gap-y-{step}</code> — Row gap</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📚 Available Steps:</strong>
+                <code>0, micro, 1, 1h, 2, 3, 4, 5, 6, 7, 8, 10, 12, 16, 20, 24</code>
+                <br>
+                <strong>Responsive Prefixes:</strong>
+                <code>sm:</code> 480px, <code>md:</code> 768px, <code>lg:</code> 1024px, <code>xl:</code> 1280px
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="display.html" class="ar-text-link">Display Utilities</a>
+              or learn about <a href="flex.html" class="ar-text-link">Flexbox Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

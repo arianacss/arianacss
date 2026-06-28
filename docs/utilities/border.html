@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Border Utilities — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-border-demo {
+      padding: var(--ar-space-3);
+      border-radius: var(--ar-radius-sm);
+      text-align: center;
+      font-weight: var(--ar-text-weight-medium);
+      min-height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ar-color-layer-base);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-border-demo--dark {
+      background: var(--ar-color-layer-sunken);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-border-demo--primary {
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-emphasis);
+    }
+
+    .doc-border-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--ar-space-2);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-radius-demo {
+      width: 4rem;
+      height: 4rem;
+      background: var(--ar-color-primary-surface);
+      border: 2px solid var(--ar-color-primary-base);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-medium);
+      color: var(--ar-color-primary-emphasis);
+      margin: var(--ar-space-1);
+    }
+
+    .doc-radius-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--ar-space-2);
+      align-items: center;
+      padding: var(--ar-space-3);
+      background: var(--ar-color-layer-raised);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-radius-grid .doc-radius-demo {
+      margin: 0;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      margin-bottom: var(--ar-space-1);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+
+      .doc-border-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="../components/button.html" class="doc-nav-link">Components</a>
+          <a href="spacing.html" class="doc-nav-link doc-nav-link--active">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Utilities</span></li>
+              <li><a href="spacing.html">Spacing</a></li>
+              <li><a href="display.html">Display</a></li>
+              <li><a href="flex.html">Flexbox</a></li>
+              <li><a href="grid.html">Grid</a></li>
+              <li><a href="typography.html">Typography</a></li>
+              <li><a href="color.html">Color</a></li>
+              <li><a href="border.html" class="doc-sidebar-active">Border</a></li>
+              <li><a href="shadow.html">Shadow</a></li>
+              <li><a href="ratio.html">Ratio</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Border Utilities</h1>
+          <p class="ar-lead">
+            Add, remove, and customize borders with a complete set of utilities.
+            Control border width, color, style, and radius — all from the token system.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Semantic Border Colors</div>
+            <div class="ar-alert__message">
+              Border utilities use <strong>semantic color names</strong> only.
+              No primitive palette classes (<code>ar-border-lapis-600</code>).
+              This ensures consistent theming and accessible color contrast.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              Border utilities give you complete control over element borders.
+              Use them to add visual structure, separate content, and create
+              interactive states.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📐</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Border presence, width, and sides
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🎨</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Semantic border colors and styles
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">⭕</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Border radius with responsive variants
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Border Presence -->
+          <section id="border-presence">
+            <h2>Border Presence</h2>
+            <p>
+              Use <code>ar-border</code> to add a 1px solid border with the default color.
+              Use <code>ar-border-0</code> to remove borders entirely.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-border"&gt;Default border (1px solid)&lt;/div&gt;
+&lt;div class="ar-border-0"&gt;No border&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-border-grid">
+              <div class="doc-border-demo ar-border">ar-border</div>
+              <div class="doc-border-demo ar-border-0" style="border: 1px solid var(--ar-color-border-default);">ar-border-0</div>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pro Tip:</strong> <code>ar-border</code> is a <strong>three-property composite</strong>.
+                It sets <code>border-width: 1px</code>, <code>border-style: solid</code>, and
+                <code>border-color: var(--ar-color-border-default)</code> simultaneously.
+              </div>
+            </div>
+          </section>
+
+          <!-- Border Width -->
+          <section id="border-width">
+            <h2>Border Width</h2>
+            <p>
+              Use <code>ar-border-2</code> to create a 2px border. Combine with <code>ar-border</code>
+              for emphasized borders.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-border ar-border-2"&gt;2px border&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-border-grid">
+              <div class="doc-border-demo ar-border">ar-border (1px)</div>
+              <div class="doc-border-demo ar-border ar-border-2">ar-border-2 (2px)</div>
+            </div>
+          </section>
+
+          <!-- Border Sides -->
+          <section id="border-sides">
+            <h2>Border Sides</h2>
+            <p>
+              Use side-specific utilities to add borders to individual sides.
+              Available: <code>ar-border-top</code>, <code>ar-border-bottom</code>,
+              <code>ar-border-x</code> (left + right), <code>ar-border-y</code> (top + bottom).
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-border-top"&gt;Top border only&lt;/div&gt;
+&lt;div class="ar-border-bottom"&gt;Bottom border only&lt;/div&gt;
+&lt;div class="ar-border-x"&gt;Left + right borders&lt;/div&gt;
+&lt;div class="ar-border-y"&gt;Top + bottom borders&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-border-grid">
+              <div class="doc-border-demo ar-border-top">ar-border-top</div>
+              <div class="doc-border-demo ar-border-bottom">ar-border-bottom</div>
+              <div class="doc-border-demo ar-border-x">ar-border-x</div>
+              <div class="doc-border-demo ar-border-y">ar-border-y</div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>🌍 RTL Note:</strong> <code>ar-border-x</code> and <code>ar-border-y</code>
+                use CSS logical properties. <code>ar-border-x</code> sets <code>border-inline</code>,
+                which correctly flips left/right in RTL layouts.
+              </div>
+            </div>
+          </section>
+
+          <!-- Border Colors -->
+          <section id="border-colors">
+            <h2>Border Colors</h2>
+            <p>
+              Use semantic border color utilities to change border color.
+              Available: default, strong, focus, divider, primary, success, warning, danger, info.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-border ar-border-primary"&gt;Primary border&lt;/div&gt;
+&lt;div class="ar-border ar-border-success"&gt;Success border&lt;/div&gt;
+&lt;div class="ar-border ar-border-danger"&gt;Danger border&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-border-grid">
+              <div class="doc-border-demo ar-border ar-border-default">ar-border-default</div>
+              <div class="doc-border-demo ar-border ar-border-strong">ar-border-strong</div>
+              <div class="doc-border-demo ar-border ar-border-focus" style="border-color: var(--ar-color-border-focus);">ar-border-focus</div>
+              <div class="doc-border-demo ar-border ar-border-divider" style="border-color: var(--ar-color-divider);">ar-border-divider</div>
+              <div class="doc-border-demo ar-border ar-border-primary">ar-border-primary</div>
+              <div class="doc-border-demo ar-border ar-border-success">ar-border-success</div>
+              <div class="doc-border-demo ar-border ar-border-warning">ar-border-warning</div>
+              <div class="doc-border-demo ar-border ar-border-danger">ar-border-danger</div>
+              <div class="doc-border-demo ar-border ar-border-info">ar-border-info</div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Combining Border Colors with Sides</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;div class="ar-border-top ar-border-primary"&gt;Primary top border&lt;/div&gt;
+&lt;div class="ar-border-x ar-border-danger"&gt;Danger side borders&lt;/div&gt;</code>
+              </div>
+              <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-3">
+                <div class="doc-border-demo ar-border-top ar-border-primary">ar-border-top + ar-border-primary</div>
+                <div class="doc-border-demo ar-border-x ar-border-danger">ar-border-x + ar-border-danger</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Border Styles -->
+          <section id="border-styles">
+            <h2>Border Styles</h2>
+            <p>
+              Use border style utilities to change the border style.
+              Available: solid, dashed, dotted, none.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-border ar-border-solid"&gt;Solid border&lt;/div&gt;
+&lt;div class="ar-border ar-border-dashed"&gt;Dashed border&lt;/div&gt;
+&lt;div class="ar-border ar-border-dotted"&gt;Dotted border&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-border-grid">
+              <div class="doc-border-demo ar-border ar-border-solid">ar-border-solid</div>
+              <div class="doc-border-demo ar-border ar-border-dashed">ar-border-dashed</div>
+              <div class="doc-border-demo ar-border ar-border-dotted">ar-border-dotted</div>
+              <div class="doc-border-demo ar-border ar-border-none" style="border-style: none; border: 1px dashed var(--ar-color-border-default);">ar-border-none</div>
+            </div>
+          </section>
+
+          <!-- Border Radius -->
+          <section id="border-radius">
+            <h2>Border Radius</h2>
+            <p>
+              Use border radius utilities to round corners.
+              Available: none, sm, <strong>rounded</strong> (base, 6px), lg, xl, full.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-rounded-none"&gt;No rounding&lt;/div&gt;
+&lt;div class="ar-rounded-sm"&gt;Small rounding (4px)&lt;/div&gt;
+&lt;div class="ar-rounded"&gt;Base rounding (6px)&lt;/div&gt;
+&lt;div class="ar-rounded-lg"&gt;Large rounding (12px)&lt;/div&gt;
+&lt;div class="ar-rounded-xl"&gt;Extra large rounding (20px)&lt;/div&gt;
+&lt;div class="ar-rounded-full"&gt;Full rounding (pill)&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-radius-grid">
+              <div class="doc-radius-demo ar-rounded-none">none</div>
+              <div class="doc-radius-demo ar-rounded-sm">sm</div>
+              <div class="doc-radius-demo ar-rounded">base</div>
+              <div class="doc-radius-demo ar-rounded-lg">lg</div>
+              <div class="doc-radius-demo ar-rounded-xl">xl</div>
+              <div class="doc-radius-demo ar-rounded-full">full</div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Radius on Images</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;img src="image.jpg" class="ar-rounded-full" alt="Avatar"&gt;
+&lt;img src="image.jpg" class="ar-rounded-lg" alt="Thumbnail"&gt;</code>
+              </div>
+              <div class="ar-flex ar-gap-4 ar-flex-wrap">
+                <div class="ar-avatar ar-avatar--lg ar-avatar--initials ar-avatar--primary ar-rounded-full" style="display:flex;">JD</div>
+                <div class="ar-avatar ar-avatar--lg ar-avatar--initials ar-avatar--primary ar-rounded-lg" style="display:flex; border-radius: var(--ar-radius-lg);">JD</div>
+                <div class="ar-avatar ar-avatar--lg ar-avatar--initials ar-avatar--primary ar-rounded-sm" style="display:flex; border-radius: var(--ar-radius-sm);">JD</div>
+                <div class="ar-avatar ar-avatar--lg ar-avatar--initials ar-avatar--primary ar-rounded-none" style="display:flex; border-radius: 0;">JD</div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">ar-rounded-full · ar-rounded-lg · ar-rounded-sm · ar-rounded-none</p>
+            </div>
+
+            <h3>Partial Border Radius</h3>
+            <p>
+              Use side-specific radius utilities to round individual corners.
+              Available: <code>ar-rounded-t</code> (top), <code>ar-rounded-b</code> (bottom),
+              <code>ar-rounded-s</code> (start/left), <code>ar-rounded-e</code> (end/right),
+              and individual corners: <code>ar-rounded-ss</code>, <code>ar-rounded-se</code>,
+              <code>ar-rounded-es</code>, <code>ar-rounded-ee</code>.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-rounded-t"&gt;Top corners rounded&lt;/div&gt;
+&lt;div class="ar-rounded-b"&gt;Bottom corners rounded&lt;/div&gt;
+&lt;div class="ar-rounded-s"&gt;Start-side corners rounded&lt;/div&gt;
+&lt;div class="ar-rounded-e"&gt;End-side corners rounded&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-border-grid">
+              <div class="doc-radius-demo ar-rounded-t" style="width: 6rem; height: 4rem;">ar-rounded-t</div>
+              <div class="doc-radius-demo ar-rounded-b" style="width: 6rem; height: 4rem;">ar-rounded-b</div>
+              <div class="doc-radius-demo ar-rounded-s" style="width: 6rem; height: 4rem;">ar-rounded-s</div>
+              <div class="doc-radius-demo ar-rounded-e" style="width: 6rem; height: 4rem;">ar-rounded-e</div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>🌍 RTL Note:</strong> <code>ar-rounded-s</code> and <code>ar-rounded-e</code>
+                use logical properties. In RTL layouts, <code>ar-rounded-s</code> rounds the
+                <strong>right</strong> side and <code>ar-rounded-e</code> rounds the
+                <strong>left</strong> side — the correct behavior for RTL.
+              </div>
+            </div>
+          </section>
+
+          <!-- Responsive Radius -->
+          <section id="responsive-radius">
+            <h2>Responsive Border Radius</h2>
+            <p>
+              Border radius utilities have responsive variants at all breakpoints.
+              Use them to change rounding at different screen sizes.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Sharp on mobile, rounded on desktop --&gt;
+&lt;img class="ar-rounded-none ar-md:rounded-lg ar-lg:rounded-xl" src="image.jpg" alt="Image"&gt;
+
+&lt;!-- Square on mobile, pill on desktop --&gt;
+&lt;button class="ar-rounded-none ar-lg:rounded-full"&gt;Button&lt;/button&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Responsive Radius Example</h4>
+              <div class="ar-flex ar-gap-4 ar-flex-wrap ar-items-center">
+                <div class="ar-avatar ar-avatar--lg ar-avatar--initials ar-avatar--primary ar-rounded-none ar-md:rounded-lg ar-lg:rounded-full" style="display:flex; transition: border-radius var(--ar-duration-base) var(--ar-ease-standard);">
+                  JD
+                </div>
+                <div class="ar-avatar ar-avatar--lg ar-avatar--initials ar-avatar--success ar-rounded-none ar-md:rounded-lg ar-lg:rounded-full" style="display:flex; transition: border-radius var(--ar-duration-base) var(--ar-ease-standard);">
+                  JD
+                </div>
+                <div class="ar-avatar ar-avatar--lg ar-avatar--initials ar-avatar--warning ar-rounded-none ar-md:rounded-lg ar-lg:rounded-full" style="display:flex; transition: border-radius var(--ar-duration-base) var(--ar-ease-standard);">
+                  JD
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                <code>ar-rounded-none ar-md:rounded-lg ar-lg:rounded-full</code>
+              </p>
+              <p class="ar-text-xs ar-text-muted">Resize your browser to see the radius change</p>
+            </div>
+          </section>
+
+          <!-- Common Patterns -->
+          <section id="patterns">
+            <h2>Common Patterns</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Card with Border</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-card ar-card--bordered ar-shadow-0"&gt;
+  &lt;div class="ar-card__body"&gt;
+    &lt;h3&gt;Bordered Card&lt;/h3&gt;
+    &lt;p&gt;Content goes here.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-card ar-card--bordered ar-shadow-0 ar-p-3">
+                  <h4 class="ar-h6 ar-mb-1">Bordered Card</h4>
+                  <p class="ar-text-sm ar-text-muted ar-m-0">Content goes here.</p>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Status Badge with Border</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;span class="ar-badge ar-badge--outline ar-badge--success"&gt;
+  Published
+&lt;/span&gt;</code>
+                </div>
+                <div class="ar-flex ar-gap-2 ar-flex-wrap">
+                  <span class="ar-badge ar-badge--outline ar-badge--success">Published</span>
+                  <span class="ar-badge ar-badge--outline ar-badge--warning">Draft</span>
+                  <span class="ar-badge ar-badge--outline ar-badge--danger">Archived</span>
+                  <span class="ar-badge ar-badge--outline ar-badge--info">Pending</span>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Input with Border States</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;input class="ar-input ar-border ar-border-success" type="text" value="Valid input"&gt;
+&lt;input class="ar-input ar-border ar-border-danger" type="text" value="Error"&gt;</code>
+                </div>
+                <div class="ar-flex ar-flex-col ar-gap-2">
+                  <input class="ar-input ar-border ar-border-success" type="text" value="Valid input" style="border-color: var(--ar-color-success-base);">
+                  <input class="ar-input ar-border ar-border-danger" type="text" value="Error" style="border-color: var(--ar-color-danger-base);">
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Divider with Border</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-border-y ar-border-divider ar-py-4"&gt;
+  &lt;p&gt;Content above&lt;/p&gt;
+  &lt;hr class="ar-border-divider"&gt;
+  &lt;p&gt;Content below&lt;/p&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-border-y ar-border-divider ar-py-2" style="border-color: var(--ar-color-divider);">
+                  <p class="ar-text-sm ar-m-0">Content above</p>
+                  <hr class="ar-mt-2 ar-mb-2" style="border-color: var(--ar-color-divider);">
+                  <p class="ar-text-sm ar-m-0">Content below</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Common Mistakes -->
+          <section id="mistakes">
+            <h2>Common Mistakes to Avoid</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Using ar-border-0 incorrectly</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-border-0"&gt;No border&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> <code>ar-border-0</code> removes <strong>all</strong>
+                  borders. It's <code>border: 0</code>, not <code>border-width: 0</code>.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Use ar-border-0 to reset</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-border ar-border-0"&gt;Reset all borders&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Combine <code>ar-border</code> with <code>ar-border-0</code>
+                  to reset borders from components.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Using border on interactive elements without focus</h4>
+                <div class="doc-code-block">
+                  <code>&lt;button class="ar-border-primary"&gt;Button&lt;/button&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Interactive elements should use the focus ring
+                  system, not border utilities, for focus indication.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Use focus ring for interactive elements</h4>
+                <div class="doc-code-block">
+                  <code>&lt;button class="ar-btn ar-btn--primary"&gt;Button&lt;/button&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Buttons and other interactive elements already
+                  have focus rings built in via the <code>:focus-visible</code> system.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Reference -->
+          <section id="quick-reference">
+            <h2>Quick Reference</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Border Presence</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-border</code> — 1px solid default</li>
+                  <li><code>ar-border-0</code> — no border</li>
+                  <li><code>ar-border-2</code> — 2px width</li>
+                  <li><code>ar-border-top</code> — top only</li>
+                  <li><code>ar-border-bottom</code> — bottom only</li>
+                  <li><code>ar-border-x</code> — left + right</li>
+                  <li><code>ar-border-y</code> — top + bottom</li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Border Colors</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-border-default</code></li>
+                  <li><code>ar-border-strong</code></li>
+                  <li><code>ar-border-focus</code></li>
+                  <li><code>ar-border-divider</code></li>
+                  <li><code>ar-border-primary</code></li>
+                  <li><code>ar-border-success</code></li>
+                  <li><code>ar-border-warning</code></li>
+                  <li><code>ar-border-danger</code></li>
+                  <li><code>ar-border-info</code></li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Border Styles</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-border-solid</code></li>
+                  <li><code>ar-border-dashed</code></li>
+                  <li><code>ar-border-dotted</code></li>
+                  <li><code>ar-border-none</code></li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Border Radius</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-rounded-none</code> — 0</li>
+                  <li><code>ar-rounded-sm</code> — 4px</li>
+                  <li><code>ar-rounded</code> — 6px (base)</li>
+                  <li><code>ar-rounded-lg</code> — 12px</li>
+                  <li><code>ar-rounded-xl</code> — 20px</li>
+                  <li><code>ar-rounded-full</code> — pill</li>
+                  <li><code>ar-rounded-t/b/s/e</code> — sides</li>
+                  <li><code>ar-rounded-ss/se/es/ee</code> — corners</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📚 Responsive Prefixes:</strong>
+                <code>sm:</code> 480px, <code>md:</code> 768px, <code>lg:</code> 1024px, <code>xl:</code> 1280px
+                <br>
+                <strong>Radius Example:</strong> <code>ar-rounded-none ar-md:rounded-lg</code>
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="shadow.html" class="ar-text-link">Shadow Utilities</a>
+              or learn about <a href="ratio.html" class="ar-text-link">Ratio Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

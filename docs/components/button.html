@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--ar-space-4);
+      align-items: center;
+      padding: var(--ar-space-3);
+      background: var(--ar-color-layer-raised);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-btn-group--col {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--ar-space-3);
+      padding: var(--ar-space-3);
+      background: var(--ar-color-layer-raised);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-button-grid .ar-btn {
+      justify-self: center;
+      width: 100%;
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="button.html" class="doc-nav-link doc-nav-link--active">Components</a>
+          <a href="../utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Components</span></li>
+              <li><a href="button.html" class="doc-sidebar-active">Button</a></li>
+              <li><a href="card.html">Card</a></li>
+              <li><a href="alert.html">Alert</a></li>
+              <li><a href="indicators.html">Indicators</a></li>
+              <li><a href="input.html">Input</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Button</h1>
+          <p class="ar-lead">
+            The most important interactive component. Buttons trigger actions
+            and communicate importance through visual hierarchy.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Design Philosophy</div>
+            <div class="ar-alert__message">
+              ArianaCSS buttons are opinionated in three ways:
+              <ul class="ar-list ar-mt-2">
+                <li><strong>Clear visual hierarchy</strong> — 7 variants from primary to link</li>
+                <li><strong>Consistent sizing</strong> — same height and padding across all variants</li>
+                <li><strong>Distinct states</strong> — hover, active, focus, disabled, and loading</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              Buttons are the primary interactive element in any UI. ArianaCSS provides
+              a complete button system with 7 variants, 3 sizes, and full state support.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🎯</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  7 variants with clear visual hierarchy
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📏</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  3 sizes: sm, base, lg
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🔄</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  All states: hover, active, focus, disabled, loading
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Basic Usage -->
+          <section id="basic-usage">
+            <h2>Basic Usage</h2>
+            <p>
+              The simplest button uses the base <code>.ar-btn</code> class with a variant.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;button class="ar-btn ar-btn--primary" type="button"&gt;
+  Primary Button
+&lt;/button&gt;
+
+&lt;button class="ar-btn ar-btn--secondary" type="button"&gt;
+  Secondary Button
+&lt;/button&gt;
+
+&lt;button class="ar-btn ar-btn--ghost" type="button"&gt;
+  Ghost Button
+&lt;/button&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-btn-group">
+                <button class="ar-btn ar-btn--primary" type="button">Primary</button>
+                <button class="ar-btn ar-btn--secondary" type="button">Secondary</button>
+                <button class="ar-btn ar-btn--ghost" type="button">Ghost</button>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Tip:</strong> Always use <code>type="button"</code> to prevent
+                accidental form submission. For submitting forms, use <code>type="submit"</code>.
+              </div>
+            </div>
+          </section>
+
+          <!-- Variants -->
+          <section id="variants">
+            <h2>Variants</h2>
+            <p>
+              ArianaCSS provides <strong>7 button variants</strong> in order of visual weight:
+              primary → secondary → ghost → danger → danger-ghost → link → inverse.
+            </p>
+
+            <div class="doc-button-grid">
+              <button class="ar-btn ar-btn--primary" type="button">ar-btn--primary</button>
+              <button class="ar-btn ar-btn--secondary" type="button">ar-btn--secondary</button>
+              <button class="ar-btn ar-btn--ghost" type="button">ar-btn--ghost</button>
+              <button class="ar-btn ar-btn--danger" type="button">ar-btn--danger</button>
+              <button class="ar-btn ar-btn--danger-ghost" type="button">ar-btn--danger-ghost</button>
+              <button class="ar-btn ar-btn--link" type="button">ar-btn--link</button>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Inverse Variant (Dark Background)</h4>
+              <div class="ar-bg-inverse ar-p-4 ar-rounded">
+                <div class="doc-btn-group">
+                  <button class="ar-btn ar-btn--inverse" type="button">ar-btn--inverse</button>
+                  <button class="ar-btn ar-btn--primary" type="button">ar-btn--primary</button>
+                  <button class="ar-btn ar-btn--ghost" type="button">ar-btn--ghost</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-code-block ar-mt-4">
+              <code>&lt;!-- Inverse variant for dark surfaces --&gt;
+&lt;div class="ar-bg-inverse ar-p-4"&gt;
+  &lt;button class="ar-btn ar-btn--inverse" type="button"&gt;Inverse&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--primary" type="button"&gt;Primary&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Ghost&lt;/button&gt;
+&lt;/div&gt;</code>
+            </div>
+          </section>
+
+          <!-- Sizes -->
+          <section id="sizes">
+            <h2>Sizes</h2>
+            <p>
+              Buttons come in <strong>3 sizes</strong>: sm (32px), base (40px), and lg (48px).
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;button class="ar-btn ar-btn--primary ar-btn--sm" type="button"&gt;Small&lt;/button&gt;
+&lt;button class="ar-btn ar-btn--primary" type="button"&gt;Default&lt;/button&gt;
+&lt;button class="ar-btn ar-btn--primary ar-btn--lg" type="button"&gt;Large&lt;/button&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-btn-group">
+                <button class="ar-btn ar-btn--primary ar-btn--sm" type="button">Small</button>
+                <button class="ar-btn ar-btn--primary" type="button">Default</button>
+                <button class="ar-btn ar-btn--primary ar-btn--lg" type="button">Large</button>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Size Comparison Across Variants</h4>
+              <div class="doc-btn-group ar-flex-col">
+                <div class="ar-flex ar-flex-wrap ar-gap-3 ar-items-center">
+                  <button class="ar-btn ar-btn--secondary ar-btn--sm" type="button">Sm</button>
+                  <button class="ar-btn ar-btn--secondary" type="button">Base</button>
+                  <button class="ar-btn ar-btn--secondary ar-btn--lg" type="button">Lg</button>
+                </div>
+                <div class="ar-flex ar-flex-wrap ar-gap-3 ar-items-center">
+                  <button class="ar-btn ar-btn--ghost ar-btn--sm" type="button">Sm</button>
+                  <button class="ar-btn ar-btn--ghost" type="button">Base</button>
+                  <button class="ar-btn ar-btn--ghost ar-btn--lg" type="button">Lg</button>
+                </div>
+                <div class="ar-flex ar-flex-wrap ar-gap-3 ar-items-center">
+                  <button class="ar-btn ar-btn--danger ar-btn--sm" type="button">Sm</button>
+                  <button class="ar-btn ar-btn--danger" type="button">Base</button>
+                  <button class="ar-btn ar-btn--danger ar-btn--lg" type="button">Lg</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📏 Sizing Guide:</strong>
+                <ul class="ar-list ar-mt-2">
+                  <li><strong>Sm (32px):</strong> Table actions, compact toolbars, inline forms</li>
+                  <li><strong>Base (40px):</strong> Default for most contexts</li>
+                  <li><strong>Lg (48px):</strong> Hero CTAs, prominent form submissions</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- States -->
+          <section id="states">
+            <h2>States</h2>
+            <p>
+              Buttons support <strong>5 interactive states</strong>: default, hover, active, focus, and disabled.
+            </p>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Interactive States (Primary)</h4>
+              <div class="doc-btn-group">
+                <button class="ar-btn ar-btn--primary" type="button">Default</button>
+                <button class="ar-btn ar-btn--primary ar-hover:bg-primary-hover" type="button" style="background: var(--ar-color-primary-hover); border-color: var(--ar-color-primary-hover); box-shadow: var(--ar-shadow-2);">Hover</button>
+                <button class="ar-btn ar-btn--primary" type="button" style="background: var(--ar-color-primary-active); border-color: var(--ar-color-primary-active); box-shadow: var(--ar-shadow-inset); transform: translateY(1px);">Active</button>
+                <button class="ar-btn ar-btn--primary" type="button" disabled>Disabled</button>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">Hover: darker · Active: pressed down · Disabled: low contrast</p>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Disabled States Across Variants</h4>
+              <div class="doc-btn-group">
+                <button class="ar-btn ar-btn--primary" type="button" disabled>Primary</button>
+                <button class="ar-btn ar-btn--secondary" type="button" disabled>Secondary</button>
+                <button class="ar-btn ar-btn--ghost" type="button" disabled>Ghost</button>
+                <button class="ar-btn ar-btn--danger" type="button" disabled>Danger</button>
+                <button class="ar-btn ar-btn--link" type="button" disabled>Link</button>
+              </div>
+            </div>
+
+            <div class="doc-code-block ar-mt-4">
+              <code>&lt;!-- Disabled button --&gt;
+&lt;button class="ar-btn ar-btn--primary" type="button" disabled&gt;
+  Disabled
+&lt;/button&gt;
+
+&lt;!-- Disabled with aria-disabled (focusable but non-interactive) --&gt;
+&lt;button class="ar-btn ar-btn--primary" type="button" aria-disabled="true"&gt;
+  aria-disabled
+&lt;/button&gt;</code>
+            </div>
+
+            <div class="ar-alert ar-alert--warning ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>⚠️ Disabled vs aria-disabled:</strong>
+                <ul class="ar-list ar-mt-2">
+                  <li><code>disabled</code> — Removes from tab order, prevents click events</li>
+                  <li><code>aria-disabled="true"</code> — Remains focusable (useful for tooltips explaining why it's disabled)</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Loading State -->
+          <section id="loading">
+            <h2>Loading State</h2>
+            <p>
+              Use <code>.ar-btn--loading</code> with the <code>ar-btn__spinner</code> element
+              to show a CSS-only loading spinner.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;button class="ar-btn ar-btn--primary ar-btn--loading" type="button" aria-busy="true" disabled&gt;
+  &lt;span class="ar-btn__spinner" aria-hidden="true"&gt;&lt;/span&gt;
+  Saving…
+&lt;/button&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-btn-group">
+                <button class="ar-btn ar-btn--primary ar-btn--loading" type="button" aria-busy="true" disabled>
+                  <span class="ar-btn__spinner" aria-hidden="true"></span>
+                  Saving…
+                </button>
+                <button class="ar-btn ar-btn--secondary ar-btn--loading" type="button" aria-busy="true" disabled>
+                  <span class="ar-btn__spinner" aria-hidden="true"></span>
+                  Loading…
+                </button>
+                <button class="ar-btn ar-btn--ghost ar-btn--loading" type="button" aria-busy="true" disabled>
+                  <span class="ar-btn__spinner" aria-hidden="true"></span>
+                  Processing…
+                </button>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>♿ Accessibility:</strong>
+                <ul class="ar-list ar-mt-2">
+                  <li><code>aria-busy="true"</code> — Tells screen readers the action is in progress</li>
+                  <li><code>disabled</code> — Prevents double-submission</li>
+                  <li><code>aria-hidden="true"</code> on spinner — Decorative, no need to announce</li>
+                  <li>Spinner stops spinning with <code>prefers-reduced-motion</code></li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Icon Buttons -->
+          <section id="icon-buttons">
+            <h2>Icon Buttons</h2>
+            <p>
+              Add icons to buttons using the <code>ar-btn__icon</code> element.
+              Use <code>.ar-btn--icon-only</code> for buttons with only an icon.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Leading icon --&gt;
+&lt;button class="ar-btn ar-btn--primary" type="button"&gt;
+  &lt;svg class="ar-btn__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24"&gt;
+    &lt;path d="..." /&gt;
+  &lt;/svg&gt;
+  Save
+&lt;/button&gt;
+
+&lt;!-- Trailing icon --&gt;
+&lt;button class="ar-btn ar-btn--primary" type="button"&gt;
+  Download
+  &lt;svg class="ar-btn__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24"&gt;
+    &lt;path d="..." /&gt;
+  &lt;/svg&gt;
+&lt;/button&gt;
+
+&lt;!-- Icon only --&gt;
+&lt;button class="ar-btn ar-btn--ghost ar-btn--icon-only" type="button" aria-label="Delete"&gt;
+  &lt;svg class="ar-btn__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24"&gt;
+    &lt;path d="..." /&gt;
+  &lt;/svg&gt;
+&lt;/button&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-btn-group">
+                <button class="ar-btn ar-btn--primary" type="button">
+                  <svg class="ar-btn__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                  </svg>
+                  Save
+                </button>
+                <button class="ar-btn ar-btn--primary" type="button">
+                  Download
+                  <svg class="ar-btn__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                </button>
+                <button class="ar-btn ar-btn--ghost ar-btn--icon-only" type="button" aria-label="Delete">
+                  <svg class="ar-btn__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--danger ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>♿ Accessibility Critical:</strong> Icon-only buttons <strong>MUST</strong> have
+                an <code>aria-label</code> or <code>aria-labelledby</code> attribute.
+                Screen readers cannot infer the button's purpose from the icon alone.
+              </div>
+            </div>
+          </section>
+
+          <!-- Button Groups -->
+          <section id="button-groups">
+            <h2>Button Groups</h2>
+            <p>
+              Use <code>.ar-btn-group</code> to group related buttons with collapsed borders.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-btn-group" role="group" aria-label="Text alignment"&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Left&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Center&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Right&lt;/button&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-btn-group" role="group" aria-label="Text alignment">
+                <button class="ar-btn ar-btn--ghost" type="button">Left</button>
+                <button class="ar-btn ar-btn--ghost" type="button">Center</button>
+                <button class="ar-btn ar-btn--ghost" type="button">Right</button>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Button Group with Primary Action</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;div class="ar-btn-group" role="group" aria-label="Form actions"&gt;
+  &lt;button class="ar-btn ar-btn--primary" type="submit"&gt;Save&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Cancel&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--danger" type="button"&gt;Delete&lt;/button&gt;
+&lt;/div&gt;</code>
+              </div>
+              <div class="ar-btn-group" role="group" aria-label="Form actions">
+                <button class="ar-btn ar-btn--primary" type="submit">Save</button>
+                <button class="ar-btn ar-btn--ghost" type="button">Cancel</button>
+                <button class="ar-btn ar-btn--danger" type="button">Delete</button>
+              </div>
+            </div>
+
+            <h3>Vertical Button Group</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-btn-group ar-btn-group--vertical" role="group" aria-label="Settings"&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Profile&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Security&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Notifications&lt;/button&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-btn-group ar-btn-group--vertical" role="group" aria-label="Settings" style="max-width: 200px;">
+                <button class="ar-btn ar-btn--ghost" type="button">Profile</button>
+                <button class="ar-btn ar-btn--ghost" type="button">Security</button>
+                <button class="ar-btn ar-btn--ghost" type="button">Notifications</button>
+              </div>
+            </div>
+
+            <h3>Pill Button Group</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-btn-group ar-btn-group--pill" role="group" aria-label="Options"&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Option 1&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Option 2&lt;/button&gt;
+  &lt;button class="ar-btn ar-btn--ghost" type="button"&gt;Option 3&lt;/button&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-btn-group ar-btn-group--pill" role="group" aria-label="Options">
+                <button class="ar-btn ar-btn--ghost" type="button">Option 1</button>
+                <button class="ar-btn ar-btn--ghost" type="button">Option 2</button>
+                <button class="ar-btn ar-btn--ghost" type="button">Option 3</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Full Width -->
+          <section id="full-width">
+            <h2>Full Width</h2>
+            <p>
+              Use <code>.ar-btn--full</code> to make a button span the full width of its container.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;button class="ar-btn ar-btn--primary ar-btn--full" type="button"&gt;
+  Submit Form
+&lt;/button&gt;</code>
+            </div>
+
+            <div class="doc-example-box" style="max-width: 400px;">
+              <button class="ar-btn ar-btn--primary ar-btn--full" type="button">Submit Form</button>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Tip:</strong> Full-width buttons are great for mobile forms,
+                hero CTAs, and modal dialogs where the button should span the available width.
+              </div>
+            </div>
+          </section>
+
+          <!-- Pill Shape -->
+          <section id="pill">
+            <h2>Pill Shape</h2>
+            <p>
+              Use <code>.ar-btn--pill</code> for rounded, approachable buttons.
+              Popular in marketing, hero sections, and CTAs.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;button class="ar-btn ar-btn--primary ar-btn--pill" type="button"&gt;
+  Get Started
+&lt;/button&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-btn-group">
+                <button class="ar-btn ar-btn--primary ar-btn--pill" type="button">Get Started</button>
+                <button class="ar-btn ar-btn--primary ar-btn--pill ar-btn--lg" type="button">Large Pill</button>
+                <button class="ar-btn ar-btn--primary ar-btn--pill ar-btn--sm" type="button">Small Pill</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Accessibility -->
+          <section id="accessibility">
+            <h2>Accessibility</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">✅ Best Practices</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Always use <code>&lt;button&gt;</code> elements (not <code>&lt;div&gt;</code>)</li>
+                  <li>Use <code>type="button"</code> for non-submit buttons</li>
+                  <li>Provide <code>aria-label</code> for icon-only buttons</li>
+                  <li>Use <code>disabled</code> for truly disabled buttons</li>
+                  <li>Use <code>aria-busy="true"</code> for loading states</li>
+                  <li>All buttons are keyboard-focusable (Tab/Shift+Tab)</li>
+                  <li>Enter/Space activates buttons</li>
+                  <li>Focus ring visible on keyboard focus</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">❌ Common Mistakes</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li>Using <code>&lt;div&gt;</code> or <code>&lt;span&gt;</code> as buttons</li>
+                  <li>Icon-only buttons without <code>aria-label</code></li>
+                  <li>Using <code>aria-disabled</code> without <code>disabled</code></li>
+                  <li>Removing focus rings with <code>outline: none</code></li>
+                  <li>Using <code>role="button"</code> on non-button elements</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Accessible Button Examples</h4>
+              <div class="doc-btn-group">
+                <button class="ar-btn ar-btn--primary" type="button">
+                  <svg class="ar-btn__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                  </svg>
+                  Save
+                </button>
+                <button class="ar-btn ar-btn--ghost ar-btn--icon-only" type="button" aria-label="Delete item">
+                  <svg class="ar-btn__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                  </svg>
+                </button>
+                <button class="ar-btn ar-btn--danger ar-btn--loading" type="button" aria-busy="true" disabled>
+                  <span class="ar-btn__spinner" aria-hidden="true"></span>
+                  Deleting…
+                </button>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                ✓ Proper button elements · ✓ aria-label on icon button · ✓ aria-busy on loading
+              </p>
+            </div>
+          </section>
+
+          <!-- HTML Reference -->
+          <section id="html-reference">
+            <h2>HTML Reference</h2>
+
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Purpose</th>
+                  <th>Required</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>.ar-btn</code></td>
+                  <td>Base button styles</td>
+                  <td>✅ Required</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--primary</code></td>
+                  <td>Primary action (filled lapis)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--secondary</code></td>
+                  <td>Secondary action (tinted)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--ghost</code></td>
+                  <td>Tertiary action (bordered)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--danger</code></td>
+                  <td>Destructive action (filled ember)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--danger-ghost</code></td>
+                  <td>Destructive tertiary (bordered)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--link</code></td>
+                  <td>Link-styled button</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--inverse</code></td>
+                  <td>Inverse variant (dark surfaces)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--sm</code></td>
+                  <td>Small size (32px)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--lg</code></td>
+                  <td>Large size (48px)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--full</code></td>
+                  <td>Full width</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--pill</code></td>
+                  <td>Pill shape (full radius)</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--icon-only</code></td>
+                  <td>Square button with only an icon</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn--loading</code></td>
+                  <td>Loading state with spinner</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn__icon</code></td>
+                  <td>Icon inside button</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn__spinner</code></td>
+                  <td>Loading spinner element</td>
+                  <td>With --loading</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn-group</code></td>
+                  <td>Group container for buttons</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn-group--vertical</code></td>
+                  <td>Vertical button group</td>
+                  <td>Optional</td>
+                </tr>
+                <tr>
+                  <td><code>.ar-btn-group--pill</code></td>
+                  <td>Pill-shaped button group</td>
+                  <td>Optional</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Do / Don't -->
+          <section id="do-dont">
+            <h2>Do / Don't</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use semantic buttons</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;button class="ar-btn ar-btn--primary" type="button"&gt;
+  Save
+&lt;/button&gt;
+
+&lt;button class="ar-btn ar-btn--danger" type="submit"&gt;
+  Delete
+&lt;/button&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Use proper <code>&lt;button&gt;</code> elements with correct types.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Use divs as buttons</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-btn ar-btn--primary" onclick="save()"&gt;
+  Save
+&lt;/div&gt;
+
+&lt;span class="ar-btn ar-btn--danger" onclick="delete()"&gt;
+  Delete
+&lt;/span&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Non-interactive elements are not keyboard-accessible without additional work.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Do: Use proper variants</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;button class="ar-btn ar-btn--primary" type="button"&gt;
+  Save
+&lt;/button&gt;
+&lt;button class="ar-btn ar-btn--ghost" type="button"&gt;
+  Cancel
+&lt;/button&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Primary for main action, ghost for secondary actions.</p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Don't: Use danger for non-destructive actions</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;button class="ar-btn ar-btn--danger" type="button"&gt;
+  Submit
+&lt;/button&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted">Danger is for <strong>destructive</strong> actions only: delete, remove, revoke.</p>
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="card.html" class="ar-text-link">Card Component</a>
+              or learn about <a href="../utilities/flex.html" class="ar-text-link">Flexbox Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

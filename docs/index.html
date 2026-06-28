@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArianaCSS — Modern Lightweight CSS Framework</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles (not part of the framework) */
+    .doc-hero {
+      padding: var(--ar-space-20) 0;
+      background: linear-gradient(135deg, var(--ar-color-layer-inverse) 0%, var(--ar-color-layer-inverse-raised) 100%);
+      border-bottom: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-hero .ar-display {
+      color: var(--ar-color-text-inverse);
+    }
+
+    .doc-hero .ar-lead {
+      color: var(--ar-color-text-inverse-muted);
+    }
+
+    .doc-feature-grid {
+      padding: var(--ar-space-16) 0;
+    }
+
+    .doc-feature-card {
+      padding: var(--ar-space-6);
+      text-align: center;
+      height: 100%;
+    }
+
+    .doc-feature-card .ar-h3 {
+      margin-bottom: var(--ar-space-2);
+    }
+
+    .doc-feature-icon {
+      font-size: var(--ar-text-size-4xl);
+      margin-bottom: var(--ar-space-4);
+      display: block;
+    }
+
+    .doc-cta {
+      padding: var(--ar-space-16) 0;
+      background: var(--ar-color-layer-sunken);
+      border-top: 1px solid var(--ar-color-divider);
+      text-align: center;
+    }
+
+    .doc-cta .ar-h2 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-tag {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+      margin-bottom: var(--ar-space-2);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+    }
+
+    /* Navigation */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    /* Responsive adjustments for doc hero */
+    @media (max-width: 767px) {
+      .doc-hero {
+        padding: var(--ar-space-12) 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="grid.html" class="doc-nav-link">Grid</a>
+          <a href="typography.html" class="doc-nav-link">Typography</a>
+          <a href="components/button.html" class="doc-nav-link">Components</a>
+          <a href="utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="doc-hero">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-2 ar-gap-8 ar-items-center">
+        <div>
+          <span class="doc-tag">Version 1.0.0</span>
+          <h1 class="ar-display ar-mb-4">
+            Ariana<span style="color: var(--ar-color-primary-base);">CSS</span>
+          </h1>
+          <p class="ar-lead ar-mb-6">
+            A modern, lightweight, pure CSS framework for the real world.<br>
+            Built in Afghanistan. Designed for everyone.
+          </p>
+          <div class="ar-flex ar-flex-wrap ar-gap-3">
+            <a href="getting-started.html" class="ar-btn ar-btn--primary ar-btn--lg">
+              Get Started
+            </a>
+            <a href="https://github.com/your-username/arianacss" class="ar-btn ar-btn--ghost ar-btn--lg" target="_blank" rel="noopener noreferrer">
+              View on GitHub
+            </a>
+          </div>
+          <div class="ar-mt-6 ar-flex ar-gap-6 ar-text-sm ar-color-text-muted">
+            <span>⚡ <strong class="ar-text-default">~15 KB</strong> gzipped</span>
+            <span>🎨 <strong class="ar-text-default">Pure CSS</strong></span>
+            <span>♿ <strong class="ar-text-default">Accessible</strong></span>
+            <span>🌍 <strong class="ar-text-default">RTL Ready</strong></span>
+          </div>
+        </div>
+        <div class="ar-hidden ar-lg:block">
+          <div class="ar-card ar-shadow-2 ar-p-6" style="background: var(--ar-color-layer-raised);">
+            <div class="ar-code-block">
+              <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="ariana.min.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="ar-container"&gt;
+    &lt;h1&gt;Hello, World!&lt;/h1&gt;
+    &lt;button class="ar-btn ar-btn--primary"&gt;
+      Get Started
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="doc-feature-grid">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-lg:grid-cols-4 ar-gap-6">
+        <div class="ar-card doc-feature-card ar-shadow-1">
+          <span class="doc-feature-icon">🎯</span>
+          <h3 class="ar-h4">Structured Freedom</h3>
+          <p class="ar-text-muted">Use components, utilities, or both. No locks. No vendor lock-in.</p>
+        </div>
+        <div class="ar-card doc-feature-card ar-shadow-1">
+          <span class="doc-feature-icon">🧩</span>
+          <h3 class="ar-h4">Pure CSS</h3>
+          <p class="ar-text-muted">Zero JavaScript. Zero dependencies. Drop a single file and go.</p>
+        </div>
+        <div class="ar-card doc-feature-card ar-shadow-1">
+          <span class="doc-feature-icon">♿</span>
+          <h3 class="ar-h4">Accessible by Default</h3>
+          <p class="ar-text-muted">WCAG AA compliant. Keyboard navigable. Screen reader ready.</p>
+        </div>
+        <div class="ar-card doc-feature-card ar-shadow-1">
+          <span class="doc-feature-icon">🌍</span>
+          <h3 class="ar-h4">RTL Ready</h3>
+          <p class="ar-text-muted">Full support for Dari, Pashto, Arabic, and all right-to-left scripts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="doc-cta">
+    <div class="ar-container">
+      <h2 class="ar-h2">Ready to build something great?</h2>
+      <p class="ar-text-lg ar-text-muted ar-mb-6">
+        Start building with ArianaCSS today.
+      </p>
+      <div class="ar-flex ar-flex-wrap ar-gap-3 ar-justify-center">
+        <a href="getting-started.html" class="ar-btn ar-btn--primary ar-btn--lg">
+          📖 Read the Docs
+        </a>
+        <a href="https://github.com/your-username/arianacss" class="ar-btn ar-btn--ghost ar-btn--lg" target="_blank" rel="noopener noreferrer">
+          ⭐ Star on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

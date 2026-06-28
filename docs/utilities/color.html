@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Utilities — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-color-demo {
+      padding: var(--ar-space-3);
+      border-radius: var(--ar-radius-sm);
+      text-align: center;
+      font-weight: var(--ar-text-weight-medium);
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-color-demo--border {
+      border-color: var(--ar-color-border-default);
+    }
+
+    .doc-color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--ar-space-2);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-color-swatch {
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--ar-radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--ar-color-border-default);
+    }
+
+    .doc-color-swatch .swatch {
+      height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-color-swatch .swatch-label {
+      padding: var(--ar-space-1) var(--ar-space-2);
+      font-size: var(--ar-text-size-xs);
+      font-family: var(--ar-text-font-mono);
+      background: var(--ar-color-layer-base);
+      text-align: center;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-hover-demo {
+      display: inline-block;
+      padding: var(--ar-space-3) var(--ar-space-6);
+      border-radius: var(--ar-radius-base);
+      cursor: pointer;
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+
+      .doc-color-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="../components/button.html" class="doc-nav-link">Components</a>
+          <a href="spacing.html" class="doc-nav-link doc-nav-link--active">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Utilities</span></li>
+              <li><a href="spacing.html">Spacing</a></li>
+              <li><a href="display.html">Display</a></li>
+              <li><a href="flex.html">Flexbox</a></li>
+              <li><a href="grid.html">Grid</a></li>
+              <li><a href="typography.html">Typography</a></li>
+              <li><a href="color.html" class="doc-sidebar-active">Color</a></li>
+              <li><a href="border.html">Border</a></li>
+              <li><a href="shadow.html">Shadow</a></li>
+              <li><a href="ratio.html">Ratio</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Color Utilities</h1>
+          <p class="ar-lead">
+            Apply semantic background colors to elements. Layer backgrounds, status colors,
+            and interactive hover states — all from the token system.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Semantic Names Only</div>
+            <div class="ar-alert__message">
+              ArianaCSS color utilities use <strong>semantic token names</strong> only.
+              No primitive palette classes (<code>ar-bg-lapis-600</code>). This ensures
+              consistent theming and prevents ad-hoc color decisions.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              Color utilities set <code>background-color</code> using semantic tokens.
+              They are designed to be used with appropriate text color utilities for
+              readable, accessible combinations.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🎨</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Semantic color roles (primary, success, warning, danger, info)
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📐</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Layer backgrounds for UI depth (base, raised, sunken, inverse)
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🔄</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Hover variants for interactive elements
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Layer Backgrounds -->
+          <section id="layer-backgrounds">
+            <h2>Layer Backgrounds</h2>
+            <p>
+              Layer backgrounds define the depth planes of your UI. Use them to create
+              visual hierarchy through color differentiation.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-bg-base"&gt;Base layer (pure white)&lt;/div&gt;
+&lt;div class="ar-bg-raised"&gt;Raised layer (slightly warm)&lt;/div&gt;
+&lt;div class="ar-bg-sunken"&gt;Sunken layer (recessed)&lt;/div&gt;
+&lt;div class="ar-bg-inverse"&gt;Inverse layer (dark)&lt;/div&gt;
+&lt;div class="ar-bg-transparent"&gt;Transparent background&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-color-grid">
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-base" style="color: var(--ar-color-text-default);">ar-bg-base</div>
+                <div class="swatch-label">--ar-color-layer-base<br>hsl(0 0% 100%)</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-raised" style="color: var(--ar-color-text-default);">ar-bg-raised</div>
+                <div class="swatch-label">--ar-color-layer-raised<br>hsl(35 20% 99%)</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-sunken" style="color: var(--ar-color-text-default);">ar-bg-sunken</div>
+                <div class="swatch-label">--ar-color-layer-sunken<br>hsl(35 12% 93%)</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-inverse" style="color: var(--ar-color-text-inverse);">ar-bg-inverse</div>
+                <div class="swatch-label">--ar-color-layer-inverse<br>var(--ar-stone-900)</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-transparent" style="color: var(--ar-color-text-default); border: 2px dashed var(--ar-color-border-default);">ar-bg-transparent</div>
+                <div class="swatch-label">background: transparent</div>
+              </div>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Usage Example: Card on Inverse Background</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;section class="ar-bg-inverse ar-py-8"&gt;
+  &lt;div class="ar-container"&gt;
+    &lt;h2 class="ar-text-inverse"&gt;Dark Section&lt;/h2&gt;
+    &lt;p class="ar-text-inverse-muted"&gt;Content on dark background.&lt;/p&gt;
+    &lt;div class="ar-card ar-bg-raised ar-p-4"&gt;
+      &lt;p class="ar-text-default"&gt;Card on inverse section.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code>
+              </div>
+              <div class="ar-bg-inverse ar-py-4 ar-px-4 ar-rounded">
+                <h4 class="ar-text-inverse ar-mb-1">Dark Section</h4>
+                <p class="ar-text-inverse-muted ar-text-sm ar-mb-3">Content on dark background.</p>
+                <div class="ar-card ar-bg-raised ar-p-3 ar-shadow-1" style="background: var(--ar-color-layer-raised);">
+                  <p class="ar-text-default ar-text-sm ar-m-0">Card on inverse section.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Primary Backgrounds -->
+          <section id="primary-backgrounds">
+            <h2>Primary Backgrounds</h2>
+            <p>
+              Use primary backgrounds for brand elements, call-to-action sections,
+              and highlighted UI components.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-bg-primary"&gt;Solid primary background&lt;/div&gt;
+&lt;div class="ar-bg-primary-surface"&gt;Tinted primary surface&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-color-grid">
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-primary" style="color: var(--ar-color-text-on-primary);">ar-bg-primary</div>
+                <div class="swatch-label">--ar-color-primary-base<br>var(--ar-lapis-600)</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-primary-surface" style="color: var(--ar-color-primary-emphasis);">ar-bg-primary-surface</div>
+                <div class="swatch-label">--ar-color-primary-surface<br>var(--ar-lapis-50)</div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pairing Guide:</strong> Use <code>ar-text-on-primary</code> (white)
+                for text on <code>ar-bg-primary</code>. Use <code>ar-text-primary</code> for
+                text on <code>ar-bg-primary-surface</code>.
+              </div>
+            </div>
+          </section>
+
+          <!-- Status Backgrounds -->
+          <section id="status-backgrounds">
+            <h2>Status Backgrounds</h2>
+            <p>
+              Use status backgrounds for alerts, badges, validation states, and
+              status indicators. Available in both <strong>filled</strong> and
+              <strong>surface</strong> variants.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Filled (solid background, white text) --&gt;
+&lt;div class="ar-bg-success"&gt;Success&lt;/div&gt;
+&lt;div class="ar-bg-warning"&gt;Warning&lt;/div&gt;
+&lt;div class="ar-bg-danger"&gt;Danger&lt;/div&gt;
+&lt;div class="ar-bg-info"&gt;Info&lt;/div&gt;
+
+&lt;!-- Surface (tinted background, role text color) --&gt;
+&lt;div class="ar-bg-success-surface"&gt;Success Surface&lt;/div&gt;
+&lt;div class="ar-bg-warning-surface"&gt;Warning Surface&lt;/div&gt;
+&lt;div class="ar-bg-danger-surface"&gt;Danger Surface&lt;/div&gt;
+&lt;div class="ar-bg-info-surface"&gt;Info Surface&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-color-grid">
+              <!-- Filled variants -->
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-success" style="color: var(--ar-color-text-on-success);">ar-bg-success</div>
+                <div class="swatch-label">Filled — white text</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-warning" style="color: var(--ar-color-text-on-warning);">ar-bg-warning</div>
+                <div class="swatch-label">Filled — white text</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-danger" style="color: var(--ar-color-text-on-danger);">ar-bg-danger</div>
+                <div class="swatch-label">Filled — white text</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-info" style="color: var(--ar-color-text-on-info);">ar-bg-info</div>
+                <div class="swatch-label">Filled — white text</div>
+              </div>
+
+              <!-- Surface variants -->
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-success-surface" style="color: var(--ar-color-success-text);">ar-bg-success-surface</div>
+                <div class="swatch-label">Surface — tinted background</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-warning-surface" style="color: var(--ar-color-warning-text);">ar-bg-warning-surface</div>
+                <div class="swatch-label">Surface — tinted background</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-danger-surface" style="color: var(--ar-color-danger-text);">ar-bg-danger-surface</div>
+                <div class="swatch-label">Surface — tinted background</div>
+              </div>
+              <div class="doc-color-swatch">
+                <div class="swatch ar-bg-info-surface" style="color: var(--ar-color-info-text);">ar-bg-info-surface</div>
+                <div class="swatch-label">Surface — tinted background</div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--warning ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>⚠️ Warning:</strong> <code>ar-bg-warning</code> uses <strong>white text</strong>.
+                This is correct and verified to pass contrast requirements. Do not use dark text
+                on warning backgrounds.
+              </div>
+            </div>
+          </section>
+
+          <!-- Hover Variants -->
+          <section id="hover-variants">
+            <h2>Hover Variants</h2>
+            <p>
+              Use hover variants for interactive elements that need a background
+              color change on hover.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Clickable section with hover effect --&gt;
+&lt;div class="ar-hover:bg-primary"&gt;Hover me&lt;/div&gt;
+
+&lt;!-- Table row with hover effect --&gt;
+&lt;tr class="ar-hover:bg-state"&gt;
+  &lt;td&gt;Data&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;!-- Navigation item with hover effect --&gt;
+&lt;a href="#" class="ar-hover:bg-primary-surface"&gt;Dashboard&lt;/a&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+                <div>
+                  <h4 class="ar-h6 ar-mb-2">ar-hover:bg-primary</h4>
+                  <div class="doc-hover-demo ar-hover:bg-primary ar-bg-raised ar-text-default" style="transition: background-color var(--ar-duration-fast) var(--ar-ease-standard);">
+                    Hover over me
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">Changes to primary color on hover</p>
+                </div>
+                <div>
+                  <h4 class="ar-h6 ar-mb-2">ar-hover:bg-state</h4>
+                  <div class="doc-hover-demo ar-hover:bg-state ar-bg-raised ar-text-default" style="transition: background-color var(--ar-duration-fast) var(--ar-ease-standard);">
+                    Hover over me
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">Neutral overlay on hover (safe on any surface)</p>
+                </div>
+                <div>
+                  <h4 class="ar-h6 ar-mb-2">ar-hover:bg-primary-surface</h4>
+                  <div class="doc-hover-demo ar-hover:bg-primary-surface ar-bg-raised ar-text-default" style="transition: background-color var(--ar-duration-fast) var(--ar-ease-standard);">
+                    Hover over me
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">Tinted primary surface on hover</p>
+                </div>
+                <div>
+                  <h4 class="ar-h6 ar-mb-2">ar-hover:bg-sunken</h4>
+                  <div class="doc-hover-demo ar-hover:bg-sunken ar-bg-raised ar-text-default" style="transition: background-color var(--ar-duration-fast) var(--ar-ease-standard);">
+                    Hover over me
+                  </div>
+                  <p class="ar-text-xs ar-text-muted ar-mt-1">Sunken layer on hover</p>
+                </div>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">All hover transitions are instant with <code>prefers-reduced-motion</code></p>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Best Practice:</strong> Use <code>ar-hover:bg-state</code> for
+                table rows, list items, and navigation elements. It's a neutral overlay
+                that works on any surface color without introducing hue conflicts.
+              </div>
+            </div>
+          </section>
+
+          <!-- Pairing Guide -->
+          <section id="pairing-guide">
+            <h2>Pairing Guide</h2>
+            <p>
+              Color utilities only set <code>background-color</code>. Always pair them
+              with appropriate text color utilities for readable, accessible content.
+            </p>
+
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Background Class</th>
+                  <th>Recommended Text Class</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ar-bg-primary</code></td>
+                  <td><code>ar-text-on-primary</code></td>
+                  <td>White text on filled primary</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-primary-surface</code></td>
+                  <td><code>ar-text-primary</code></td>
+                  <td>Primary text on tinted surface</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-success</code></td>
+                  <td><code>ar-text-on-success</code></td>
+                  <td>White text on filled success</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-success-surface</code></td>
+                  <td><code>ar-text-success</code></td>
+                  <td>Success text on tinted surface</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-warning</code></td>
+                  <td><code>ar-text-on-warning</code></td>
+                  <td>White text on filled warning</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-warning-surface</code></td>
+                  <td><code>ar-text-warning</code></td>
+                  <td>Warning text on tinted surface</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-danger</code></td>
+                  <td><code>ar-text-on-danger</code></td>
+                  <td>White text on filled danger</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-danger-surface</code></td>
+                  <td><code>ar-text-danger</code></td>
+                  <td>Danger text on tinted surface</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-info</code></td>
+                  <td><code>ar-text-on-info</code></td>
+                  <td>White text on filled info</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-info-surface</code></td>
+                  <td><code>ar-text-info</code></td>
+                  <td>Info text on tinted surface</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-inverse</code></td>
+                  <td><code>ar-text-inverse</code></td>
+                  <td>Light text on dark surface</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-base</code></td>
+                  <td><code>ar-text-default</code></td>
+                  <td>Default text on white</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-raised</code></td>
+                  <td><code>ar-text-default</code></td>
+                  <td>Default text on raised surface</td>
+                </tr>
+                <tr>
+                  <td><code>ar-bg-sunken</code></td>
+                  <td><code>ar-text-default</code></td>
+                  <td>Default text on sunken surface</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Pairing Examples</h4>
+              <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-3">
+                <div class="ar-bg-primary ar-p-3 ar-rounded">
+                  <p class="ar-text-on-primary ar-m-0 ar-font-semibold">ar-bg-primary + ar-text-on-primary</p>
+                </div>
+                <div class="ar-bg-primary-surface ar-p-3 ar-rounded ar-border ar-border-primary">
+                  <p class="ar-text-primary ar-m-0 ar-font-semibold">ar-bg-primary-surface + ar-text-primary</p>
+                </div>
+                <div class="ar-bg-inverse ar-p-3 ar-rounded">
+                  <p class="ar-text-inverse ar-m-0 ar-font-semibold">ar-bg-inverse + ar-text-inverse</p>
+                </div>
+                <div class="ar-bg-success-surface ar-p-3 ar-rounded ar-border ar-border-success">
+                  <p class="ar-text-success ar-m-0 ar-font-semibold">ar-bg-success-surface + ar-text-success</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Common Patterns -->
+          <section id="patterns">
+            <h2>Common Patterns</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Hero Section</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;section class="ar-bg-primary ar-py-16 ar-text-center"&gt;
+  &lt;div class="ar-container"&gt;
+    &lt;h1 class="ar-text-on-primary ar-display"&gt;Welcome&lt;/h1&gt;
+    &lt;p class="ar-text-on-primary ar-text-lg"&gt;Build something great.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code>
+                </div>
+                <div class="ar-bg-primary ar-py-4 ar-px-4 ar-rounded ar-text-center">
+                  <h3 class="ar-text-on-primary ar-h4 ar-mb-1">Welcome</h3>
+                  <p class="ar-text-on-primary ar-text-sm ar-m-0">Build something great.</p>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Alert / Callout</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-bg-success-surface ar-border ar-border-success ar-p-4 ar-rounded"&gt;
+  &lt;p class="ar-text-success ar-font-semibold"&gt;✓ Success!&lt;/p&gt;
+  &lt;p class="ar-text-success ar-text-sm"&gt;Your changes were saved.&lt;/p&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-bg-success-surface ar-border ar-border-success ar-p-3 ar-rounded">
+                  <p class="ar-text-success ar-font-semibold ar-m-0">✓ Success!</p>
+                  <p class="ar-text-success ar-text-sm ar-m-0">Your changes were saved.</p>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Dark Footer</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;footer class="ar-bg-inverse ar-py-6"&gt;
+  &lt;div class="ar-container"&gt;
+    &lt;p class="ar-text-inverse"&gt;© 2026 Company&lt;/p&gt;
+    &lt;div class="ar-flex ar-gap-4"&gt;
+      &lt;a href="#" class="ar-text-inverse-muted"&gt;Terms&lt;/a&gt;
+      &lt;a href="#" class="ar-text-inverse-muted"&gt;Privacy&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/footer&gt;</code>
+                </div>
+                <div class="ar-bg-inverse ar-py-3 ar-px-4 ar-rounded">
+                  <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+                    <p class="ar-text-inverse ar-text-sm ar-m-0">© 2026 Company</p>
+                    <div class="ar-flex ar-gap-4">
+                      <a href="#" class="ar-text-inverse-muted ar-text-sm ar-text-decoration-none">Terms</a>
+                      <a href="#" class="ar-text-inverse-muted ar-text-sm ar-text-decoration-none">Privacy</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Interactive Table Row</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;tr class="ar-hover:bg-state"&gt;
+  &lt;td&gt;Data 1&lt;/td&gt;
+  &lt;td&gt;Data 2&lt;/td&gt;
+&lt;/tr&gt;</code>
+                </div>
+                <div class="ar-border ar-border-divider ar-rounded ar-overflow-hidden">
+                  <table class="doc-table ar-m-0">
+                    <tbody>
+                      <tr class="ar-hover:bg-state ar-cursor-pointer">
+                        <td class="ar-p-2">Row 1, Col 1</td>
+                        <td class="ar-p-2">Row 1, Col 2</td>
+                      </tr>
+                      <tr class="ar-hover:bg-state ar-cursor-pointer">
+                        <td class="ar-p-2">Row 2, Col 1</td>
+                        <td class="ar-p-2">Row 2, Col 2</td>
+                      </tr>
+                      <tr class="ar-hover:bg-state ar-cursor-pointer">
+                        <td class="ar-p-2">Row 3, Col 1</td>
+                        <td class="ar-p-2">Row 3, Col 2</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Common Mistakes -->
+          <section id="mistakes">
+            <h2>Common Mistakes to Avoid</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Missing text color on dark backgrounds</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-bg-inverse"&gt;
+  &lt;p&gt;This text is hard to read&lt;/p&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> <code>ar-bg-inverse</code> is a dark background.
+                  Without <code>ar-text-inverse</code>, the text inherits default dark
+                  color and has poor contrast.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Always pair with text utilities</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-bg-inverse ar-text-inverse"&gt;
+  &lt;p&gt;This text is readable&lt;/p&gt;
+&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Pairing background and text utilities ensures
+                  accessible contrast ratios.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Using primitive palette colors</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-bg-lapis-600"&gt;Not a valid class&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Primitive palette classes do not exist.
+                  ArianaCSS uses <strong>semantic</strong> color names only.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Use semantic color names</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-bg-primary"&gt;Valid semantic class&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Semantic names ensure consistent theming
+                  and maintainable code.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Reference -->
+          <section id="quick-reference">
+            <h2>Quick Reference</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Layer Backgrounds</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-bg-base</code> — pure white</li>
+                  <li><code>ar-bg-raised</code> — slightly warm</li>
+                  <li><code>ar-bg-sunken</code> — recessed</li>
+                  <li><code>ar-bg-inverse</code> — dark surface</li>
+                  <li><code>ar-bg-transparent</code> — transparent</li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Primary</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-bg-primary</code> — filled</li>
+                  <li><code>ar-bg-primary-surface</code> — tinted</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Status — Filled</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-bg-success</code> — green fill</li>
+                  <li><code>ar-bg-warning</code> — gold fill</li>
+                  <li><code>ar-bg-danger</code> — red fill</li>
+                  <li><code>ar-bg-info</code> — blue-gray fill</li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Status — Surface</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-bg-success-surface</code> — green tint</li>
+                  <li><code>ar-bg-warning-surface</code> — gold tint</li>
+                  <li><code>ar-bg-danger-surface</code> — red tint</li>
+                  <li><code>ar-bg-info-surface</code> — blue-gray tint</li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Hover Variants</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-hover:bg-base</code></li>
+                  <li><code>ar-hover:bg-sunken</code></li>
+                  <li><code>ar-hover:bg-primary</code></li>
+                  <li><code>ar-hover:bg-primary-surface</code></li>
+                  <li><code>ar-hover:bg-state</code> — neutral overlay</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pro Tip:</strong> Background utilities do not set text color.
+                Always pair with appropriate text utilities for accessible contrast.
+                <br>
+                <strong>Example:</strong> <code>ar-bg-success ar-text-on-success</code>
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="border.html" class="ar-text-link">Border Utilities</a>
+              or learn about <a href="shadow.html" class="ar-text-link">Shadow Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-table th,
+    .doc-table td {
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-bottom: 1px solid var(--ar-color-divider);
+      text-align: left;
+    }
+
+    .doc-table th {
+      background: var(--ar-color-layer-sunken);
+      font-weight: var(--ar-text-weight-semibold);
+      color: var(--ar-color-text-heading);
+    }
+
+    .doc-table tr:hover {
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-tag {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="getting-started.html" class="doc-nav-link doc-nav-link--active">Get Started</a>
+          <a href="tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="grid.html" class="doc-nav-link">Grid</a>
+          <a href="typography.html" class="doc-nav-link">Typography</a>
+          <a href="components/button.html" class="doc-nav-link">Components</a>
+          <a href="utilities/spacing.html" class="doc-nav-link">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Getting Started</span></li>
+              <li><a href="#introduction" class="doc-sidebar-active">Introduction</a></li>
+              <li><a href="#installation">Installation</a></li>
+              <li><a href="#quick-start">Quick Start</a></li>
+              <li><a href="#basic-template">Basic Template</a></li>
+              <li><a href="#next-steps">Next Steps</a></li>
+              <li><span class="doc-sidebar-heading">Core Concepts</span></li>
+              <li><a href="#tokens">Tokens</a></li>
+              <li><a href="#layers">Layers</a></li>
+              <li><a href="#responsive">Responsive Design</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Getting Started</h1>
+          <p class="ar-lead">
+            Learn how to install and use ArianaCSS in your project.
+            Start building modern, accessible, and lightweight web interfaces in minutes.
+          </p>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              ArianaCSS is a pure CSS framework that combines the best ideas from Bootstrap and Tailwind CSS.
+              It's designed to be lightweight (~15 KB gzipped), accessible, and easy to learn.
+            </p>
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h5 ar-mb-2">🎯 Component-First</h4>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Ready-to-use components with semantic class names.
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h5 ar-mb-2">🔧 Utility-Enabled</h4>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Curated utility classes for fine-grained control.
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h5 ar-mb-2">🎨 Theme Ready</h4>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  CSS custom properties make theming effortless.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Installation -->
+          <section id="installation">
+            <h2>Installation</h2>
+
+            <h3>CDN (Recommended)</h3>
+            <p>The easiest way to get started:</p>
+            <div class="doc-code-block">
+              <code>&lt;!-- Full framework (components + utilities) --&gt;
+&lt;link rel="stylesheet" href="https://cdn.example.com/arianacss/dist/ariana.min.css"&gt;
+
+&lt;!-- Or core-only (components only, no utilities) --&gt;
+&lt;!-- &lt;link rel="stylesheet" href="https://cdn.example.com/arianacss/dist/ariana-core.min.css"&gt; --&gt;
+
+&lt;!-- Or utilities only --&gt;
+&lt;!-- &lt;link rel="stylesheet" href="https://cdn.example.com/arianacss/dist/ariana-utilities.min.css"&gt; --&gt;</code>
+            </div>
+
+            <h3>Package Manager</h3>
+            <div class="doc-code-block">
+              <code># npm
+npm install arianacss
+
+# yarn
+yarn add arianacss
+
+# pnpm
+pnpm add arianacss</code>
+            </div>
+            <p>Then import in your project:</p>
+            <div class="doc-code-block">
+              <code>/* Import everything */
+@import 'arianacss/dist/ariana.min.css';
+
+/* Or import core only */
+@import 'arianacss/dist/ariana-core.min.css';
+
+/* Or import utilities only */
+@import 'arianacss/dist/ariana-utilities.min.css';</code>
+            </div>
+
+            <h3>Direct Download</h3>
+            <p>
+              Download the latest release from the
+              <a href="https://github.com/your-username/arianacss/releases" class="ar-text-link">releases page</a>
+              and include it in your project:
+            </p>
+            <div class="doc-code-block">
+              <code>&lt;link rel="stylesheet" href="path/to/ariana.min.css"&gt;</code>
+            </div>
+          </section>
+
+          <!-- Quick Start -->
+          <section id="quick-start">
+            <h2>Quick Start</h2>
+            <p>Here's a minimal example to get you started:</p>
+
+            <div class="doc-code-block">
+              <code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;My ArianaCSS Project&lt;/title&gt;
+  &lt;link rel="stylesheet" href="https://cdn.example.com/arianacss/dist/ariana.min.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="ar-container"&gt;
+    &lt;h1&gt;Hello, ArianaCSS!&lt;/h1&gt;
+    &lt;p&gt;This is a paragraph with &lt;a href="#"&gt;a link&lt;/a&gt;.&lt;/p&gt;
+    &lt;button class="ar-btn ar-btn--primary"&gt;Get Started&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="ar-container ar-p-0">
+                <h1>Hello, ArianaCSS!</h1>
+                <p>This is a paragraph with <a href="#">a link</a>.</p>
+                <button class="ar-btn ar-btn--primary">Get Started</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Basic Template -->
+          <section id="basic-template">
+            <h2>Basic Template</h2>
+            <p>A more complete template with a navigation bar, grid, and components:</p>
+
+            <div class="doc-code-block">
+              <code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;ArianaCSS Template&lt;/title&gt;
+  &lt;link rel="stylesheet" href="https://cdn.example.com/arianacss/dist/ariana.min.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;!-- Navigation --&gt;
+  &lt;nav class="ar-flex ar-flex-row ar-justify-between ar-items-center ar-px-4 ar-py-3 ar-border-bottom"&gt;
+    &lt;span class="ar-font-bold ar-text-lg"&gt;My Site&lt;/span&gt;
+    &lt;ul class="ar-flex ar-gap-4 ar-list-none ar-m-0"&gt;
+      &lt;li&gt;&lt;a href="#" class="ar-text-link"&gt;Home&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#" class="ar-text-link"&gt;About&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#" class="ar-text-link"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+
+  &lt;!-- Hero --&gt;
+  &lt;section class="ar-py-16 ar-text-center ar-bg-primary-surface"&gt;
+    &lt;div class="ar-container"&gt;
+      &lt;h1 class="ar-h1"&gt;Welcome to My Site&lt;/h1&gt;
+      &lt;p class="ar-lead ar-text-muted"&gt;Built with ArianaCSS&lt;/p&gt;
+      &lt;button class="ar-btn ar-btn--primary ar-mt-4"&gt;Learn More&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;!-- Features --&gt;
+  &lt;section class="ar-py-12"&gt;
+    &lt;div class="ar-container"&gt;
+      &lt;div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-6"&gt;
+        &lt;div class="ar-card ar-p-6 ar-shadow-1"&gt;
+          &lt;h3 class="ar-h4"&gt;Feature 1&lt;/h3&gt;
+          &lt;p class="ar-text-muted"&gt;Description of feature 1.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class="ar-card ar-p-6 ar-shadow-1"&gt;
+          &lt;h3 class="ar-h4"&gt;Feature 2&lt;/h3&gt;
+          &lt;p class="ar-text-muted"&gt;Description of feature 2.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class="ar-card ar-p-6 ar-shadow-1"&gt;
+          &lt;h3 class="ar-h4"&gt;Feature 3&lt;/h3&gt;
+          &lt;p class="ar-text-muted"&gt;Description of feature 3.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;!-- Footer --&gt;
+  &lt;footer class="ar-py-4 ar-text-center ar-text-muted ar-border-top"&gt;
+    &lt;div class="ar-container"&gt;
+      &lt;p class="ar-m-0"&gt;&amp;copy; 2026 My Site. Built with ArianaCSS.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code>
+            </div>
+          </section>
+
+          <!-- Next Steps -->
+          <section id="next-steps">
+            <h2>Next Steps</h2>
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <a href="tokens.html" class="ar-card ar-p-4 ar-shadow-1 ar-text-decoration-none ar-hover:shadow-2" style="display: block;">
+                <h4 class="ar-h5 ar-mb-1 ar-color-text-heading">🎨 Explore Tokens</h4>
+                <p class="ar-text-sm ar-text-muted ar-m-0">Learn about the design system and how to customize it.</p>
+              </a>
+              <a href="grid.html" class="ar-card ar-p-4 ar-shadow-1 ar-text-decoration-none ar-hover:shadow-2" style="display: block;">
+                <h4 class="ar-h5 ar-mb-1 ar-color-text-heading">📐 Master the Grid</h4>
+                <p class="ar-text-sm ar-text-muted ar-m-0">Build responsive layouts with the 12-column system.</p>
+              </a>
+              <a href="components/button.html" class="ar-card ar-p-4 ar-shadow-1 ar-text-decoration-none ar-hover:shadow-2" style="display: block;">
+                <h4 class="ar-h5 ar-mb-1 ar-color-text-heading">🧩 Use Components</h4>
+                <p class="ar-text-sm ar-text-muted ar-m-0">Add buttons, cards, alerts, and more to your pages.</p>
+              </a>
+              <a href="utilities/spacing.html" class="ar-card ar-p-4 ar-shadow-1 ar-text-decoration-none ar-hover:shadow-2" style="display: block;">
+                <h4 class="ar-h5 ar-mb-1 ar-color-text-heading">🔧 Apply Utilities</h4>
+                <p class="ar-text-sm ar-text-muted ar-m-0">Fine-tune your designs with utility classes.</p>
+              </a>
+            </div>
+          </section>
+
+          <!-- Core Concepts -->
+          <section id="tokens">
+            <h2>Core Concepts: Tokens</h2>
+            <p>
+              ArianaCSS is built on a comprehensive token system. Every visual decision—color, spacing,
+              typography, shadow—is defined as a CSS custom property.
+            </p>
+            <div class="doc-code-block">
+              <code>:root {
+  /* Primitive tokens */
+  --ar-lapis-600: hsl(226, 72%, 46%);
+
+  /* Semantic tokens */
+  --ar-color-primary-base: var(--ar-lapis-600);
+  --ar-color-primary-hover: var(--ar-lapis-700);
+}</code>
+            </div>
+            <p>
+              <strong>Learn more:</strong> See the <a href="tokens.html" class="ar-text-link">Tokens documentation</a>
+              for the complete reference.
+            </p>
+          </section>
+
+          <section id="layers">
+            <h2>Core Concepts: Layers</h2>
+            <p>
+              ArianaCSS uses CSS <code>@layer</code> to manage the cascade. The layer order is:
+            </p>
+            <div class="doc-code-block">
+              <code>@layer tokens, base, layout, typography, components, utilities;</code>
+            </div>
+            <p>
+              <strong>Utilities</strong> win over <strong>components</strong>.
+              This means you can override any component style with a utility class without using <code>!important</code>.
+            </p>
+            <p>
+              <strong>Learn more:</strong> See <a href="LAYER-CONTRACT.md" class="ar-text-link">LAYER-CONTRACT.md</a>
+              for the complete layer documentation.
+            </p>
+          </section>
+
+          <section id="responsive">
+            <h2>Core Concepts: Responsive Design</h2>
+            <p>
+              ArianaCSS is mobile-first. Breakpoints:
+            </p>
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Breakpoint</th>
+                  <th>Value</th>
+                  <th>Device Class</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>sm</code></td>
+                  <td>480px</td>
+                  <td>Narrow phone → standard phone</td>
+                </tr>
+                <tr>
+                  <td><code>md</code></td>
+                  <td>768px</td>
+                  <td>Phone → tablet</td>
+                </tr>
+                <tr>
+                  <td><code>lg</code></td>
+                  <td>1024px</td>
+                  <td>Tablet → laptop</td>
+                </tr>
+                <tr>
+                  <td><code>xl</code></td>
+                  <td>1280px</td>
+                  <td>Laptop → wide desktop</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Use responsive prefixes:</p>
+            <div class="doc-code-block">
+              <code>&lt;!-- Hide on mobile, show as flex on tablet+ --&gt;
+&lt;nav class="ar-hidden ar-md:flex"&gt;...&lt;/nav&gt;
+
+&lt;!-- Stack on mobile, row on tablet --&gt;
+&lt;div class="ar-flex ar-flex-col ar-md:flex-row"&gt;...&lt;/div&gt;</code>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>💡 Tip:</strong> All examples in the documentation use live ArianaCSS classes.
+              You can copy and paste them directly into your project.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

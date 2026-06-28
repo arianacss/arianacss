@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page · ArianaCSS</title>
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+  <style>
+    /* Page-specific styles — minimal, only for demo structure */
+    body {
+      background: var(--ar-color-layer-base);
+    }
+    .hero-section {
+      background: linear-gradient(135deg, var(--ar-color-layer-inverse) 0%, var(--ar-color-layer-inverse-raised) 100%);
+      padding: 6rem 0 5rem;
+    }
+    .hero-section .ar-display {
+      color: var(--ar-color-text-inverse);
+    }
+    .hero-section .ar-lead {
+      color: var(--ar-color-text-inverse-muted);
+    }
+    .feature-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: var(--ar-radius-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      flex-shrink: 0;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+    }
+    .testimonial-card {
+      background: var(--ar-color-layer-raised);
+      border: 1px solid var(--ar-color-border-default);
+      border-radius: var(--ar-radius-base);
+      padding: 1.5rem;
+      height: 100%;
+    }
+    .testimonial-card blockquote {
+      margin: 0;
+      border: none;
+      padding: 0;
+      color: var(--ar-color-text-default);
+      font-style: italic;
+      font-size: var(--ar-text-size-base);
+      line-height: var(--ar-text-leading-relaxed);
+    }
+    .testimonial-card .ar-avatar {
+      flex-shrink: 0;
+    }
+    .pricing-card {
+      background: var(--ar-color-layer-base);
+      border: 1px solid var(--ar-color-border-default);
+      border-radius: var(--ar-radius-base);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      height: 100%;
+      transition: box-shadow var(--ar-duration-base) var(--ar-ease-standard),
+                  transform var(--ar-duration-base) var(--ar-ease-standard);
+    }
+    .pricing-card:hover {
+      box-shadow: var(--ar-shadow-2);
+      transform: translateY(-4px);
+    }
+    .pricing-card--featured {
+      border-color: var(--ar-color-primary-base);
+      background: var(--ar-color-primary-surface);
+      position: relative;
+    }
+    .pricing-card--featured .ar-badge {
+      position: absolute;
+      top: -0.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .pricing-price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--ar-color-text-heading);
+      line-height: 1;
+    }
+    .pricing-price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--ar-color-text-muted);
+    }
+    .pricing-features {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+      text-align: left;
+    }
+    .pricing-features li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .pricing-features li:last-child {
+      border-bottom: none;
+    }
+    .pricing-features li::before {
+      content: "✓";
+      color: var(--ar-color-success-base);
+      font-weight: 700;
+    }
+    .cta-section {
+      background: linear-gradient(135deg, var(--ar-color-primary-base) 0%, var(--ar-color-primary-hover) 100%);
+      padding: 4rem 0;
+      text-align: center;
+    }
+    .cta-section h2 {
+      color: var(--ar-color-text-on-primary);
+    }
+    .cta-section p {
+      color: rgba(255,255,255,0.85);
+    }
+    .footer {
+      background: var(--ar-color-layer-inverse);
+      color: var(--ar-color-text-inverse-muted);
+      padding: 3rem 0 2rem;
+      border-top: 1px solid var(--ar-color-layer-inverse-raised);
+    }
+    .footer a {
+      color: var(--ar-color-text-inverse);
+      text-decoration: none;
+    }
+    .footer a:hover {
+      color: var(--ar-color-text-inverse);
+      text-decoration: underline;
+    }
+    .footer .ar-divider {
+      border-color: rgba(255,255,255,0.1);
+    }
+    @media (max-width: 767px) {
+      .hero-section {
+        padding: 4rem 0 3rem;
+      }
+      .hero-section .ar-display {
+        font-size: var(--ar-text-size-4xl);
+      }
+      .pricing-card {
+        padding: 1.5rem 1rem;
+      }
+      .pricing-price {
+        font-size: 2rem;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pricing-card {
+        transition: none;
+      }
+      .pricing-card:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!-- NAVIGATION                                                   -->
+  <!-- ============================================================ -->
+
+  <header class="ar-container--fluid ar-py-3" style="background:var(--ar-color-layer-base);border-bottom:1px solid var(--ar-color-divider);">
+    <div class="ar-container ar-flex ar-items-center ar-justify-between ar-flex-wrap ar-gap-3">
+      <div class="ar-flex ar-items-center ar-gap-2">
+        <div class="ar-avatar ar-avatar--sm ar-bg-primary ar-text-on-primary" style="border-radius:var(--ar-radius-base);">A</div>
+        <span class="ar-text-heading ar-font-bold ar-text-lg">ArianaCSS</span>
+      </div>
+      <nav class="ar-flex ar-items-center ar-gap-4 ar-flex-wrap">
+        <a href="#features" class="ar-text-link ar-text-sm ar-hidden ar-sm:inline">Features</a>
+        <a href="#testimonials" class="ar-text-link ar-text-sm ar-hidden ar-sm:inline">Testimonials</a>
+        <a href="#pricing" class="ar-text-link ar-text-sm ar-hidden ar-sm:inline">Pricing</a>
+        <a href="#cta" class="ar-btn ar-btn--primary ar-btn--sm">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================ -->
+  <!-- HERO SECTION                                                 -->
+  <!-- ============================================================ -->
+
+  <section class="hero-section">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-2 ar-gap-8 ar-items-center">
+
+        <!-- Hero Content -->
+        <div>
+          <p class="ar-eyebrow" style="color:var(--ar-color-text-inverse-muted);">ArianaCSS v1.0</p>
+          <h1 class="ar-display ar-mb-4" style="font-size:3.5rem;line-height:1.1;">Build beautiful interfaces,<br>faster.</h1>
+          <p class="ar-lead ar-mb-6" style="max-width:90%;">
+            A modern, lightweight CSS framework inspired by Afghan design traditions — combining the best of Bootstrap and Tailwind without the bloat.
+          </p>
+          <div class="ar-flex ar-flex-wrap ar-gap-3">
+            <a href="#cta" class="ar-btn ar-btn--inverse ar-btn--lg">Get Started Free</a>
+            <a href="#features" class="ar-btn ar-btn--inverse ar-btn--lg" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2);">Learn More →</a>
+          </div>
+          <div class="ar-flex ar-items-center ar-gap-4 ar-mt-6">
+            <div class="ar-avatar-group">
+              <img class="ar-avatar ar-avatar--sm" src="https://i.pravatar.cc/80?img=1" alt="User">
+              <img class="ar-avatar ar-avatar--sm" src="https://i.pravatar.cc/80?img=2" alt="User">
+              <img class="ar-avatar ar-avatar--sm" src="https://i.pravatar.cc/80?img=3" alt="User">
+              <div class="ar-avatar ar-avatar--sm ar-bg-primary ar-text-on-primary ar-avatar--initials">+2k</div>
+            </div>
+            <span class="ar-text-sm" style="color:var(--ar-color-text-inverse-muted);">
+              <span style="color:var(--ar-color-text-inverse);font-weight:600;">2,000+</span> developers trust ArianaCSS
+            </span>
+          </div>
+        </div>
+
+        <!-- Hero Image Placeholder -->
+        <div class="ar-hidden ar-lg:block">
+          <div class="ar-card ar-card--inverse ar-card--raised" style="border-radius:var(--ar-radius-lg);overflow:hidden;">
+            <div class="ar-card__body" style="padding:2rem;">
+              <div class="ar-flex ar-flex-col ar-gap-4">
+                <div class="ar-flex ar-items-center ar-gap-3">
+                  <div class="ar-avatar ar-avatar--sm ar-bg-primary ar-text-on-primary ar-avatar--initials">JD</div>
+                  <div class="ar-flex-1">
+                    <div class="ar-text-sm ar-font-semibold" style="color:var(--ar-color-text-inverse);">John Doe</div>
+                    <div class="ar-text-xs" style="color:var(--ar-color-text-inverse-muted);">Frontend Developer</div>
+                  </div>
+                  <span class="ar-badge ar-badge--success ar-badge--pill ar-badge--inverse">Active</span>
+                </div>
+                <div class="ar-card ar-card--sunken ar-card--inverse" style="border-radius:var(--ar-radius-sm);">
+                  <div class="ar-card__body" style="padding:1rem;">
+                    <p style="color:var(--ar-color-text-inverse-muted);font-size:var(--ar-text-size-sm);margin:0;">
+                      "ArianaCSS helped me ship my dashboard in 2 days. The component system is exactly what I needed."
+                    </p>
+                  </div>
+                </div>
+                <div class="ar-flex ar-gap-2 ar-flex-wrap">
+                  <span class="ar-badge ar-badge--inverse ar-badge--pill" style="background:rgba(255,255,255,0.08);">#css</span>
+                  <span class="ar-badge ar-badge--inverse ar-badge--pill" style="background:rgba(255,255,255,0.08);">#framework</span>
+                  <span class="ar-badge ar-badge--inverse ar-badge--pill" style="background:rgba(255,255,255,0.08);">#opensource</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FEATURES SECTION                                             -->
+  <!-- ============================================================ -->
+
+  <section id="features" class="ar-container ar-py-12">
+    <div class="ar-text-center ar-mb-10">
+      <p class="ar-eyebrow">Features</p>
+      <h2 class="ar-h2 ar-mb-3">Everything you need to build modern UIs</h2>
+      <p class="ar-lead" style="max-width:600px;margin:0 auto;">A lightweight framework with a unique design language, accessible components, and utilities that work together seamlessly.</p>
+    </div>
+
+    <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-lg:grid-cols-3 ar-gap-6">
+
+      <!-- Feature 1 -->
+      <div class="ar-card ar-card--flat ar-card--bordered">
+        <div class="ar-card__body">
+          <div class="feature-icon ar-mb-3">🎨</div>
+          <h3 class="ar-card__title" style="font-size:1.125rem;">Unique Design Language</h3>
+          <p class="ar-text-sm ar-text-muted" style="margin-block-start:0.5rem;">
+            Inspired by Islamic geometric principles and Afghan natural colors — Lapis blue, Saffron gold, Cedar green.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="ar-card ar-card--flat ar-card--bordered">
+        <div class="ar-card__body">
+          <div class="feature-icon ar-mb-3">⚡</div>
+          <h3 class="ar-card__title" style="font-size:1.125rem;">Lightweight &amp; Fast</h3>
+          <p class="ar-text-sm ar-text-muted" style="margin-block-start:0.5rem;">
+            Under 15 KB minified. No JavaScript dependencies. Pure CSS that loads instantly on any connection.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="ar-card ar-card--flat ar-card--bordered">
+        <div class="ar-card__body">
+          <div class="feature-icon ar-mb-3">♿</div>
+          <h3 class="ar-card__title" style="font-size:1.125rem;">Accessibility First</h3>
+          <p class="ar-text-sm ar-text-muted" style="margin-block-start:0.5rem;">
+            WCAG 2.2 compliant focus rings, ARIA support, reduced motion, and high contrast mode built in from the start.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="ar-card ar-card--flat ar-card--bordered">
+        <div class="ar-card__body">
+          <div class="feature-icon ar-mb-3">📱</div>
+          <h3 class="ar-card__title" style="font-size:1.125rem;">Mobile-First</h3>
+          <p class="ar-text-sm ar-text-muted" style="margin-block-start:0.5rem;">
+            Responsive utilities for all breakpoints. Everything works on phones, tablets, and desktops out of the box.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="ar-card ar-card--flat ar-card--bordered">
+        <div class="ar-card__body">
+          <div class="feature-icon ar-mb-3">🧩</div>
+          <h3 class="ar-card__title" style="font-size:1.125rem;">Component + Utility Hybrid</h3>
+          <p class="ar-text-sm ar-text-muted" style="margin-block-start:0.5rem;">
+            Pre-built components (buttons, cards, alerts) plus composable utilities for complete flexibility.
+          </p>
+        </div>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="ar-card ar-card--flat ar-card--bordered">
+        <div class="ar-card__body">
+          <div class="feature-icon ar-mb-3">🌍</div>
+          <h3 class="ar-card__title" style="font-size:1.125rem;">RTL Ready</h3>
+          <p class="ar-text-sm ar-text-muted" style="margin-block-start:0.5rem;">
+            Full support for Dari, Pashto, Arabic, and Hebrew with logical CSS properties throughout the framework.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- STATS BANNER                                                 -->
+  <!-- ============================================================ -->
+
+  <section class="ar-container--fluid ar-py-8" style="background:var(--ar-color-layer-sunken);border-block:1px solid var(--ar-color-border-default);">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-2 ar-md:grid-cols-4 ar-gap-6 ar-text-center">
+        <div>
+          <div class="ar-text-4xl ar-font-extrabold ar-text-heading ar-tabular-nums">14.5</div>
+          <div class="ar-text-sm ar-text-muted">KB minified</div>
+        </div>
+        <div>
+          <div class="ar-text-4xl ar-font-extrabold ar-text-heading ar-tabular-nums">23</div>
+          <div class="ar-text-sm ar-text-muted">CSS modules</div>
+        </div>
+        <div>
+          <div class="ar-text-4xl ar-font-extrabold ar-text-heading ar-tabular-nums">147</div>
+          <div class="ar-text-sm ar-text-muted">Design tokens</div>
+        </div>
+        <div>
+          <div class="ar-text-4xl ar-font-extrabold ar-text-heading ar-tabular-nums">5</div>
+          <div class="ar-text-sm ar-text-muted">Core components</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TESTIMONIALS                                                 -->
+  <!-- ============================================================ -->
+
+  <section id="testimonials" class="ar-container ar-py-12">
+    <div class="ar-text-center ar-mb-10">
+      <p class="ar-eyebrow">Testimonials</p>
+      <h2 class="ar-h2 ar-mb-3">Loved by developers worldwide</h2>
+      <p class="ar-lead" style="max-width:600px;margin:0 auto;">See what the community is saying about ArianaCSS.</p>
+    </div>
+
+    <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-lg:grid-cols-3 ar-gap-6">
+
+      <!-- Testimonial 1 -->
+      <div class="testimonial-card">
+        <div class="ar-flex ar-items-center ar-gap-3 ar-mb-3">
+          <img class="ar-avatar" src="https://i.pravatar.cc/80?img=8" alt="User">
+          <div>
+            <div class="ar-font-semibold ar-text-sm">Sarah Chen</div>
+            <div class="ar-text-xs ar-text-muted">Frontend Lead, FinTech Co.</div>
+          </div>
+        </div>
+        <blockquote>
+          "ArianaCSS is the framework I've been waiting for. It has the component completeness of Bootstrap with the flexibility of Tailwind — and it actually teaches you CSS along the way."
+        </blockquote>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testimonial-card">
+        <div class="ar-flex ar-items-center ar-gap-3 ar-mb-3">
+          <img class="ar-avatar" src="https://i.pravatar.cc/80?img=9" alt="User">
+          <div>
+            <div class="ar-font-semibold ar-text-sm">Mohammad Rahim</div>
+            <div class="ar-text-xs ar-text-muted">Full-Stack Developer, Kabul</div>
+          </div>
+        </div>
+        <blockquote>
+          "The RTL support for Dari and Pashto is incredible. Finally a framework that respects our language direction without needing a separate stylesheet."
+        </blockquote>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="testimonial-card">
+        <div class="ar-flex ar-items-center ar-gap-3 ar-mb-3">
+          <img class="ar-avatar" src="https://i.pravatar.cc/80?img=10" alt="User">
+          <div>
+            <div class="ar-font-semibold ar-text-sm">Emily Davis</div>
+            <div class="ar-text-xs ar-text-muted">UX Designer, Remote</div>
+          </div>
+        </div>
+        <blockquote>
+          "The design system is so thoughtfully crafted. The Lapis blue and warm Stone neutrals create a professional, warm feel that's rare in CSS frameworks."
+        </blockquote>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PRICING SECTION                                              -->
+  <!-- ============================================================ -->
+
+  <section id="pricing" class="ar-container--fluid ar-py-12" style="background:var(--ar-color-layer-sunken);">
+    <div class="ar-container">
+      <div class="ar-text-center ar-mb-10">
+        <p class="ar-eyebrow">Pricing</p>
+        <h2 class="ar-h2 ar-mb-3">Simple, transparent pricing</h2>
+        <p class="ar-lead" style="max-width:600px;margin:0 auto;">Choose the plan that works for your team. All plans include full framework access.</p>
+      </div>
+
+      <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-6 ar-items-start">
+
+        <!-- Plan: Free -->
+        <div class="pricing-card">
+          <h3 class="ar-h5 ar-mb-1">Starter</h3>
+          <p class="ar-text-sm ar-text-muted ar-mb-4">Perfect for personal projects</p>
+          <div class="pricing-price">
+            $0 <span>/ month</span>
+          </div>
+          <ul class="pricing-features">
+            <li>Full framework access</li>
+            <li>All components &amp; utilities</li>
+            <li>Community support</li>
+            <li>MIT license</li>
+          </ul>
+          <a href="#cta" class="ar-btn ar-btn--ghost ar-btn--full">Get Started</a>
+        </div>
+
+        <!-- Plan: Pro (Featured) -->
+        <div class="pricing-card pricing-card--featured">
+          <span class="ar-badge ar-badge--filled ar-badge--primary ar-badge--pill">Popular</span>
+          <h3 class="ar-h5 ar-mb-1">Pro</h3>
+          <p class="ar-text-sm ar-text-muted ar-mb-4">For professional developers</p>
+          <div class="pricing-price">
+            $29 <span>/ month</span>
+          </div>
+          <ul class="pricing-features">
+            <li>All Starter features</li>
+            <li>Priority support</li>
+            <li>Design system updates</li>
+            <li>Private Slack community</li>
+            <li>Early access to v2.0</li>
+          </ul>
+          <a href="#cta" class="ar-btn ar-btn--primary ar-btn--full">Start Free Trial</a>
+        </div>
+
+        <!-- Plan: Team -->
+        <div class="pricing-card">
+          <h3 class="ar-h5 ar-mb-1">Team</h3>
+          <p class="ar-text-sm ar-text-muted ar-mb-4">For teams and agencies</p>
+          <div class="pricing-price">
+            $99 <span>/ month</span>
+          </div>
+          <ul class="pricing-features">
+            <li>All Pro features</li>
+            <li>5 team seats included</li>
+            <li>Custom theming support</li>
+            <li>Dedicated account manager</li>
+            <li>SLA and uptime guarantee</li>
+          </ul>
+          <a href="#cta" class="ar-btn ar-btn--ghost ar-btn--full">Contact Sales</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CTA SECTION                                                  -->
+  <!-- ============================================================ -->
+
+  <section id="cta" class="cta-section">
+    <div class="ar-container">
+      <h2 class="ar-h2 ar-mb-3" style="font-size:2.5rem;">Ready to build something amazing?</h2>
+      <p class="ar-lead ar-mb-6" style="max-width:600px;margin:0 auto 2rem;">
+        Join thousands of developers already using ArianaCSS. It's free, open source, and built for the modern web.
+      </p>
+      <div class="ar-flex ar-flex-wrap ar-justify-center ar-gap-3">
+        <a href="#" class="ar-btn ar-btn--inverse ar-btn--lg">Get Started Free</a>
+        <a href="#" class="ar-btn ar-btn--inverse ar-btn--lg" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2);">View on GitHub →</a>
+      </div>
+      <p class="ar-text-sm ar-mt-4" style="color:rgba(255,255,255,0.6);">
+        No credit card required • MIT License • Open source
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER                                                       -->
+  <!-- ============================================================ -->
+
+  <footer class="footer">
+    <div class="ar-container">
+
+      <div class="ar-grid ar-grid-cols-2 ar-md:grid-cols-4 ar-gap-8 ar-mb-8">
+
+        <div>
+          <div class="ar-flex ar-items-center ar-gap-2 ar-mb-3">
+            <div class="ar-avatar ar-avatar--sm ar-bg-primary ar-text-on-primary" style="border-radius:var(--ar-radius-base);">A</div>
+            <span class="ar-text-inverse ar-font-bold">ArianaCSS</span>
+          </div>
+          <p class="ar-text-sm" style="color:var(--ar-color-text-inverse-muted);">
+            A modern CSS framework built for the world, inspired by Afghanistan.
+          </p>
+          <p class="ar-text-xs ar-mt-2" style="color:var(--ar-color-text-inverse-muted);">
+            © 2026 ArianaCSS. MIT License.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="ar-text-sm ar-font-semibold ar-text-inverse ar-mb-3">Product</h4>
+          <ul class="ar-flex ar-flex-col ar-gap-1" style="list-style:none;padding:0;">
+            <li><a href="#" class="ar-text-sm">Features</a></li>
+            <li><a href="#" class="ar-text-sm">Documentation</a></li>
+            <li><a href="#" class="ar-text-sm">Components</a></li>
+            <li><a href="#" class="ar-text-sm">Utilities</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="ar-text-sm ar-font-semibold ar-text-inverse ar-mb-3">Community</h4>
+          <ul class="ar-flex ar-flex-col ar-gap-1" style="list-style:none;padding:0;">
+            <li><a href="#" class="ar-text-sm">GitHub</a></li>
+            <li><a href="#" class="ar-text-sm">Discord</a></li>
+            <li><a href="#" class="ar-text-sm">Twitter</a></li>
+            <li><a href="#" class="ar-text-sm">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="ar-text-sm ar-font-semibold ar-text-inverse ar-mb-3">Legal</h4>
+          <ul class="ar-flex ar-flex-col ar-gap-1" style="list-style:none;padding:0;">
+            <li><a href="#" class="ar-text-sm">License</a></li>
+            <li><a href="#" class="ar-text-sm">Privacy Policy</a></li>
+            <li><a href="#" class="ar-text-sm">Terms of Service</a></li>
+            <li><a href="#" class="ar-text-sm">Cookie Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <hr class="ar-divider" style="border-color:rgba(255,255,255,0.1);">
+
+      <div class="ar-flex ar-flex-wrap ar-justify-between ar-gap-3 ar-pt-4">
+        <p class="ar-text-xs" style="color:var(--ar-color-text-inverse-muted);">
+          Built with ❤️ in Afghanistan. Supporting Dari, Pashto, and the global community.
+        </p>
+        <div class="ar-flex ar-gap-3">
+          <span class="ar-badge ar-badge--inverse ar-badge--pill" style="background:rgba(255,255,255,0.08);">CSS</span>
+          <span class="ar-badge ar-badge--inverse ar-badge--pill" style="background:rgba(255,255,255,0.08);">Open Source</span>
+          <span class="ar-badge ar-badge--inverse ar-badge--pill" style="background:rgba(255,255,255,0.08);">v1.0</span>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

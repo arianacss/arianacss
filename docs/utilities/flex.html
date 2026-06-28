@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flexbox Utilities — ArianaCSS</title>
+
+  <!-- ArianaCSS Framework -->
+  <link rel="stylesheet" href="../../dist/ariana.min.css">
+
+  <style>
+    /* Documentation-specific styles */
+    .doc-nav {
+      padding: var(--ar-space-3) 0;
+      border-bottom: 1px solid var(--ar-color-divider);
+      background: var(--ar-color-layer-base);
+    }
+
+    .doc-nav-brand {
+      font-weight: var(--ar-text-weight-bold);
+      font-size: var(--ar-text-size-lg);
+      color: var(--ar-color-text-heading);
+      text-decoration: none;
+    }
+
+    .doc-nav-brand span {
+      color: var(--ar-color-primary-base);
+    }
+
+    .doc-nav-link {
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-base);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-nav-link:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-nav-link--active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+    }
+
+    .doc-content {
+      padding: var(--ar-space-8) 0 var(--ar-space-16);
+    }
+
+    .doc-content h1 {
+      margin-bottom: var(--ar-space-4);
+    }
+
+    .doc-content h2 {
+      margin-top: var(--ar-space-12);
+      margin-bottom: var(--ar-space-4);
+      padding-top: var(--ar-space-4);
+      border-top: 1px solid var(--ar-color-divider);
+    }
+
+    .doc-content h3 {
+      margin-top: var(--ar-space-8);
+      margin-bottom: var(--ar-space-3);
+    }
+
+    .doc-content .ar-lead {
+      margin-bottom: var(--ar-space-6);
+    }
+
+    .doc-code-block {
+      background: var(--ar-color-layer-sunken);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      overflow-x: auto;
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-code-block code {
+      font-family: var(--ar-text-font-mono);
+      font-size: var(--ar-text-size-sm);
+      color: var(--ar-color-text-code);
+      white-space: pre-wrap;
+    }
+
+    .doc-example-box {
+      background: var(--ar-color-layer-raised);
+      padding: var(--ar-space-4);
+      border-radius: var(--ar-radius-base);
+      border: 1px solid var(--ar-color-divider);
+      margin: var(--ar-space-4) 0;
+    }
+
+    .doc-sidebar {
+      position: sticky;
+      top: var(--ar-space-4);
+      height: fit-content;
+    }
+
+    .doc-sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .doc-sidebar li {
+      margin-bottom: var(--ar-space-1);
+    }
+
+    .doc-sidebar a {
+      display: block;
+      padding: var(--ar-space-2) var(--ar-space-3);
+      color: var(--ar-color-text-muted);
+      text-decoration: none;
+      border-radius: var(--ar-radius-base);
+      font-size: var(--ar-text-size-sm);
+      transition: background-color var(--ar-duration-fast) var(--ar-ease-standard),
+                  color var(--ar-duration-fast) var(--ar-ease-standard);
+    }
+
+    .doc-sidebar a:hover {
+      background: var(--ar-color-state-hover-bg);
+      color: var(--ar-color-text-default);
+    }
+
+    .doc-sidebar .doc-sidebar-active {
+      color: var(--ar-color-text-default);
+      background: var(--ar-color-state-hover-bg);
+      font-weight: var(--ar-text-weight-medium);
+    }
+
+    .doc-sidebar .doc-sidebar-heading {
+      font-size: var(--ar-text-size-xs);
+      text-transform: uppercase;
+      letter-spacing: var(--ar-text-tracking-wider);
+      color: var(--ar-color-text-muted);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      margin-top: var(--ar-space-4);
+      font-weight: var(--ar-text-weight-semibold);
+    }
+
+    .doc-footer {
+      padding: var(--ar-space-8) 0;
+      border-top: 1px solid var(--ar-color-divider);
+      color: var(--ar-color-text-muted);
+      font-size: var(--ar-text-size-sm);
+    }
+
+    .doc-badge {
+      display: inline-block;
+      background: var(--ar-color-primary-surface);
+      color: var(--ar-color-primary-base);
+      font-size: var(--ar-text-size-xs);
+      font-weight: var(--ar-text-weight-semibold);
+      padding: var(--ar-space-micro) var(--ar-space-2);
+      border-radius: var(--ar-radius-full);
+      letter-spacing: var(--ar-text-tracking-wider);
+      text-transform: uppercase;
+    }
+
+    .doc-flex-demo {
+      background: var(--ar-color-layer-sunken);
+      border: 2px dashed var(--ar-color-border-default);
+      border-radius: var(--ar-radius-sm);
+      padding: var(--ar-space-3);
+      min-height: 6rem;
+      display: flex;
+      gap: var(--ar-space-2);
+      flex-wrap: wrap;
+    }
+
+    .doc-flex-demo-item {
+      background: var(--ar-color-primary-surface);
+      border: 1px solid var(--ar-color-primary-border);
+      color: var(--ar-color-primary-emphasis);
+      padding: var(--ar-space-2) var(--ar-space-3);
+      border-radius: var(--ar-radius-sm);
+      font-size: var(--ar-text-size-sm);
+      font-weight: var(--ar-text-weight-medium);
+      text-align: center;
+    }
+
+    .doc-flex-demo-item--success {
+      background: var(--ar-color-success-surface);
+      border-color: var(--ar-color-success-border);
+      color: var(--ar-color-success-text);
+    }
+
+    .doc-flex-demo-item--warning {
+      background: var(--ar-color-warning-surface);
+      border-color: var(--ar-color-warning-border);
+      color: var(--ar-color-warning-text);
+    }
+
+    .doc-flex-demo-item--danger {
+      background: var(--ar-color-danger-surface);
+      border-color: var(--ar-color-danger-border);
+      color: var(--ar-color-danger-text);
+    }
+
+    .doc-flex-demo-item--info {
+      background: var(--ar-color-info-surface);
+      border-color: var(--ar-color-info-border);
+      color: var(--ar-color-info-text);
+    }
+
+    .doc-flex-demo-item--tall {
+      min-height: 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .doc-flex-demo-item--fill {
+      flex: 1;
+      text-align: center;
+    }
+
+    .doc-flex-demo-row {
+      background: var(--ar-color-layer-sunken);
+      border: 2px dashed var(--ar-color-border-default);
+      border-radius: var(--ar-radius-sm);
+      padding: var(--ar-space-3);
+      min-height: 4rem;
+      display: flex;
+      gap: var(--ar-space-2);
+      margin-bottom: var(--ar-space-2);
+    }
+
+    .doc-flex-demo-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .doc-label {
+      font-size: var(--ar-text-size-xs);
+      color: var(--ar-color-text-muted);
+      font-family: var(--ar-text-font-mono);
+      display: block;
+      margin-bottom: var(--ar-space-1);
+    }
+
+    @media (max-width: 767px) {
+      .doc-sidebar {
+        position: static;
+        margin-bottom: var(--ar-space-8);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="doc-nav">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-row ar-justify-between ar-items-center">
+        <a href="../index.html" class="doc-nav-brand">
+          Ariana<span>CSS</span>
+        </a>
+        <div class="ar-flex ar-gap-2">
+          <a href="../getting-started.html" class="doc-nav-link">Get Started</a>
+          <a href="../tokens.html" class="doc-nav-link">Tokens</a>
+          <a href="../grid.html" class="doc-nav-link">Grid</a>
+          <a href="../typography.html" class="doc-nav-link">Typography</a>
+          <a href="../components/button.html" class="doc-nav-link">Components</a>
+          <a href="spacing.html" class="doc-nav-link doc-nav-link--active">Utilities</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="doc-content">
+    <div class="ar-container">
+      <div class="ar-grid ar-grid-cols-1 ar-lg:grid-cols-12 ar-gap-8">
+
+        <!-- Sidebar -->
+        <aside class="ar-col-12 ar-lg:col-3">
+          <div class="doc-sidebar">
+            <ul>
+              <li><span class="doc-sidebar-heading">Utilities</span></li>
+              <li><a href="spacing.html">Spacing</a></li>
+              <li><a href="display.html">Display</a></li>
+              <li><a href="flex.html" class="doc-sidebar-active">Flexbox</a></li>
+              <li><a href="grid.html">Grid</a></li>
+              <li><a href="typography.html">Typography</a></li>
+              <li><a href="color.html">Color</a></li>
+              <li><a href="border.html">Border</a></li>
+              <li><a href="shadow.html">Shadow</a></li>
+              <li><a href="ratio.html">Ratio</a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ar-col-12 ar-lg:col-9">
+
+          <h1>Flexbox Utilities</h1>
+          <p class="ar-lead">
+            Build flexible, responsive layouts with a complete set of flexbox utilities.
+            Direction, alignment, distribution, and ordering — all in one system.
+          </p>
+
+          <div class="ar-alert ar-alert--info ar-mb-6">
+            <div class="ar-alert__title">Important: Display First</div>
+            <div class="ar-alert__message">
+              Flexbox utilities <strong>do not set <code>display: flex</code></strong>.
+              Always use <code>ar-flex</code> or <code>ar-inline-flex</code> (from display utilities)
+              <em>before</em> using flexbox utilities.
+            </div>
+          </div>
+
+          <!-- Introduction -->
+          <section id="introduction">
+            <h2>Introduction</h2>
+            <p>
+              ArianaCSS provides a complete set of flexbox utilities for building flexible layouts.
+              Use them for navigation bars, card grids, button groups, form rows, and more.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">📐</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Direction, wrap, and flow control
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🎯</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Alignment and distribution (items, justify, self)
+                </p>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <div class="ar-h4 ar-mb-1">🔄</div>
+                <p class="ar-text-sm ar-text-muted ar-m-0">
+                  Responsive variants at all 4 breakpoints
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Direction & Wrap -->
+          <section id="direction-wrap">
+            <h2>Direction & Wrap</h2>
+            <p>
+              Control the flow direction and wrapping behavior of flex containers.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-flex ar-flex-row ar-gap-4"&gt;
+  &lt;span&gt;Item 1&lt;/span&gt;
+  &lt;span&gt;Item 2&lt;/span&gt;
+  &lt;span&gt;Item 3&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="ar-flex ar-flex-col ar-gap-4"&gt;
+  &lt;span&gt;Item 1&lt;/span&gt;
+  &lt;span&gt;Item 2&lt;/span&gt;
+  &lt;span&gt;Item 3&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class="ar-flex ar-flex-wrap ar-gap-4"&gt;
+  &lt;span&gt;Item 1&lt;/span&gt;
+  &lt;span&gt;Item 2&lt;/span&gt;
+  &lt;span&gt;Item 3&lt;/span&gt;
+  &lt;span&gt;Item 4&lt;/span&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Row (default)</h4>
+                <span class="doc-label">ar-flex-row</span>
+                <div class="doc-flex-demo ar-flex-row">
+                  <span class="doc-flex-demo-item">1</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">2</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">3</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Column</h4>
+                <span class="doc-label">ar-flex-col</span>
+                <div class="doc-flex-demo ar-flex-col">
+                  <span class="doc-flex-demo-item">1</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">2</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">3</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Wrap</h4>
+                <span class="doc-label">ar-flex-wrap</span>
+                <div class="doc-flex-demo ar-flex-wrap" style="width: 200px;">
+                  <span class="doc-flex-demo-item">1</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">2</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">3</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--danger">4</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--info">5</span>
+                </div>
+                <p class="ar-text-xs ar-text-muted ar-mt-2">Items wrap to the next row when space runs out</p>
+              </div>
+            </div>
+
+            <div class="doc-example-box ar-mt-4">
+              <h4 class="ar-h6 ar-mb-2">Responsive Direction</h4>
+              <div class="doc-code-block ar-mb-2">
+                <code>&lt;div class="ar-flex ar-flex-col ar-md:flex-row ar-gap-4"&gt;
+  &lt;span&gt;Stack on mobile, row on tablet+&lt;/span&gt;
+  &lt;span&gt;Item 2&lt;/span&gt;
+  &lt;span&gt;Item 3&lt;/span&gt;
+&lt;/div&gt;</code>
+              </div>
+              <div class="doc-flex-demo ar-flex-col ar-md:flex-row">
+                <span class="doc-flex-demo-item">📱 Mobile: column</span>
+                <span class="doc-flex-demo-item doc-flex-demo-item--success">💻 Tablet+: row</span>
+                <span class="doc-flex-demo-item doc-flex-demo-item--warning">Resize to see it change</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Flex Shorthand -->
+          <section id="flex-shorthand">
+            <h2>Flex Shorthand</h2>
+            <p>
+              Use flex shorthand utilities for common flex patterns:
+              <code>ar-flex-1</code>, <code>ar-flex-auto</code>, <code>ar-flex-initial</code>, and <code>ar-flex-none</code>.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-flex ar-gap-4"&gt;
+  &lt;div class="ar-flex-1"&gt;Fills remaining space&lt;/div&gt;
+  &lt;div class="ar-flex-none"&gt;Fixed width&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-flex-1</h4>
+                <span class="doc-label">flex: 1 1 0% — fills remaining space</span>
+                <div class="doc-flex-demo">
+                  <span class="doc-flex-demo-item ar-flex-1">Fill</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success ar-flex-none" style="width: 80px;">Fixed</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-flex-auto</h4>
+                <span class="doc-label">flex: 1 1 auto — fills from natural size</span>
+                <div class="doc-flex-demo">
+                  <span class="doc-flex-demo-item ar-flex-auto">Auto</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success ar-flex-auto">Auto</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning ar-flex-none" style="width: 60px;">Fixed</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-col-12 ar-md:col-4">
+                <h4 class="ar-h6 ar-mb-2">ar-flex-initial</h4>
+                <span class="doc-label">flex: 0 1 auto — default behavior</span>
+                <div class="doc-flex-demo">
+                  <span class="doc-flex-demo-item ar-flex-initial">Initial</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success ar-flex-initial">Initial</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning ar-flex-none" style="width: 60px;">Fixed</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-col-12 ar-md:col-4">
+                <h4 class="ar-h6 ar-mb-2">ar-flex-none</h4>
+                <span class="doc-label">flex: none — no grow/shrink</span>
+                <div class="doc-flex-demo">
+                  <span class="doc-flex-demo-item ar-flex-none" style="width: 60px;">None</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success ar-flex-1">Fill</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning ar-flex-none" style="width: 60px;">None</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--success ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>💡 Pro Tip:</strong> <code>ar-flex-1</code> is the most commonly used
+                flex shorthand. It makes an element fill available space in a flex container.
+                Perfect for navigation items, form fields, and card content.
+              </div>
+            </div>
+          </section>
+
+          <!-- Alignment -->
+          <section id="alignment">
+            <h2>Alignment Utilities</h2>
+            <p>
+              Control alignment along the main axis (<code>justify</code>) and cross axis (<code>items</code>).
+            </p>
+
+            <h3>Align Items (Cross Axis)</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-flex ar-items-center ar-gap-4" style="min-height: 120px;"&gt;
+  &lt;span&gt;Centered vertically&lt;/span&gt;
+  &lt;span&gt;Item 2&lt;/span&gt;
+  &lt;span&gt;Item 3&lt;/span&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-3 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-items-start</h4>
+                <div class="doc-flex-demo ar-items-start" style="min-height: 100px;">
+                  <span class="doc-flex-demo-item doc-flex-demo-item--tall">Top</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">Middle</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">Bottom</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-items-center</h4>
+                <div class="doc-flex-demo ar-items-center" style="min-height: 100px;">
+                  <span class="doc-flex-demo-item doc-flex-demo-item--tall">Top</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">Middle</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">Bottom</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-items-end</h4>
+                <div class="doc-flex-demo ar-items-end" style="min-height: 100px;">
+                  <span class="doc-flex-demo-item doc-flex-demo-item--tall">Top</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">Middle</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">Bottom</span>
+                </div>
+              </div>
+            </div>
+
+            <h3>Justify Content (Main Axis)</h3>
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-flex ar-justify-between ar-gap-4"&gt;
+  &lt;span&gt;Left&lt;/span&gt;
+  &lt;span&gt;Center&lt;/span&gt;
+  &lt;span&gt;Right&lt;/span&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-justify-start</h4>
+                <div class="doc-flex-demo ar-justify-start">
+                  <span class="doc-flex-demo-item">1</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">2</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">3</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-justify-center</h4>
+                <div class="doc-flex-demo ar-justify-center">
+                  <span class="doc-flex-demo-item">1</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">2</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">3</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-justify-end</h4>
+                <div class="doc-flex-demo ar-justify-end">
+                  <span class="doc-flex-demo-item">1</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">2</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">3</span>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">ar-justify-between</h4>
+                <div class="doc-flex-demo ar-justify-between">
+                  <span class="doc-flex-demo-item">1</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">2</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">3</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Grow, Shrink, Basis, Order -->
+          <section id="grow-shrink-order">
+            <h2>Grow, Shrink, Basis & Order</h2>
+            <p>
+              Control individual flex item behavior with grow, shrink, basis, and order utilities.
+            </p>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Grow</h4>
+                <span class="doc-label">ar-grow — flex-grow: 1</span>
+                <div class="doc-flex-demo">
+                  <span class="doc-flex-demo-item">Static</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success ar-grow">Grows</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning">Static</span>
+                </div>
+                <div class="doc-code-block ar-mt-2">
+                  <code>&lt;span class="ar-grow"&gt;Fills space&lt;/span&gt;</code>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Shrink</h4>
+                <span class="doc-label">ar-shrink-0 — prevents shrinking</span>
+                <div class="doc-flex-demo" style="max-width: 200px;">
+                  <span class="doc-flex-demo-item ar-flex-1">Flexible</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success ar-shrink-0" style="width: 100px;">Don't shrink</span>
+                </div>
+                <div class="doc-code-block ar-mt-2">
+                  <code>&lt;span class="ar-shrink-0"&gt;Fixed width&lt;/span&gt;</code>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Basis</h4>
+                <span class="doc-label">ar-basis-full — initial size 100%</span>
+                <div class="doc-flex-doc ar-flex-demo">
+                  <span class="doc-flex-demo-item ar-basis-full">Full</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success ar-basis-auto">Auto</span>
+                </div>
+                <div class="doc-code-block ar-mt-2">
+                  <code>&lt;span class="ar-basis-full"&gt;100% basis&lt;/span&gt;</code>
+                </div>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Order</h4>
+                <span class="doc-label">ar-order-first / ar-order-last</span>
+                <div class="doc-flex-demo">
+                  <span class="doc-flex-demo-item ar-order-last">Last (DOM: 1st)</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--success">Middle</span>
+                  <span class="doc-flex-demo-item doc-flex-demo-item--warning ar-order-first">First (DOM: 3rd)</span>
+                </div>
+                <div class="doc-code-block ar-mt-2">
+                  <code>&lt;span class="ar-order-first"&gt;Appears first&lt;/span&gt;</code>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Self Alignment -->
+          <section id="self-alignment">
+            <h2>Self Alignment</h2>
+            <p>
+              Use <code>ar-self-*</code> to override the parent's <code>align-items</code>
+              for individual flex items.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;div class="ar-flex ar-items-start" style="min-height: 120px;"&gt;
+  &lt;div class="ar-self-start"&gt;Top&lt;/div&gt;
+  &lt;div class="ar-self-center"&gt;Center&lt;/div&gt;
+  &lt;div class="ar-self-end"&gt;Bottom&lt;/div&gt;
+&lt;/div&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <div class="doc-flex-demo ar-items-start" style="min-height: 120px;">
+                <span class="doc-flex-demo-item doc-flex-demo-item--tall ar-self-start" style="min-height: 2rem;">Self Start</span>
+                <span class="doc-flex-demo-item doc-flex-demo-item--success doc-flex-demo-item--tall ar-self-center" style="min-height: 2rem;">Self Center</span>
+                <span class="doc-flex-demo-item doc-flex-demo-item--warning doc-flex-demo-item--tall ar-self-end" style="min-height: 2rem;">Self End</span>
+                <span class="doc-flex-demo-item doc-flex-demo-item--info doc-flex-demo-item--tall ar-self-stretch" style="min-height: 2rem;">Self Stretch</span>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                Parent has <code>ar-items-start</code>, but each item overrides its alignment
+              </p>
+            </div>
+          </section>
+
+          <!-- Responsive Flex -->
+          <section id="responsive">
+            <h2>Responsive Flex</h2>
+            <p>
+              Direction, wrap, and alignment utilities have responsive variants at all breakpoints.
+              Use them to change flex behavior at different screen sizes.
+            </p>
+
+            <div class="doc-code-block">
+              <code>&lt;!-- Stack on mobile, row on tablet+ --&gt;
+&lt;div class="ar-flex ar-flex-col ar-md:flex-row ar-gap-4"&gt;
+  &lt;div&gt;Item 1&lt;/div&gt;
+  &lt;div&gt;Item 2&lt;/div&gt;
+  &lt;div&gt;Item 3&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Center on mobile, space-between on desktop --&gt;
+&lt;nav class="ar-flex ar-justify-center ar-lg:justify-between ar-gap-4"&gt;
+  &lt;a href="#"&gt;Home&lt;/a&gt;
+  &lt;a href="#"&gt;About&lt;/a&gt;
+  &lt;a href="#"&gt;Contact&lt;/a&gt;
+&lt;/nav&gt;</code>
+            </div>
+
+            <div class="doc-example-box">
+              <h4 class="ar-h6 ar-mb-2">Responsive Flex Example</h4>
+              <div class="doc-flex-demo ar-flex-col ar-md:flex-row ar-justify-center ar-md:justify-between ar-gap-2">
+                <span class="doc-flex-demo-item">Mobile: column</span>
+                <span class="doc-flex-demo-item doc-flex-demo-item--success">Tablet+: row</span>
+                <span class="doc-flex-demo-item doc-flex-demo-item--warning">Resize to see</span>
+              </div>
+              <p class="ar-text-xs ar-text-muted ar-mt-2">
+                <code>ar-flex-col ar-md:flex-row ar-justify-center ar-md:justify-between</code>
+              </p>
+            </div>
+          </section>
+
+          <!-- Common Patterns -->
+          <section id="patterns">
+            <h2>Common Patterns</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Navigation Bar</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;nav class="ar-flex ar-flex-row ar-justify-between ar-items-center ar-gap-4 ar-p-4"&gt;
+  &lt;span class="ar-font-bold"&gt;Logo&lt;/span&gt;
+  &lt;ul class="ar-flex ar-gap-4 ar-m-0 ar-list-none"&gt;
+    &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;About&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;button class="ar-btn ar-btn--primary"&gt;Login&lt;/button&gt;
+&lt;/nav&gt;</code>
+                </div>
+                <div class="ar-flex ar-flex-row ar-justify-between ar-items-center ar-gap-4 ar-p-3 ar-bg-sunken ar-rounded">
+                  <span class="ar-font-bold">Logo</span>
+                  <ul class="ar-flex ar-gap-4 ar-m-0 ar-list-none">
+                    <li><a href="#" class="ar-text-link">Home</a></li>
+                    <li><a href="#" class="ar-text-link">About</a></li>
+                  </ul>
+                  <button class="ar-btn ar-btn--primary ar-btn--sm">Login</button>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Card Grid</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-flex ar-flex-wrap ar-gap-4"&gt;
+  &lt;div class="ar-flex-1" style="min-width: 200px;"&gt;Card 1&lt;/div&gt;
+  &lt;div class="ar-flex-1" style="min-width: 200px;"&gt;Card 2&lt;/div&gt;
+  &lt;div class="ar-flex-1" style="min-width: 200px;"&gt;Card 3&lt;/div&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-flex ar-flex-wrap ar-gap-3">
+                  <div class="ar-flex-1" style="min-width: 120px;">
+                    <div class="doc-flex-demo-item ar-shadow-1 ar-p-3 ar-text-center">Card 1</div>
+                  </div>
+                  <div class="ar-flex-1" style="min-width: 120px;">
+                    <div class="doc-flex-demo-item doc-flex-demo-item--success ar-shadow-1 ar-p-3 ar-text-center">Card 2</div>
+                  </div>
+                  <div class="ar-flex-1" style="min-width: 120px;">
+                    <div class="doc-flex-demo-item doc-flex-demo-item--warning ar-shadow-1 ar-p-3 ar-text-center">Card 3</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Icon + Text</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;div class="ar-flex ar-items-center ar-gap-2"&gt;
+  &lt;svg class="ar-shrink-0" width="20" height="20"&gt;...&lt;/svg&gt;
+  &lt;span class="ar-flex-1"&gt;Label text that may wrap&lt;/span&gt;
+&lt;/div&gt;</code>
+                </div>
+                <div class="ar-flex ar-items-center ar-gap-2 ar-p-2 ar-bg-sunken ar-rounded">
+                  <svg class="ar-shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 8v4l3 3"/>
+                  </svg>
+                  <span class="ar-flex-1 ar-text-sm">Label text that may wrap to multiple lines</span>
+                </div>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Footer with Links</h4>
+                <div class="doc-code-block ar-mb-2">
+                  <code>&lt;footer class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4 ar-py-6"&gt;
+  &lt;span&gt;© 2026 Company&lt;/span&gt;
+  &lt;div class="ar-flex ar-gap-4"&gt;
+    &lt;a href="#"&gt;Terms&lt;/a&gt;
+    &lt;a href="#"&gt;Privacy&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/footer&gt;</code>
+                </div>
+                <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-3 ar-py-3 ar-border-top">
+                  <span class="ar-text-sm ar-text-muted">© 2026 Company</span>
+                  <div class="ar-flex ar-gap-4">
+                    <a href="#" class="ar-text-link ar-text-sm">Terms</a>
+                    <a href="#" class="ar-text-link ar-text-sm">Privacy</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Common Mistakes -->
+          <section id="mistakes">
+            <h2>Common Mistakes to Avoid</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4 ar-mt-4">
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Missing display:flex</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-items-center"&gt;...&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> Flexbox utilities <strong>require</strong>
+                  <code>display: flex</code> to work. Without it, alignment and
+                  direction utilities have no effect.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Always include ar-flex</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-flex ar-items-center"&gt;...&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> <code>ar-flex</code> sets <code>display: flex</code>
+                  and enables all flexbox utilities to work correctly.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-danger">
+                <h4 class="ar-h6 ar-text-danger ar-mb-2">❌ Mixing justify and items</h4>
+                <div class="doc-code-block">
+                  <code>&lt;div class="ar-flex ar-justify-center ar-items-center"&gt;...&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> This works but only if you understand that
+                  <code>justify</code> is for the <strong>main axis</strong> and
+                  <code>items</code> is for the <strong>cross axis</strong>. They do
+                  different things.
+                </p>
+              </div>
+
+              <div class="ar-card ar-p-4 ar-shadow-1 ar-border ar-border-success">
+                <h4 class="ar-h6 ar-text-success ar-mb-2">✅ Understand axis directions</h4>
+                <div class="doc-code-block">
+                  <code>&lt;!-- Row: justify=horizontal, items=vertical --&gt;
+&lt;div class="ar-flex ar-flex-row ar-justify-between ar-items-center"&gt;...&lt;/div&gt;
+
+&lt;!-- Column: justify=vertical, items=horizontal --&gt;
+&lt;div class="ar-flex ar-flex-col ar-justify-center ar-items-stretch"&gt;...&lt;/div&gt;</code>
+                </div>
+                <p class="ar-text-sm ar-text-muted ar-mt-2">
+                  <strong>Why:</strong> The axis direction changes with
+                  <code>flex-direction</code>. Plan your layout accordingly.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Reference -->
+          <section id="quick-reference">
+            <h2>Quick Reference</h2>
+
+            <div class="ar-grid ar-grid-cols-1 ar-md:grid-cols-2 ar-gap-4">
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Direction & Wrap</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-flex-row</code> — row (default)</li>
+                  <li><code>ar-flex-col</code> — column</li>
+                  <li><code>ar-flex-row-reverse</code> — reverse row</li>
+                  <li><code>ar-flex-col-reverse</code> — reverse column</li>
+                  <li><code>ar-flex-wrap</code> — wrap items</li>
+                  <li><code>ar-flex-nowrap</code> — no wrap (default)</li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Flex Shorthand</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-flex-1</code> — flex: 1 1 0%</li>
+                  <li><code>ar-flex-auto</code> — flex: 1 1 auto</li>
+                  <li><code>ar-flex-initial</code> — flex: 0 1 auto</li>
+                  <li><code>ar-flex-none</code> — flex: none</li>
+                </ul>
+              </div>
+              <div class="ar-card ar-p-4 ar-shadow-1">
+                <h4 class="ar-h6 ar-mb-2">Alignment & Distribution</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-items-start/center/end/stretch/baseline</code></li>
+                  <li><code>ar-justify-start/center/end/between/around/evenly</code></li>
+                  <li><code>ar-content-start/center/end/between/around/evenly</code></li>
+                  <li><code>ar-self-auto/start/center/end/stretch</code></li>
+                </ul>
+                <h4 class="ar-h6 ar-mt-4 ar-mb-2">Item Behavior</h4>
+                <ul class="ar-list ar-text-sm">
+                  <li><code>ar-grow</code> — flex-grow: 1</li>
+                  <li><code>ar-grow-0</code> — flex-grow: 0</li>
+                  <li><code>ar-shrink</code> — flex-shrink: 1</li>
+                  <li><code>ar-shrink-0</code> — flex-shrink: 0</li>
+                  <li><code>ar-basis-auto/full/0</code> — flex-basis</li>
+                  <li><code>ar-order-first/last/none</code> — order</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="ar-alert ar-alert--info ar-mt-4">
+              <div class="ar-alert__message">
+                <strong>📚 Responsive Prefixes:</strong>
+                <code>sm:</code> 480px, <code>md:</code> 768px, <code>lg:</code> 1024px, <code>xl:</code> 1280px
+                <br>
+                <strong>Example:</strong> <code>ar-flex-col ar-md:flex-row</code>
+              </div>
+            </div>
+          </section>
+
+          <div class="ar-mt-12 ar-p-4 ar-bg-primary-surface ar-rounded ar-border ar-border-primary">
+            <p class="ar-m-0 ar-text-sm">
+              <strong>📚 Next Steps:</strong>
+              Explore <a href="grid.html" class="ar-text-link">Grid Utilities</a>
+              or learn about <a href="typography.html" class="ar-text-link">Typography Utilities</a>.
+            </p>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="doc-footer">
+    <div class="ar-container">
+      <div class="ar-flex ar-flex-col ar-md:flex-row ar-justify-between ar-gap-4">
+        <div>
+          <p class="ar-m-0">
+            <strong>ArianaCSS</strong> — Built with ❤️ in Afghanistan
+          </p>
+          <p class="ar-m-0 ar-text-xs ar-text-muted">
+            Version 1.0.0 · MIT License
+          </p>
+        </div>
+        <div class="ar-flex ar-gap-4">
+          <a href="https://github.com/your-username/arianacss" class="ar-text-muted ar-text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="../CONTRIBUTING.md" class="ar-text-muted ar-text-decoration-none">Contributing</a>
+          <a href="../LICENSE" class="ar-text-muted ar-text-decoration-none">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
